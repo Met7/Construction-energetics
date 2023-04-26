@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Construction Job Calculator</title>
+  <!--link rel="stylesheet" href="style.css"-->
+</head>
+<body>
+  <div class="container">
+    <h1>Construction Job Calculator</h1>
+    <div class="jobs">
+      <div class="job">
+        <div class="stage">
+          <label>Material:</label>
+          <select id="material">
+            <option value="timber">Timber</option>
+            <option value="dirt">Dirt</option>
+            <option value="marble">Marble</option>
+            <option value="granite">Granite</option>
+          </select>
+          <label>Quantity:</label>
+          <input type="number" id="quantity" min="0">
+        </div>
+        <div class="stage" id="extraction">
+          <label>Extraction:</label>
+          <select id="extractionMethod"></select>
+        </div>
+        <div class="stage" id="transportation">
+          <label>Transportation:</label>
+          <select id="transportMethod">
+            <option value="carry">Carry</option>
+            <option value="mule">Mule</option>
+            <option value="cart">Animal-pulled cart</option>
+          </select>
+          <label>Distance:</label>
+          <input type="number" id="distance" min="0">
+        </div>
+        <div class="stage" id="processing">
+          <label>Processing:</label>
+          <!-- This stage is currently empty -->
+        </div>
+        <div class="stage" id="result">
+          <label>Total Energy:</label>
+          <span id="energy"></span> kJ
+        </div>
+      </div>
+    </div>
+    <button id="addJob">+ Add Job</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
