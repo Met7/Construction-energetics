@@ -1,52 +1,57 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Construction Job Calculator</title>
-  <!--link rel="stylesheet" href="style.css"-->
-</head>
-<body>
-  <div class="container">
-    <h1>Construction Job Calculator</h1>
-    <div class="jobs">
-      <div class="job">
-        <div class="stage">
-          <label>Material:</label>
-          <select id="material">
+  <head>
+    <title>Construction Job Calculator</title>
+  </head>
+  <body>
+    <div class-"jobs-container">
+    
+      <div class="job-container">
+        <h2>Job 1</h2>
+        <div>
+          <label for="materials-1">Material:</label>
+          <select id="materials-1">
             <option value="timber">Timber</option>
             <option value="dirt">Dirt</option>
-            <option value="marble">Marble</option>
+            <option value="limestone">Limestone</option>
             <option value="granite">Granite</option>
           </select>
-          <label>Quantity:</label>
-          <input type="number" id="quantity" min="0">
+          <label for="quantity-1">Quantity (cubic meters):</label>
+          <input type="number" id="quantity-1" min="0" value="0">
         </div>
-        <div class="stage" id="extraction">
-          <label>Extraction:</label>
-          <select id="extractionMethod"></select>
+        <div>
+          <label>Collection Technology:</label>
+          <p id="base-energy-1"></p>
+          <select id="collection-technology-1"></select>
         </div>
-        <div class="stage" id="transportation">
-          <label>Transportation:</label>
-          <select id="transportMethod">
-            <option value="carry">Carry</option>
-            <option value="mule">Mule</option>
-            <option value="cart">Animal-pulled cart</option>
+        <div>
+          <label for="transportation-method-1">Transportation Method:</label>
+          <select id="transportation-method-1">
+            <option value="carry">Carry (3 kJ/ton/m)</option>
+            <option value="mule">Mule (0 kJ/ton/m)</option>
+            <option value="animal-pull-cart">Animal-Pull Cart (0 kJ/ton/m)</option>
           </select>
-          <label>Distance:</label>
-          <input type="number" id="distance" min="0">
+          <label for="distance-1">Distance (meters):</label>
+          <input type="number" id="distance-1" min="0" value="0">
         </div>
-        <div class="stage" id="processing">
-          <label>Processing:</label>
-          <!-- This stage is currently empty -->
+        <div>
+          <label for="processing-1">Processing:</label>
+          <select id="processing-1"></select>
         </div>
-        <div class="stage" id="result">
-          <label>Total Energy:</label>
-          <span id="energy"></span> kJ
+        <div>
+          <label for="putting-in-place-1">Putting in Place:</label>
+          <select id="putting-in-place-1"></select>
+        </div>
+        <button class="calculate-btn">Calculate Energy</button>
+        <div>
+          <label for="total-energy-1">Total Energy (kJ):</label>
+          <span id="total-energy-1">0</span>
         </div>
       </div>
-    </div>
-    <button id="addJob">+ Add Job</button>
-  </div>
 
-  <script src="script.js"></script>
-</body>
+    </div>
+    <button id="add-job-btn">Add Job</button>
+
+    <script src="script.js"></script>
+  </body>
 </html>
