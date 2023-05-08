@@ -4,44 +4,50 @@
     <title>Construction Job Calculator</title>
   </head>
   <body>
-    <div class-"jobs-container">
-    
+    <div id="jobs-container">
       <div class="job-container">
-        <!--div class="job"-->
+        <div class="job">
           <h2>Job 1</h2>
           <div>
             <label for="materials-1">Material:</label>
             <select id="materials-1">
-              <option value="timber">Timber</option>
-              <option value="dirt">Dirt</option>
-              <option value="limestone">Limestone</option>
-              <option value="granite">Granite</option>
+              <option value="timber" data-base-energy="50">Timber</option>
+              <option value="dirt" data-base-energy="40">Dirt</option>
+              <option value="limestone" data-base-energy="300">Limestone</option>
+              <option value="granite" data-base-energy="500">Granite</option>
             </select>
             <label for="quantity-1">Quantity (cubic meters):</label>
             <input type="number" id="quantity-1" min="0" value="0">
           </div>
           <div>
-            <label>Collection Technology:</label>
-            <p id="base-energy-1"></p>
-            <select id="collection-technology-1"></select>
+            <label for="extraction-technology-1">Extraction Technology:</label>
+            <select id="extraction-technology-1"></select>
+            <label id="extraction-energy-label-1">xxx</label>
           </div>
           <div>
             <label for="transportation-method-1">Transportation Method:</label>
             <select id="transportation-method-1">
-              <option value="carry">Carry (3 kJ/ton/m)</option>
-              <option value="mule">Mule (0 kJ/ton/m)</option>
-              <option value="animal-pull-cart">Animal-Pull Cart (0 kJ/ton/m)</option>
+              <option value="carry" data-energy-per-ton-per-meter="3">Carry (3 kJ/ton/m)</option>
+              <option value="mule" data-energy-per-ton-per-meter="0">Mule (0 kJ/ton/m)</option>
+              <option value="animal-pull-cart" data-energy-per-ton-per-meter="0">Animal-Pull Cart (0 kJ/ton/m)</option>
             </select>
             <label for="distance-1">Distance (meters):</label>
             <input type="number" id="distance-1" min="0" value="0">
+            <label id="transportation-energy-label-1">yyy</label>
           </div>
           <div>
             <label for="processing-1">Processing:</label>
             <select id="processing-1"></select>
+            <label id="processing-energy-label-1">zzz</label>
           </div>
           <div>
-            <label for="putting-in-place-1">Putting in Place:</label>
-            <select id="putting-in-place-1"></select>
+            <label for="placement-1">Putting in Place:</label>
+            <select id="placement-1">
+              <option value="scaffolding" data-energy-ton-per-meter="8">Scaffolding</option>
+              <option value="ramp" data-energy-ton-per-meter="7">Ramp</option>
+              <option value="crane" data-energy-ton-per-meter="6">Crane</option>
+            </select>
+            <label id="placement-energy-label-1">chrchrchr</label>
           </div>
           <button class="calculate-btn">Calculate Energy</button>
           <div>
@@ -49,7 +55,7 @@
             <span id="total-energy-1">0</span>
           </div>
         </div>
-      <!--/div-->
+      </div>
     </div>
     <button id="add-job-button">Add Job</button>
 
