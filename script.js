@@ -1,8 +1,13 @@
-// 1m limestone 72MJ
-// 1MD 2.160Kj
+// 1m limestone 30.3mh/m -> 8.2MJ
+// 1MD = 2.160kJ
+// 1MH = 270kJ
+// Dressing 57mh / m -> 15.4kJ
+// Carry: 20kg*5km/h = 10t/m/270kJ = 27kJ/1t/m
 
-  // Create the event
-  const event = new CustomEvent("change", { "detail": "Material manual trigger" });
+// event for manual triggering
+const event = new CustomEvent("change", { "detail": "Material manual trigger" });
+
+var jobCount = 1;
 
 // ----------------- MATERIAL SELECT EVENT
 
@@ -24,10 +29,10 @@ function addMaterialSelectEvent(jobId) {
       processingSelect.disabled = true;
     } else if (materialSelect.value === "limestone") {
     createOptions(extractionSelect, [["Channeling - copper chisel (x350)", 350], ["Channeling - iron chisel (x150)", 150], ["Diamond cable saw (x10)", 10]]);
-      createOptions(processingSelect, [["Copper chisel", 50], ["Bronze chisel", 30], ["Iron chisel", 20]]);
+      createOptions(processingSelect, [["Copper chisel (x500)", 500], ["Bronze chisel (x400)", 400], ["Iron chisel (x300)", 300]]);
     } else if (materialSelect.value === "granite") {
-      createOptions(extractionSelect, [["Channeling - copper chisel", "N/a"], ["Channeling - iron chisel", 150]]);
-      createOptions(processingSelect, [["Copper chisel", 50], ["Bronze chisel", 30], ["Iron chisel", 20], ["Stone mallet", 30]]);
+      createOptions(extractionSelect, [["Channeling - copper chisel", "N/A"], ["Channeling - iron chisel", 150]]);
+      createOptions(processingSelect, [["Copper chisel (N/A)", "N/A"], ["Bronze chisel (x400)", 400], ["Iron chisel (x300)", 300], ["Stone mallet (x400)", 400]]);
     } else alert("addMaterialSelectEvent - unknown value");
 
     extractionSelect.disabled = false;
@@ -75,7 +80,7 @@ function calculateJobEnergy(jobId) {
   const extractionMethodEnergy = materialQuantity * extractionEnergy * extractionMethodModifier;
 
   const extractionEnergyLabel = document.querySelector(`#extraction-energy-label-${jobId}`);
-  extractionEnergyLabel.textContent = extractionMethodEnergy + "kJ";
+  extractionEnergyLabel.textContent = extractionMethodEnergy.toFixed(2) + "kJ";
 
   // TRANSPORTATION
   const transportationSelect = document.querySelector(`#transportation-method-${jobId}`);
@@ -85,7 +90,7 @@ function calculateJobEnergy(jobId) {
   const transportationEnergyTotal = transportationEnergy * transportationDistance * materialWeight;
 
   const transportationEnergyLabel = document.querySelector(`#transportation-energy-label-${jobId}`);
-  transportationEnergyLabel.textContent = transportationEnergyTotal + "kJ";
+  transportationEnergyLabel.textContent = transportationEnergyTotal.toFixed(2) + "kJ";
 
   // PROCESSING
   const processingSelect = document.querySelector(`#processing-${jobId}`);
@@ -94,27 +99,29 @@ function calculateJobEnergy(jobId) {
   const processingEnergy = processingEnergyModifier * materialQuantity;
 
   const processingEnergyLabel = document.querySelector(`#processing-energy-label-${jobId}`);
-  processingEnergyLabel.textContent = processingEnergy + "kJ";
+  processingEnergyLabel.textContent = processingEnergy.toFixed(2) + "kJ";
 
   // PLACEMENT
   const placingSelect = document.querySelector(`#placement-${jobId}`);
   const placingOption = placingSelect.options[placingSelect.selectedIndex];
   const placingEnergyModifier = parseFloat(placingOption.getAttribute("data-energy-ton-per-meter"));
-  const placingEnergy = placingEnergyModifier * materialWeight;
+  const placingHeight = parseFloat(document.querySelector(`#height-${jobId}`).value);
+  const placingEnergy = placingEnergyModifier * materialWeight * placingHeight;
 
   const placingEnergyLabel = document.querySelector(`#placement-energy-label-${jobId}`);
-  placingEnergyLabel.textContent = placingEnergy + "kJ";
+  placingEnergyLabel.textContent = placingEnergy.toFixed(2) + "kJ";
 
   // alert (extractionMethodEnergy);
   // alert (transportationEnergyTotal);
   // alert (processingEnergy);
   // alert (placingEnergy);
 
-  const totalEnergy = extractionMethodEnergy + transportationEnergyTotal + processingEnergy + placingEnergyModifier;
+  const totalEnergy = extractionMethodEnergy + transportationEnergyTotal + processingEnergy + placingEnergy;
 
   //const totalEnergy = 10; // TODO temp
 
   document.querySelector(`#total-energy-${jobId}`).textContent = totalEnergy.toFixed(2);
+  updateTotal();
 }
 
 // returns tons per cubic meter
@@ -128,6 +135,14 @@ function materialDensity(material) {
   } else if (material == "granite") {
     return 2.7;
   } else alert("materialDensity: unknown material");
+}
+
+function updateTotal() {
+  var total = 0;
+  for (i = 1; i <= jobCount; i++) {
+    total += parseFloat(document.querySelector(`#total-energy-${i}`).textContent);
+  }
+  document.querySelector("#total-energy-label").textContent = "Total: " + total.toFixed(2) + "kJ";
 }
 
 // ----------------- ADD JOB BUTTON
@@ -165,7 +180,6 @@ document.addEventListener("DOMContentLoaded", () => {
     newJob.querySelector("label[for='transportation-method-1']").setAttribute("for", `transportation-method-${jobNumber}`);
     newJob.querySelector("#transportation-method-1").setAttribute("id", `transportation-method-${jobNumber}`);
 
-    // Set the ID of the distance input element
     newJob.querySelector("label[for='distance-1']").setAttribute("for", `distance-${jobNumber}`);
     newJob.querySelector("#distance-1").setAttribute("id", `distance-${jobNumber}`);
 
@@ -181,6 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
     newJob.querySelector("label[for='placement-1']").setAttribute("for", `placement-${jobNumber}`);
     newJob.querySelector("#placement-1").setAttribute("id", `placement-${jobNumber}`);
 
+    newJob.querySelector("label[for='height-1']").setAttribute("for", `height-${jobNumber}`);
+    newJob.querySelector("#height-1").setAttribute("id", `height-${jobNumber}`);
+
     newJob.querySelector("#placement-energy-label-1").setAttribute("id", `placement-energy-label-${jobNumber}`);
 
     // Set the ID of the total-energy span element
@@ -190,14 +207,16 @@ document.addEventListener("DOMContentLoaded", () => {
     newJob.querySelector(`#total-energy-${jobNumber}`).textContent = "0";
 
     jobsContainer.appendChild(newJob);
+    jobCount++;
 
     newJob.querySelector(`#materials-${jobNumber}`).selectedIndex = 0;
     newJob.querySelector(`#extraction-technology-${jobNumber}`).selectedIndex = 0;
     newJob.querySelector(`#transportation-method-${jobNumber}`).selectedIndex = 0;
     newJob.querySelector(`#processing-${jobNumber}`).selectedIndex = 0;
     newJob.querySelector(`#placement-${jobNumber}`).selectedIndex = 0;
-    newJob.querySelector(`#quantity-${jobNumber}`).textContent = 0;
-    newJob.querySelector(`#distance-${jobNumber}`).textContent = 0;
+    newJob.querySelector(`#quantity-${jobNumber}`).value = 0;
+    newJob.querySelector(`#distance-${jobNumber}`).value = 0;
+    newJob.querySelector(`#height-${jobNumber}`).value = 0;
   
     addMaterialSelectEvent(jobNumber);
     document.querySelector(`#materials-${jobNumber}`).dispatchEvent(event);
