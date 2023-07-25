@@ -1,0 +1,94 @@
+{
+  "Materials": [
+    {
+      "category": "earth",
+      "name": "Adobe",
+      "density": 1.6,
+      "base_energy": 100000
+    },
+    {
+      "category": "earth",
+      "name": "Cob",
+      "density": 1.8,
+      "base_energy": 120000
+    },
+    {
+      "category": "earth",
+      "name": "Rammed Earth",
+      "density": 1.9,
+      "base_energy": 110000
+    },
+    {
+      "category": "stone",
+      "name": "Limestone",
+      "density": 2.3,
+      "base_energy": 150000
+    },
+    {
+      "category": "stone",
+      "name": "Granite",
+      "density": 2.7,
+      "base_energy": 180000
+    },
+    {
+      "category": "stone",
+      "name": "Sandstone",
+      "density": 2.2,
+      "base_energy": 140000
+    },
+    {
+      "category": "wood",
+      "name": "Oak",
+      "density": 0.7,
+      "base_energy": 80000
+    },
+    {
+      "category": "wood",
+      "name": "Cedar",
+      "density": 0.5,
+      "base_energy": 70000
+    },
+    {
+      "category": "wood",
+      "name": "Pine",
+      "density": 0.6,
+      "base_energy": 75000
+    },
+    {
+      "category": "metal",
+      "name": "Iron",
+      "density": 7.9,
+      "base_energy": 500000
+    },
+    {
+      "category": "metal",
+      "name": "Copper",
+      "density": 8.9,
+      "base_energy": 550000
+    },
+    {
+      "category": "metal",
+      "name": "Bronze",
+      "density": 8.7,
+      "base_energy": 520000
+    },
+    {
+      "category": "other",
+      "name": "Bamboo",
+      "density": 0.4,
+      "base_energy": 60000
+    },
+    {
+      "category": "other",
+      "name": "Straw",
+      "density": 0.1,
+      "base_energy": 40000
+    },
+    {
+      "category": "other",
+      "name": "Mud Brick",
+      "density": 1.8,
+      "base_energy": 90000
+    }
+  ]
+}

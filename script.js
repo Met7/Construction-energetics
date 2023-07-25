@@ -21,26 +21,23 @@ function addMaterialSelectEvent(jobId) {
     
     processingSelect.disabled = false;
     if (materialSelect.value === "timber") {
-      createOptions(extractionSelect, [["Stone Axe", 50], ["Bronze Axe", 40], ["Bronze saw", 20], ["Iron Axe", 30], ["Iron Saw", 15]]);
-      createOptions(processingSelect, [["Stone Axe", 50], ["Bronze Axe", 40], ["Iron Axe", 30]]);
+      createOptions(extractionSelect, [["Stone Axe (x50)", 50], ["Bronze Axe (x40)", 40], ["Bronze saw (x20)", 20], ["Iron Axe (x30)", 30], ["Iron Saw (x15)", 15]]);
+      createOptions(processingSelect, [["Stone Axe (x50)", 50], ["Bronze Axe (x40)", 40], ["Iron Axe  (x30)", 30]]);
     } else if (materialSelect.value === "dirt") {
-      createOptions(extractionSelect, [["Wooden shovel", 30], ["Iron shovel", 20]]);
-      createOptions(processingSelect, [["N/A"]]);
+      createOptions(extractionSelect, [["Wooden shovel (x30)", 30], ["Iron shovel (x20)", 20]]);
+      createOptions(processingSelect, [["N/A", 0]]);
       processingSelect.disabled = true;
     } else if (materialSelect.value === "limestone") {
     createOptions(extractionSelect, [["Channeling - copper chisel (x350)", 350], ["Channeling - iron chisel (x150)", 150], ["Diamond cable saw (x10)", 10]]);
       createOptions(processingSelect, [["Copper chisel (x500)", 500], ["Bronze chisel (x400)", 400], ["Iron chisel (x300)", 300]]);
     } else if (materialSelect.value === "granite") {
-      createOptions(extractionSelect, [["Channeling - copper chisel", "N/A"], ["Channeling - iron chisel", 150]]);
+      createOptions(extractionSelect, [["Channeling - copper chisel (N/A)", "N/A"], ["Channeling - iron chisel", 150]]);
       createOptions(processingSelect, [["Copper chisel (N/A)", "N/A"], ["Bronze chisel (x400)", 400], ["Iron chisel (x300)", 300], ["Stone mallet (x400)", 400]]);
     } else alert("addMaterialSelectEvent - unknown value");
 
     extractionSelect.disabled = false;
     
-    
-    //TODO fill other selects
-    //transportSelect.disabled = true;
-    //transportSelect.selectedIndex = 0;
+    calculateJobEnergy(jobId);
   });
 
     //return materialSelect;
@@ -72,44 +69,44 @@ function calculateJobEnergy(jobId) {
   
   const materialWeight = materialQuantity * materialDensity(material);
 
-  let extractionEnergy = materialOption.getAttribute("data-base-energy");
+  let materialBaseEnergy = materialOption.getAttribute("data-base-energy");
 
   const extractionMethodSelect = document.querySelector(`#extraction-technology-${jobId}`);
   const extractionMethodOption = extractionMethodSelect.options[extractionMethodSelect.selectedIndex];
   const extractionMethodModifier = parseFloat(extractionMethodOption.getAttribute("data-energy-modifier"));
-  const extractionMethodEnergy = materialQuantity * extractionEnergy * extractionMethodModifier;
+  const extractionMethodEnergy = materialQuantity * materialBaseEnergy * extractionMethodModifier;
 
   const extractionEnergyLabel = document.querySelector(`#extraction-energy-label-${jobId}`);
-  extractionEnergyLabel.textContent = extractionMethodEnergy.toFixed(2) + "kJ";
+  extractionEnergyLabel.textContent = extractionMethodEnergy.toFixed(1) + "kJ";
 
   // TRANSPORTATION
   const transportationSelect = document.querySelector(`#transportation-method-${jobId}`);
   const transportationOption = transportationSelect.options[transportationSelect.selectedIndex];
   const transportationEnergy = parseFloat(transportationOption.getAttribute("data-energy-per-ton-per-meter"));
   const transportationDistance = parseFloat(document.querySelector(`#distance-${jobId}`).value);
-  const transportationEnergyTotal = transportationEnergy * transportationDistance * materialWeight;
+  const transportationEnergyTotal = materialWeight * transportationDistance * transportationEnergy;
 
   const transportationEnergyLabel = document.querySelector(`#transportation-energy-label-${jobId}`);
-  transportationEnergyLabel.textContent = transportationEnergyTotal.toFixed(2) + "kJ";
+  transportationEnergyLabel.textContent = transportationEnergyTotal.toFixed(1) + "kJ";
 
   // PROCESSING
   const processingSelect = document.querySelector(`#processing-${jobId}`);
   const processingOption = processingSelect.options[processingSelect.selectedIndex];
   const processingEnergyModifier = parseFloat(processingOption.getAttribute("data-energy-modifier"));
-  const processingEnergy = processingEnergyModifier * materialQuantity;
+  const processingEnergy = materialQuantity * materialBaseEnergy * processingEnergyModifier;
 
   const processingEnergyLabel = document.querySelector(`#processing-energy-label-${jobId}`);
-  processingEnergyLabel.textContent = processingEnergy.toFixed(2) + "kJ";
+  processingEnergyLabel.textContent = processingEnergy.toFixed(1) + "kJ";
 
   // PLACEMENT
   const placingSelect = document.querySelector(`#placement-${jobId}`);
   const placingOption = placingSelect.options[placingSelect.selectedIndex];
   const placingEnergyModifier = parseFloat(placingOption.getAttribute("data-energy-ton-per-meter"));
   const placingHeight = parseFloat(document.querySelector(`#height-${jobId}`).value);
-  const placingEnergy = placingEnergyModifier * materialWeight * placingHeight;
+  const placingEnergy = materialWeight * placingHeight * placingEnergyModifier;
 
   const placingEnergyLabel = document.querySelector(`#placement-energy-label-${jobId}`);
-  placingEnergyLabel.textContent = placingEnergy.toFixed(2) + "kJ";
+  placingEnergyLabel.textContent = placingEnergy.toFixed(1) + "kJ";
 
   // alert (extractionMethodEnergy);
   // alert (transportationEnergyTotal);
@@ -120,7 +117,7 @@ function calculateJobEnergy(jobId) {
 
   //const totalEnergy = 10; // TODO temp
 
-  document.querySelector(`#total-energy-${jobId}`).textContent = totalEnergy.toFixed(2);
+  document.querySelector(`#total-energy-${jobId}`).textContent = totalEnergy.toFixed(1);
   updateTotal();
 }
 
@@ -142,7 +139,13 @@ function updateTotal() {
   for (i = 1; i <= jobCount; i++) {
     total += parseFloat(document.querySelector(`#total-energy-${i}`).textContent);
   }
-  document.querySelector("#total-energy-label").textContent = "Total: " + total.toFixed(2) + "kJ";
+  document.querySelector("#total-energy-label").textContent = "Total: " + total.toFixed(1) + "kJ";
+}
+
+function formatEnergy(energy) {
+  if (energy.isNaN())
+    return energy;
+  return energy.toFixed(1) + "kJ";
 }
 
 // ----------------- ADD JOB BUTTON

@@ -1,0 +1,9 @@
+{
+  "Stages": [
+    "recovery",
+    "refinement",
+    "transportation",
+    "processing",
+    "placement"
+  ]
+}

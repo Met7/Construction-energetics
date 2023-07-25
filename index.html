@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="style.css">
     <title>Construction Job Calculator</title>
   </head>
   <body>
@@ -8,60 +9,72 @@
       <div class="job-container">
         <div class="job">
           <h2>Job 1</h2>
-          <div>
-            <label for="materials-1">Material:</label>
-            <select id="materials-1">
-              <option value="timber" data-base-energy="15">Timber</option>
-              <option value="dirt" data-base-energy="10">Dirt</option>
-              <option value="limestone" data-base-energy="40">Limestone</option>
-              <option value="granite" data-base-energy="60">Granite</option>
-            </select>
-            <label for="quantity-1">Quantity (cubic meters):</label>
-            <input type="number" id="quantity-1" min="0" value="0">
-          </div>
-          <div>
-            <label for="extraction-technology-1">Extraction Technology:</label>
-            <select id="extraction-technology-1"></select>
-            <label id="extraction-energy-label-1">xxx</label>
-          </div>
-          <div>
-            <label for="transportation-method-1">Transportation Method:</label>
-            <select id="transportation-method-1">
-              <option value="carry" data-energy-per-ton-per-meter="30">Carry (30 kJ/ton/m)</option>
-              <option value="cart" data-energy-per-ton-per-meter="20">Cart (20 kJ/ton/m)</option>
-              <option value="animal-pull-cart" data-energy-per-ton-per-meter="5">Animal-Pulled Cart (5 kJ/ton/m)</option>
-            </select>
-            <label for="distance-1">Distance (meters):</label>
-            <input type="number" id="distance-1" min="0" value="0">
-            <label id="transportation-energy-label-1">yyy</label>
-          </div>
-          <div>
-            <label for="processing-1">Processing:</label>
-            <select id="processing-1"></select>
-            <label id="processing-energy-label-1">zzz</label>
-          </div>
-          <div>
-            <label for="placement-1">Putting in Place:</label>
-            <select id="placement-1">
-              <option value="scaffolding" data-energy-ton-per-meter="50">Scaffolding</option>
-              <option value="ramp" data-energy-ton-per-meter="40">Ramp</option>
-              <option value="crane" data-energy-ton-per-meter="30">Crane</option>
-            </select>
-            <label for="height-1">Height (meters):</label>
-            <input type="number" id="height-1" min="0" value="0">
-            <label id="placement-energy-label-1">chrchrchr</label>
-          </div>
-          <!--button class="calculate-btn">Calculate Energy</button-->
-          <div>
-            <label for="total-energy-1">Total Energy (kJ):</label>
-            <span id="total-energy-1">0</span>
-          </div>
+          <table class="job-table">
+            <tr class="job-stage">
+              <td><label for="materials-1" class="stage-label">Material:</label></td>
+              <td>
+                <select id="materials-1">
+                  <option value="timber" data-base-energy="15">Timber</option>
+                  <option value="dirt" data-base-energy="10">Dirt</option>
+                  <option value="limestone" data-base-energy="40">Limestone</option>
+                  <option value="granite" data-base-energy="60">Granite</option>
+                </select>
+              </td>
+              <td><label for="quantity-1" class="quantity-label">Quantity (cubic meters):</label></td>
+              <td><input type="number" id="quantity-1" min="0" value="0"></td>
+              <td></td>
+            </tr>
+            <tr class="job-stage">
+              <td><label for="extraction-technology-1" class="stage-label">Extraction Technology:</label></td>
+              <td><select id="extraction-technology-1"></select></td>
+              <td></td>
+              <td></td>
+              <td class="energy-label"><label id="extraction-energy-label-1">xxx</label></td>
+            </tr>
+            <tr class="job-stage">
+              <td><label for="transportation-method-1" class="stage-label">Transportation Method:</label></td>
+              <td>
+                <select id="transportation-method-1">
+                  <option value="carry" data-energy-per-ton-per-meter="30">Carry (30 kJ/ton/m)</option>
+                  <option value="cart" data-energy-per-ton-per-meter="20">Cart (20 kJ/ton/m)</option>
+                  <option value="animal-pull-cart" data-energy-per-ton-per-meter="5">Animal-Pulled Cart (5 kJ/ton/m)</option>
+                </select>
+              </td>
+              <td><label for="distance-1" class="quantity-label">Distance (meters):</label></td>
+              <td><input type="number" id="distance-1" min="0" value="0"></td>
+              <td class="energy-label"><label id="transportation-energy-label-1">yyy</label></td>
+            </tr>
+            <tr class="job-stage">
+              <td><label for="processing-1" class="stage-label">Processing:</label></td>
+              <td><select id="processing-1"></select></td>
+              <td></td>
+              <td></td>
+              <td class="energy-label"><label id="processing-energy-label-1">zzz</label></td>
+            </tr>
+            <tr class="job-stage">
+              <td><label for="placement-1" class="stage-label">Putting in Place:</label></td>
+              <td>
+                <select id="placement-1">
+                  <option value="scaffolding" data-energy-ton-per-meter="50">Scaffolding</option>
+                  <option value="ramp" data-energy-ton-per-meter="40">Ramp</option>
+                  <option value="crane" data-energy-ton-per-meter="30">Crane</option>
+                </select>
+              </td>
+              <td><label for="height-1" class="quantity-label">Height (meters):</label></td>
+              <td><input type="number" id="height-1" min="0" value="0"></td>
+              <td class="energy-label"><label id="placement-energy-label-1">rrr</label></td>
+            </tr>
+            <!--button class="calculate-btn">Calculate Energy</button-->
+          </table>
+            <div>
+              <label for="total-energy-1">Total Energy (kJ):</label>
+              <span id="total-energy-1">0</span>
+            </div>
         </div>
       </div>
     </div>
-    <br />
     <button id="add-job-button">Add Job</button>
-    <label id="total-energy-label">uuuu</label>
+    <label id="total-energy-label">uuu</label>
   </body>
   <script src="script.js"></script>
 </html>
