@@ -1,4 +1,5 @@
 import * as helpers from "./helpers.js"; 
+import { loadFile } from "./data_handler.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
 // 1MD = 2.160kJ
@@ -9,6 +10,9 @@ import * as helpers from "./helpers.js";
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "Material manual trigger" });
 
+const materialsData = loadFile('materials');
+console.log(materialsData);
+
 var jobCount = 1;
 
 // ----------------- MATERIAL SELECT EVENT
@@ -17,28 +21,7 @@ function addMaterialSelectEvent(jobId) {
   //alert(jobId);
   const materialSelect = document.querySelector(`#materials-${jobId}`);
   materialSelect.addEventListener("change", () => {
-    const extractionSelect = document.querySelector(`#extraction-technology-${jobId}`);
-    const processingSelect = document.querySelector(`#processing-${jobId}`);
-    const puttingInPlaceSelect = document.querySelector(`#placement-${jobId}`);
-    
-    processingSelect.disabled = false;
-    if (materialSelect.value === "timber") {
-      createOptions(extractionSelect, [["Stone Axe (x50)", 50], ["Bronze Axe (x40)", 40], ["Bronze saw (x20)", 20], ["Iron Axe (x30)", 30], ["Iron Saw (x15)", 15]]);
-      createOptions(processingSelect, [["Stone Axe (x50)", 50], ["Bronze Axe (x40)", 40], ["Iron Axe  (x30)", 30]]);
-    } else if (materialSelect.value === "dirt") {
-      createOptions(extractionSelect, [["Wooden shovel (x30)", 30], ["Iron shovel (x20)", 20]]);
-      createOptions(processingSelect, [["N/A", 0]]);
-      processingSelect.disabled = true;
-    } else if (materialSelect.value === "limestone") {
-    createOptions(extractionSelect, [["Channeling - copper chisel (x350)", 350], ["Channeling - iron chisel (x150)", 150], ["Diamond cable saw (x10)", 10]]);
-      createOptions(processingSelect, [["Copper chisel (x500)", 500], ["Bronze chisel (x400)", 400], ["Iron chisel (x300)", 300]]);
-    } else if (materialSelect.value === "granite") {
-      createOptions(extractionSelect, [["Channeling - copper chisel (N/A)", "N/A"], ["Channeling - iron chisel", 150]]);
-      createOptions(processingSelect, [["Copper chisel (N/A)", "N/A"], ["Bronze chisel (x400)", 400], ["Iron chisel (x300)", 300], ["Stone mallet (x400)", 400]]);
-    } else alert("addMaterialSelectEvent - unknown value");
-
     extractionSelect.disabled = false;
-    
     calculateJobEnergy(jobId);
   });
 
@@ -53,8 +36,8 @@ function updateTotal() {
   document.querySelector("#total-energy-label").textContent = "Total: " + total.toFixed(1) + "kJ";
 }
 
-// ----------------- ADD JOB BUTTON
-
+// --------------------------------------
+// ------------------------- HTML HELPERS
 
 function createJobHeader(jobId) {
   const element = helpers.createElement('h2', 'job-header', `Job #${jobId}`);
@@ -67,6 +50,100 @@ function createMaterialSelect(jobId) {
   //element.classList.add('job-header');
   return element;
 }
+
+function getSelected(input) {
+  if (input.type != 'select-one')
+    throw ('Input not a select');
+  return input.options[input.selectedIndex];
+}
+
+function getSelectValue(input) {
+  return getSelected(input).value;
+}
+
+function getSelectData(input) {
+  return getSelected(input).getAttribute('data')
+}
+
+function getJobElement(jobId) {
+  return document.getElementById('job-' + jobId);
+}
+
+function getStageElementInJob(jobElement, stageName) {
+  return jobElement.querySelector('.stage-'  + stageName);
+}
+
+function getStageElement(jobId, stageName) {
+  const jobElement = getJobElement(jobId);
+  return getStageElementInJob(jobElement, stageName);
+}
+
+function getStageMaterialInJob(jobElement) {
+  const stage = getStageElementInJob(jobElement, 'material');
+  const input = stage.querySelector('.base-energy');
+  return getSelectData(input);
+}
+
+function getStageMaterial(jobId) {
+  return getStageMaterialInJob(getJobElement(jobId));
+}
+
+function getMaterialCategory(material) {
+  const materialData = materialsData.find(element => element.name == material)
+  if (typeof(material) == 'undefined')
+    throw('No category for material ' + material);
+  return materialData.category;
+}
+
+// --------------------------------------
+// ---------------------- TECHNOLOGY DATA
+
+let techData = [
+  {
+    'name': 'Stone extraction',
+    'stages' : ['extraction'],
+    'materials': [
+      { 'category': 'stone', 'materials': [] }
+    ],
+    'unit': 'mass',
+    'formula': 'material-multiplier', 
+    'options': [
+      { 'text': 'Channeling - copper chisel', 'value': 350 },
+      { 'text': 'Channeling - iron chisel', 'value': 150 },
+      { 'text': 'Diamond cable saw', 'value': 10 }
+    ]
+  },
+  {
+    'name': 'Stone processing',
+    'stages' : ['processing'],
+    'materials': [
+      { 'category': 'stone', 'materials': [] }
+    ],
+    'unit': 'mass',
+    'formula': 'material-multiplier', 
+    'options': [
+      { 'text': 'Copper chisel', 'value': 300 },
+      { 'text': 'Bronze chisel', 'value': 250 },
+      { 'text': 'Iron chisel', 'value': 180 }
+    ]
+  },
+  {
+    'name': 'Wood processing',
+    'stages' : ['extraction', 'processing'],
+    'materials': [
+      { 'category': 'wood', 'materials': [] }
+    ],
+    'unit': 'volume',
+    'formula': 'material-multiplier', 
+    'options': [
+      { 'text': 'Stone Axe', 'value': 50 },
+      { 'text': 'Bronze Axe', 'value': 40 },
+      { 'text': 'Bronze saw', 'value': 20 },
+      { 'text': 'Iron Axe', 'value': 30 },
+      { 'text': 'Iron Saw', 'value': 15 }
+    ]
+  }
+]
 
 // --------------------------------------
 // --------------------------- STAGE DATA
@@ -196,16 +273,12 @@ let jobData = {
   }
 };
 
-
 // --------------------------------------
 // ------------------------------- ENERGY
 
 function getStageEnergyLabel(jobId, stageName) {
-  let job = document.getElementById(`job-${jobId}`);
-  let stage = job.querySelector(`.stage-${stageName}`);
-  let label = stage.querySelector('.energy-label label');
-  return label;
-  //return document.getElementById(`job-${jobId}`).querySelector(`.stage-${stageName}`).querySelector('.energy-label label');
+  let stage = getStageELement(jobId, stageName);
+  return label = stage.querySelector('.energy-label label');
 }
 
 function calculateStageEnergy(jobId, stageData) {
@@ -226,7 +299,7 @@ function calculateStageEnergy(jobId, stageData) {
     if (input.type == 'number') {
       value = input.value;
     } else if (input.type == 'select-one') {
-      value = input.options[input.selectedIndex].getAttribute('data')
+      value = getSelectData(input);
     } else {
       throw('Unknown param type for a stage formula');
     }

@@ -28,7 +28,7 @@ function addMaterialSelectEvent(jobId) {
       createOptions(processingSelect, [["N/A", 0]]);
       processingSelect.disabled = true;
     } else if (materialSelect.value === "limestone") {
-    createOptions(extractionSelect, [["Channeling - copper chisel (x350)", 350], ["Channeling - iron chisel (x150)", 150], ["Diamond cable saw (x10)", 10]]);
+      createOptions(extractionSelect, [["Channeling - copper chisel (x350)", 350], ["Channeling - iron chisel (x150)", 150], ["Diamond cable saw (x10)", 10]]);
       createOptions(processingSelect, [["Copper chisel (x500)", 500], ["Bronze chisel (x400)", 400], ["Iron chisel (x300)", 300]]);
     } else if (materialSelect.value === "granite") {
       createOptions(extractionSelect, [["Channeling - copper chisel (N/A)", "N/A"], ["Channeling - iron chisel", 150]]);
