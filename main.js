@@ -1,4 +1,4 @@
-import { loadFile } from "./data_handler.js";
+import { loadFile } from "./data-handler.js";
 import { createJob } from "./job-generator.js";
 
 

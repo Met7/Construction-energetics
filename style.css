@@ -79,6 +79,15 @@ body {
   margin-left: 10px;
 }
 
+table .stage {
+  border: 1px solid red;
+  width: 100%;
+}
+
+.job-stage-header {
+  background-color: #d0d0d0;
+}
+
 #add-job-button {
   margin-top: 20px;
   padding: 10px;

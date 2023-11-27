@@ -2,7 +2,7 @@ const folder = "./data/"
 
 async function loadFile(dataKey) {
   const filePath = folder + dataKey + '.json';
-  console.log(filePath);
+  console.log("Loading JSON data from: " + filePath);
 
   try {
     const response = await fetch(filePath);

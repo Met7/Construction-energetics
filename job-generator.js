@@ -1,5 +1,7 @@
+import * as htmlHelpers from "./html-helpers.js"; 
 import * as helpers from "./helpers.js"; 
-import { loadFile } from "./data_handler.js";
+import { loadFile } from "./data-handler.js";
+import { createStage } from "./stage-generator.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
 // 1MD = 2.160kJ
@@ -10,8 +12,8 @@ import { loadFile } from "./data_handler.js";
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "Material manual trigger" });
 
-const materialsData = loadFile('materials');
-console.log(materialsData);
+const materialsData = await loadFile('materials');
+//console.log(materialsData);
 
 var jobCount = 1;
 
@@ -40,7 +42,7 @@ function updateTotal() {
 // ------------------------- HTML HELPERS
 
 function createJobHeader(jobId) {
-  const element = helpers.createElement('h2', 'job-header', `Job #${jobId}`);
+  const element = htmlHelpers.createElement('h2', 'job-header', `Job #${jobId}`);
   return element;
 }
 
@@ -98,187 +100,65 @@ function getMaterialCategory(material) {
 // --------------------------------------
 // ---------------------- TECHNOLOGY DATA
 
-let techData = [
-  {
-    'name': 'Stone extraction',
-    'stages' : ['extraction'],
-    'materials': [
-      { 'category': 'stone', 'materials': [] }
-    ],
-    'unit': 'mass',
-    'formula': 'material-multiplier', 
-    'options': [
-      { 'text': 'Channeling - copper chisel', 'value': 350 },
-      { 'text': 'Channeling - iron chisel', 'value': 150 },
-      { 'text': 'Diamond cable saw', 'value': 10 }
-    ]
-  },
-  {
-    'name': 'Stone processing',
-    'stages' : ['processing'],
-    'materials': [
-      { 'category': 'stone', 'materials': [] }
-    ],
-    'unit': 'mass',
-    'formula': 'material-multiplier', 
-    'options': [
-      { 'text': 'Copper chisel', 'value': 300 },
-      { 'text': 'Bronze chisel', 'value': 250 },
-      { 'text': 'Iron chisel', 'value': 180 }
-    ]
-  },
-  {
-    'name': 'Wood processing',
-    'stages' : ['extraction', 'processing'],
-    'materials': [
-      { 'category': 'wood', 'materials': [] }
-    ],
-    'unit': 'volume',
-    'formula': 'material-multiplier', 
-    'options': [
-      { 'text': 'Stone Axe', 'value': 50 },
-      { 'text': 'Bronze Axe', 'value': 40 },
-      { 'text': 'Bronze saw', 'value': 20 },
-      { 'text': 'Iron Axe', 'value': 30 },
-      { 'text': 'Iron Saw', 'value': 15 }
-    ]
-  }
-]
+// let techData = [
+  // {
+    // 'name': 'Stone extraction',
+    // 'stages' : ['extraction'],
+    // 'materials': [
+      // { 'category': 'stone', 'materials': [] }
+    // ],
+    // 'unit': 'mass',
+    // 'formula': 'material-multiplier', 
+    // 'options': [
+      // { 'text': 'Channeling - copper chisel', 'value': 350 },
+      // { 'text': 'Channeling - iron chisel', 'value': 150 },
+      // { 'text': 'Diamond cable saw', 'value': 10 }
+    // ]
+  // },
+  // {
+    // 'name': 'Stone processing',
+    // 'stages' : ['processing'],
+    // 'materials': [
+      // { 'category': 'stone', 'materials': [] }
+    // ],
+    // 'unit': 'mass',
+    // 'formula': 'material-multiplier', 
+    // 'options': [
+      // { 'text': 'Copper chisel', 'value': 300 },
+      // { 'text': 'Bronze chisel', 'value': 250 },
+      // { 'text': 'Iron chisel', 'value': 180 }
+    // ]
+  // },
+  // {
+    // 'name': 'Wood processing',
+    // 'stages' : ['extraction', 'processing'],
+    // 'materials': [
+      // { 'category': 'wood', 'materials': [] }
+    // ],
+    // 'unit': 'volume',
+    // 'formula': 'material-multiplier', 
+    // 'options': [
+      // { 'text': 'Stone Axe', 'value': 50 },
+      // { 'text': 'Bronze Axe', 'value': 40 },
+      // { 'text': 'Bronze saw', 'value': 20 },
+      // { 'text': 'Iron Axe', 'value': 30 },
+      // { 'text': 'Iron Saw', 'value': 15 }
+    // ]
+  // }
+// ]
 
 // --------------------------------------
 // --------------------------- STAGE DATA
 
-let jobData = {
-  'stageData': {
-    'material': { 
-      stageName: 'material',
-      unit: 'mass', // TODO remove
-      inputs: {
-        'base-energy': {
-          id: 'base-energy',
-          label: 'Material',
-          type: 'select',
-          valueType: 'energy',
-          options: [["Timber (15)", 15], ["Dirt (10)", 10], ["Limestone (40)", 40], ["Granite (60)", 60]],
-          selectedIndex: 1
-        },
-        'mass': {
-          id: 'mass',
-          label: 'Mass (tons)', 
-          type: 'number',
-          valueType: 'mass',
-          defaultValue: 1
-        }
-      },
-      usesEnergy: false
-    },
-    'extraction': { 
-      stageName: 'extraction',
-      unit: 'mass',
-      inputs: {
-        'technology': {
-          id: 'technology',
-          label: 'Extraction Technology',
-          type: 'select',
-          valueType: 'technology',
-          // TODO use data from technologies
-          options: [["Stone Axe (x50)", 50], ["Bronze Axe (x40)", 40], ["Bronze saw (x20)", 20], ["Iron Axe (x30)", 30], ["Iron Saw (x15)", 15]],
-          selectedIndex: 2
-        }
-      },
-      usesEnergy: true,
-      formula: { type: 'multiply', params: [
-        { id: 'base-energy', source: 'material' },
-        { id: 'mass', source: 'material' },
-        { id: 'technology', source: 'current-stage' }
-      ]}
-    },
-    'transportation': { 
-      stageName: 'transportation',
-      unit: 'distance',
-      inputs: {
-        'technology': {
-          id: 'technology',
-          label: 'Transportation Method',
-          type: 'select',
-          valueType: 'technology',
-          // TODO use data from technologies
-          options: [["Carry (30 kJ/ton/m)", 30], ["Cart (20 kJ/ton/m)", 20], ["Animal-Pulled Cart (5 kJ/ton/m)", 5]],
-          selectedIndex: 3
-        },
-        'distance': {
-          id: 'distance',
-          label: 'Distance (meters)', 
-          type: 'number',
-          valueType: 'distance',
-          defaultValue: 3
-        }
-      },
-      usesEnergy: true,
-      formula: { type: 'multiply', params: [
-        { id: 'mass', source: 'material' }, // id corresponds to id in inputs
-        { id: 'technology', source: 'current-stage' },
-        { id: 'distance', source: 'current-stage' }
-      ]}
-    },
-    'processing': { 
-      stageName: 'processing',
-      unit: 'energy',
-      inputs: {
-        'technology': {
-          id: 'technology',
-          label: 'Processing',
-          type: 'select',
-          valueType: 'technology',
-          // TODO use data from technologies
-          options: [["Stone Axe (x50)", 50], ["Bronze Axe (x40)", 40], ["Bronze saw (x20)", 20], ["Iron Axe (x30)", 30], ["Iron Saw (x15)", 15]],
-          selectedIndex: 2
-        }
-      },
-      usesEnergy: true,
-      formula: { type: 'multiply', params: [
-        { id: 'base-energy', source: 'material' },
-        { id: 'mass', source: 'material' },
-        { id: 'technology', source: 'current-stage' }
-      ]}
-    },
-    'placement': { 
-      stageName: 'placement',
-      unit: 'distance',
-      inputs: {
-        'technology': {
-          id: 'technology',
-          label: 'Placement',
-          type: 'select',
-          valueType: 'technology',
-          // TODO use data from technologies
-          options: [["Scaffolding", 50], ["ramp", 40], ["crane", 30]],
-          selectedIndex: 3
-        },
-        'elevation': {
-          id: 'elevation',
-          label: 'Height (meters)', 
-          type: 'number',
-          valueType: 'distance',
-          defaultValue: 5
-        }
-      },
-      usesEnergy: true,
-      formula: { type: 'multiply', params: [
-        { id: 'mass', source: 'material' }, // id corresponds to id in inputs
-        { id: 'technology', source: 'current-stage' },
-        { id: 'elevation', source: 'current-stage' }
-      ]}
-    }
-  }
-};
+let jobData = await loadFile('stages');
+//console.log(jobData);
 
 // --------------------------------------
 // ------------------------------- ENERGY
 
 function getStageEnergyLabel(jobId, stageName) {
-  let stage = getStageELement(jobId, stageName);
-  return label = stage.querySelector('.energy-label label');
+  let stage = getStageElement(jobId, stageName);
+  return stage.querySelector('.energy-label label');
 }
 
 function calculateStageEnergy(jobId, stageData) {
@@ -329,7 +209,7 @@ function updateStageEnergy(jobId, stageData) {
 
 function recalculateJobEnergy(jobId) {
   let totalJobEnergy = 0;
-  for (const stage of Object.values(jobData.stageData))
+  for (const stage of Object.values(jobData))
     totalJobEnergy += updateStageEnergy(jobId, stage);
 
   let job = document.getElementById(`job-${jobId}`);
@@ -340,56 +220,56 @@ function recalculateJobEnergy(jobId) {
 // --------------------------------------
 // ------------------------------- STAGES
 
-function createLabelTd(css, text, tdCss) {
-  let cell = helpers.createElement('td', tdCss); 
-  let label = helpers.createElement('label', css, text);
-  cell.appendChild(label);
-  return cell;
-}
+// function createLabelTd(css, text, tdCss) {
+  // let cell = htmlHelpers.createElement('td', tdCss); 
+  // let label = htmlHelpers.createElement('label', css, text);
+  // cell.appendChild(label);
+  // return cell;
+// }
 
-function createStage(jobId, columnCount, stageData) {
-  let row = createJobStage(stageData.stageName);
+// function createStage(jobId, columnCount, stageData) {
+  // let row = createJobStage(stageData.stageName);
   
-  for (const input of Object.values(stageData.inputs)) {
-    row.appendChild(createLabelTd('quantity-label', input.label + ':'));
-    columnCount--;
-    let cell = document.createElement('td');
+  // for (const input of Object.values(stageData.inputs)) {
+    // row.appendChild(createLabelTd('quantity-label', input.label + ':'));
+    // columnCount--;
+    // let cell = document.createElement('td');
     
-    if (input.type == 'select') {
-      const select = helpers.createElement('select', input.id);
-      helpers.createOptions(select, input.options);
-      select.selectedIndex = stageData.selectedIndex;
-      cell.appendChild(select);
-    }
-    else if (input.type == 'number') {
-      const inputElement = helpers.createElement('input', input.id);
-      inputElement.type = 'number';
-      inputElement.min = 0;
-      inputElement.value = input.defaultValue;
-      cell.appendChild(inputElement);
-    } else
-      throw('Unknown input type for a job stage: ' + input.type);
+    // if (input.type == 'select') {
+      // const select = htmlHelpers.createElement('select', input.id);
+      // helpers.createOptions(select, input.options);
+      // select.selectedIndex = stageData.selectedIndex;
+      // cell.appendChild(select);
+    // }
+    // else if (input.type == 'number') {
+      // const inputElement = htmlHelpers.createElement('input', input.id);
+      // inputElement.type = 'number';
+      // inputElement.min = 0;
+      // inputElement.value = input.defaultValue;
+      // cell.appendChild(inputElement);
+    // } else
+      // throw('Unknown input type for a job stage: ' + input.type);
     
-    row.appendChild(cell);
-    columnCount--;
-  }
+    // row.appendChild(cell);
+    // columnCount--;
+  // }
  
-  if (stageData.usesEnergy)
-      columnCount--;
-  for (let i = 0; i < columnCount; i++)
-    row.appendChild(document.createElement('td'));
+  // if (stageData.usesEnergy)
+      // columnCount--;
+  // for (let i = 0; i < columnCount; i++)
+    // row.appendChild(document.createElement('td'));
   
-  if (stageData.usesEnergy)
-    row.appendChild(createLabelTd('', 'X kJ', 'energy-label'));
+  // if (stageData.usesEnergy)
+    // row.appendChild(createLabelTd('', 'X kJ', 'energy-label'));
 
-  return row;
-}
+  // return row;
+// }
 
-function createJobStage(stageName) {
-  const row = helpers.createElement('tr', 'job-stage');
-  row.classList.add(`stage-${stageName}`);
-  return row;
-}
+// function createJobStage(stageName) {
+  // const row = htmlHelpers.createElement('tr', 'job-stage');
+  // row.classList.add(`stage-${stageName}`);
+  // return row;
+// }
 
 // --------------------------------------
 // --------------------------------- JOBS
@@ -405,16 +285,16 @@ function createJobButton() {
 }
 
 function createJob(jobId, stages) {
-  let jobDiv = helpers.createElement('div', 'job'); 
+  let jobDiv = htmlHelpers.createElement('div', 'job'); 
   jobDiv.id = `job-${jobId}`;
   jobDiv.appendChild(createJobHeader(jobId));
   
-  let jobTable = helpers.createElement('table', 'job-table');
+  let jobTable = htmlHelpers.createElement('table', 'job-table');
   
   const columnCount = 6;
 
-  for (const stageData of Object.values(jobData.stageData)) {
-    let stage = createStage(jobId, columnCount, stageData);
+  for (const stageData of Object.values(jobData)) {
+    let stage = createStage(jobId, stageData);
     jobTable.appendChild(stage);  
   }
   jobDiv.appendChild(jobTable);
@@ -425,7 +305,7 @@ function createJob(jobId, stages) {
     // jobDiv.appendChild(stage)
   // });
   
-  let jobEnergyLabel = helpers.createElement('label', 'job-energy-label');
+  let jobEnergyLabel = htmlHelpers.createElement('label', 'job-energy-label');
   jobEnergyLabel.textContent = 'E';
   jobDiv.appendChild(jobEnergyLabel);
   
