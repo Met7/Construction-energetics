@@ -25,17 +25,7 @@
     "extraction": { 
       "stageName": "extraction",
       "unit": "mass",
-      "inputs": {
-        "technology": {
-          "id": "technology",
-          "label": "Extraction Technology",
-          "type": "select",
-          "valueType": "technology",
-          
-          "options": [["Stone Axe (x50)", 50], ["Bronze Axe (x40)", 40], ["Bronze saw (x20)", 20], ["Iron Axe (x30)", 30], ["Iron Saw (x15)", 15]],
-          "selectedIndex": 2
-        }
-      },
+      "inputs": {},
       "usesEnergy": true,
       "formula": { "type": "multiply", "params": [
         { "id": "base-energy", "source": "material" },
@@ -47,15 +37,6 @@
       "stageName": "transportation",
       "unit": "distance",
       "inputs": {
-        "technology": {
-          "id": "technology",
-          "label": "Transportation Method",
-          "type": "select",
-          "valueType": "technology",
-          
-          "options": [["Carry (30 kJ/ton/m)", 30], ["Cart (20 kJ/ton/m)", 20], ["Animal-Pulled Cart (5 kJ/ton/m)", 5]],
-          "selectedIndex": 3
-        },
         "distance": {
           "id": "distance",
           "label": "Distance (meters)", 
@@ -74,17 +55,7 @@
     "processing": { 
       "stageName": "processing",
       "unit": "energy",
-      "inputs": {
-        "technology": {
-          "id": "technology",
-          "label": "Processing",
-          "type": "select",
-          "valueType": "technology",
-          
-          "options": [["Stone Axe (x50)", 50], ["Bronze Axe (x40)", 40], ["Bronze saw (x20)", 20], ["Iron Axe (x30)", 30], ["Iron Saw (x15)", 15]],
-          "selectedIndex": 2
-        }
-      },
+      "inputs": {},
       "usesEnergy": true,
       "formula": { "type": "multiply", "params": [
         { "id": "base-energy", "source": "material" },
@@ -96,15 +67,6 @@
       "stageName": "placement",
       "unit": "distance",
       "inputs": {
-        "technology": {
-          "id": "technology",
-          "label": "Placement",
-          "type": "select",
-          "valueType": "technology",
-          
-          "options": [["Scaffolding", 50], ["ramp", 40], ["crane", 30]],
-          "selectedIndex": 3
-        },
         "elevation": {
           "id": "elevation",
           "label": "Height (meters)", 

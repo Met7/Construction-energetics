@@ -1,7 +1,7 @@
 import * as htmlHelpers from "./html-helpers.js"; 
 import * as helpers from "./helpers.js"; 
 import { loadFile } from "./data-handler.js";
-import { createStage } from "./stage-generator.js";
+import { createStage, setStageMaterial } from "./stage-generator.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
 // 1MD = 2.160kJ
@@ -98,56 +98,6 @@ function getMaterialCategory(material) {
 }
 
 // --------------------------------------
-// ---------------------- TECHNOLOGY DATA
-
-// let techData = [
-  // {
-    // 'name': 'Stone extraction',
-    // 'stages' : ['extraction'],
-    // 'materials': [
-      // { 'category': 'stone', 'materials': [] }
-    // ],
-    // 'unit': 'mass',
-    // 'formula': 'material-multiplier', 
-    // 'options': [
-      // { 'text': 'Channeling - copper chisel', 'value': 350 },
-      // { 'text': 'Channeling - iron chisel', 'value': 150 },
-      // { 'text': 'Diamond cable saw', 'value': 10 }
-    // ]
-  // },
-  // {
-    // 'name': 'Stone processing',
-    // 'stages' : ['processing'],
-    // 'materials': [
-      // { 'category': 'stone', 'materials': [] }
-    // ],
-    // 'unit': 'mass',
-    // 'formula': 'material-multiplier', 
-    // 'options': [
-      // { 'text': 'Copper chisel', 'value': 300 },
-      // { 'text': 'Bronze chisel', 'value': 250 },
-      // { 'text': 'Iron chisel', 'value': 180 }
-    // ]
-  // },
-  // {
-    // 'name': 'Wood processing',
-    // 'stages' : ['extraction', 'processing'],
-    // 'materials': [
-      // { 'category': 'wood', 'materials': [] }
-    // ],
-    // 'unit': 'volume',
-    // 'formula': 'material-multiplier', 
-    // 'options': [
-      // { 'text': 'Stone Axe', 'value': 50 },
-      // { 'text': 'Bronze Axe', 'value': 40 },
-      // { 'text': 'Bronze saw', 'value': 20 },
-      // { 'text': 'Iron Axe', 'value': 30 },
-      // { 'text': 'Iron Saw', 'value': 15 }
-    // ]
-  // }
-// ]
-
-// --------------------------------------
 // --------------------------- STAGE DATA
 
 let jobData = await loadFile('stages');
@@ -218,60 +168,6 @@ function recalculateJobEnergy(jobId) {
 }
 
 // --------------------------------------
-// ------------------------------- STAGES
-
-// function createLabelTd(css, text, tdCss) {
-  // let cell = htmlHelpers.createElement('td', tdCss); 
-  // let label = htmlHelpers.createElement('label', css, text);
-  // cell.appendChild(label);
-  // return cell;
-// }
-
-// function createStage(jobId, columnCount, stageData) {
-  // let row = createJobStage(stageData.stageName);
-  
-  // for (const input of Object.values(stageData.inputs)) {
-    // row.appendChild(createLabelTd('quantity-label', input.label + ':'));
-    // columnCount--;
-    // let cell = document.createElement('td');
-    
-    // if (input.type == 'select') {
-      // const select = htmlHelpers.createElement('select', input.id);
-      // helpers.createOptions(select, input.options);
-      // select.selectedIndex = stageData.selectedIndex;
-      // cell.appendChild(select);
-    // }
-    // else if (input.type == 'number') {
-      // const inputElement = htmlHelpers.createElement('input', input.id);
-      // inputElement.type = 'number';
-      // inputElement.min = 0;
-      // inputElement.value = input.defaultValue;
-      // cell.appendChild(inputElement);
-    // } else
-      // throw('Unknown input type for a job stage: ' + input.type);
-    
-    // row.appendChild(cell);
-    // columnCount--;
-  // }
- 
-  // if (stageData.usesEnergy)
-      // columnCount--;
-  // for (let i = 0; i < columnCount; i++)
-    // row.appendChild(document.createElement('td'));
-  
-  // if (stageData.usesEnergy)
-    // row.appendChild(createLabelTd('', 'X kJ', 'energy-label'));
-
-  // return row;
-// }
-
-// function createJobStage(stageName) {
-  // const row = htmlHelpers.createElement('tr', 'job-stage');
-  // row.classList.add(`stage-${stageName}`);
-  // return row;
-// }
-
-// --------------------------------------
 // --------------------------------- JOBS
 
 // for testing
@@ -290,21 +186,14 @@ function createJob(jobId, stages) {
   jobDiv.appendChild(createJobHeader(jobId));
   
   let jobTable = htmlHelpers.createElement('table', 'job-table');
-  
-  const columnCount = 6;
 
   for (const stageData of Object.values(jobData)) {
     let stage = createStage(jobId, stageData);
+    setStageMaterial(stageData.stageName, stage, "stone", "limestone"); // TODO Read from selected materia1
     jobTable.appendChild(stage);  
   }
   jobDiv.appendChild(jobTable);
-  
-  //console.log(stages);
-  // stages.forEach((stageName) => {
-    // let stage = createJobStage(jobId, stageName);
-    // jobDiv.appendChild(stage)
-  // });
-  
+    
   let jobEnergyLabel = htmlHelpers.createElement('label', 'job-energy-label');
   jobEnergyLabel.textContent = 'E';
   jobDiv.appendChild(jobEnergyLabel);

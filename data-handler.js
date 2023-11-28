@@ -1,5 +1,7 @@
 const folder = "./data/"
 
+// TODO add browser caching
+
 async function loadFile(dataKey) {
   const filePath = folder + dataKey + '.json';
   console.log("Loading JSON data from: " + filePath);
