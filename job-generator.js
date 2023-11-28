@@ -23,7 +23,7 @@ function addMaterialSelectEvent(jobId) {
   //alert(jobId);
   const materialSelect = document.querySelector(`#materials-${jobId}`);
   materialSelect.addEventListener("change", () => {
-    extractionSelect.disabled = false;
+    //extractionSelect.disabled = false;
     calculateJobEnergy(jobId);
   });
 
@@ -54,8 +54,7 @@ function createMaterialSelect(jobId) {
 }
 
 function getSelected(input) {
-  if (input.type != 'select-one')
-    throw ('Input not a select');
+  if (input.type != 'select-one') throw ('Input not a select');
   return input.options[input.selectedIndex];
 }
 
@@ -187,10 +186,14 @@ function createJob(jobId, stages) {
   
   let jobTable = htmlHelpers.createElement('table', 'job-table');
 
+  let i = 1; // TODO remove
   for (const stageData of Object.values(jobData)) {
     let stage = createStage(jobId, stageData);
     setStageMaterial(stageData.stageName, stage, "stone", "limestone"); // TODO Read from selected materia1
-    jobTable.appendChild(stage);  
+    jobTable.appendChild(stage); 
+    if (i == 0)
+      break;
+    i--;
   }
   jobDiv.appendChild(jobTable);
     
