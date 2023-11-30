@@ -9,6 +9,9 @@ body {
   padding: 20px;
 }
 
+
+/* ---------------------------------- JOB --------  */
+
 #jobs-container {}
 
 .job-container {
@@ -79,12 +82,14 @@ body {
   margin-left: 10px;
 }
 
-table .stage {
+/* ---------------------------------- STAGE -------  */
+
+.stage table {
   border: 1px solid red;
   width: 100%;
 }
 
-.job-stage-header {
+.stage-header {
   background-color: #d0d0d0;
 }
 

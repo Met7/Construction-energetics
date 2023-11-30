@@ -1,27 +1,5 @@
 {
   "stages": {
-    "material": { 
-      "stageName": "material",
-      "unit": "mass", 
-      "inputs": {
-        "base-energy": {
-          "id": "base-energy",
-          "label": "Material",
-          "type": "select",
-          "valueType": "energy",
-          "options": [["Timber (15)", 15], ["Dirt (10)", 10], ["Limestone (40)", 40], ["Granite (60)", 60]],
-          "selectedIndex": 1
-        },
-        "mass": {
-          "id": "mass",
-          "label": "Mass (tons)", 
-          "type": "number",
-          "valueType": "mass",
-          "defaultValue": 1
-        }
-      },
-      "usesEnergy": false
-    },
     "extraction": { 
       "stageName": "extraction",
       "unit": "mass",

@@ -17,19 +17,9 @@ const materialsData = await loadFile('materials');
 
 var jobCount = 1;
 
-// ----------------- MATERIAL SELECT EVENT
 
-function addMaterialSelectEvent(jobId) {
-  //alert(jobId);
-  const materialSelect = document.querySelector(`#materials-${jobId}`);
-  materialSelect.addEventListener("change", () => {
-    //extractionSelect.disabled = false;
-    calculateJobEnergy(jobId);
-  });
 
-    //return materialSelect;
-}
-
+// TODO use or delete
 function updateTotal() {
   var total = 0;
   for (i = 1; i <= jobCount; i++) {
@@ -46,25 +36,36 @@ function createJobHeader(jobId) {
   return element;
 }
 
-function createMaterialSelect(jobId) {
-  const element = document.createElement('select');
-  //element.textContent = stage + ' ' + jobId;
-  //element.classList.add('job-header');
-  return element;
+function fillSubMaterialSelect(subMaterialSelect, material) {
+  //console.log("XXX making options for sub materials");
+  
+  let subMaterials = [];
+  console.log(materialsData[material]);
+  for (const subMaterial of materialsData[material]) {
+    subMaterials.push(subMaterial.name);
+  }
+  htmlHelpers.createOptions(subMaterialSelect, subMaterials);
+  //console.log("YYY done");
+  
+  // TODO change event:
+  // TODO enable and reset stages
+  // TODO confirm dialog
 }
 
-function getSelected(input) {
-  if (input.type != 'select-one') throw ('Input not a select');
-  return input.options[input.selectedIndex];
+function createMaterialSelect(subMaterialSelect) {
+  const select = document.createElement('select');
+  htmlHelpers.createOptions(select, Object.keys(materialsData));
+  //console.log(Object.keys(materialsData));
+  
+  select.addEventListener("change", () => {
+    fillSubMaterialSelect(subMaterialSelect, htmlHelpers.getSelectText(select));
+    // TODO disable stages until sub-material is selected.
+    // TODO confirm dialog
+  });
+  return select;
 }
 
-function getSelectValue(input) {
-  return getSelected(input).value;
-}
-
-function getSelectData(input) {
-  return getSelected(input).getAttribute('data')
-}
+// TODO use or delete all bellow
 
 function getJobElement(jobId) {
   return document.getElementById('job-' + jobId);
@@ -82,7 +83,7 @@ function getStageElement(jobId, stageName) {
 function getStageMaterialInJob(jobElement) {
   const stage = getStageElementInJob(jobElement, 'material');
   const input = stage.querySelector('.base-energy');
-  return getSelectData(input);
+  return htmlHelpers.getSelectData(input);
 }
 
 function getStageMaterial(jobId) {
@@ -128,7 +129,7 @@ function calculateStageEnergy(jobId, stageData) {
     if (input.type == 'number') {
       value = input.value;
     } else if (input.type == 'select-one') {
-      value = getSelectData(input);
+      value = htmlHelpers.getSelectData(input);
     } else {
       throw('Unknown param type for a stage formula');
     }
@@ -183,22 +184,34 @@ function createJob(jobId, stages) {
   let jobDiv = htmlHelpers.createElement('div', 'job'); 
   jobDiv.id = `job-${jobId}`;
   jobDiv.appendChild(createJobHeader(jobId));
+ 
+  let jobTable = htmlHelpers.createElement('table', 'job-table'); 
+  const columnCount = 2;
   
-  let jobTable = htmlHelpers.createElement('table', 'job-table');
+  
+  // (sub)Material selects
+  const subMaterialSelect = document.createElement('select');
+  const materialSelect = createMaterialSelect(subMaterialSelect);
+  
+  // TODO rename submaterial to material
+  
+  let row = htmlHelpers.createTableRow("Material category:", [materialSelect], columnCount);
+  jobTable.appendChild(row); 
+  
+  row = htmlHelpers.createTableRow("Material:", [subMaterialSelect], columnCount);
+  jobTable.appendChild(row); 
 
-  let i = 1; // TODO remove
   for (const stageData of Object.values(jobData)) {
     let stage = createStage(jobId, stageData);
     setStageMaterial(stageData.stageName, stage, "stone", "limestone"); // TODO Read from selected materia1
-    jobTable.appendChild(stage); 
-    if (i == 0)
-      break;
-    i--;
+    let td = htmlHelpers.createTd(stage);
+    td.colSpan = columnCount;
+    jobTable.appendChild(htmlHelpers.createTr(td));
+    break; // TODO remove
   }
-  jobDiv.appendChild(jobTable);
+  jobDiv.appendChild(jobTable);// TODO consider whether table is needed
     
-  let jobEnergyLabel = htmlHelpers.createElement('label', 'job-energy-label');
-  jobEnergyLabel.textContent = 'E';
+  const jobEnergyLabel = htmlHelpers.createElement('label', 'job-energy-label', 'E');
   jobDiv.appendChild(jobEnergyLabel);
   
   jobDiv.appendChild(document.createElement('br'));
@@ -206,6 +219,7 @@ function createJob(jobId, stages) {
   
   return jobDiv;
 }
+
 /*
 document.addEventListener("DOMContentLoaded", () => {
   const jobsContainer = document.querySelector("#jobs-container");
