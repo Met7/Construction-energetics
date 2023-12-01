@@ -29,14 +29,9 @@ function updateTotal() {
 }
 
 // --------------------------------------
-// ------------------------- HTML HELPERS
+// ---------------------- MATERIAL EVENTS
 
-function createJobHeader(jobId) {
-  const element = htmlHelpers.createElement('h2', 'job-header', `Job #${jobId}`);
-  return element;
-}
-
-function fillSubMaterialSelect(subMaterialSelect, material) {
+function fillSubMaterialSelect(jobElement, subMaterialSelect, material) {
   //console.log("XXX making options for sub materials");
   
   let subMaterials = [];
@@ -52,17 +47,40 @@ function fillSubMaterialSelect(subMaterialSelect, material) {
   // TODO confirm dialog
 }
 
-function createMaterialSelect(subMaterialSelect) {
+function createMaterialSelect() {
   const select = document.createElement('select');
   htmlHelpers.createOptions(select, Object.keys(materialsData));
   //console.log(Object.keys(materialsData));
-  
-  select.addEventListener("change", () => {
-    fillSubMaterialSelect(subMaterialSelect, htmlHelpers.getSelectText(select));
+  return select;
+}
+
+function setMaterialSelectEvent(jobElement, materialSelect, subMaterialSelect) {
+  materialSelect.addEventListener("change", () => {
+    fillSubMaterialSelect(jobElement, subMaterialSelect, htmlHelpers.getSelectText(materialSelect));
     // TODO disable stages until sub-material is selected.
     // TODO confirm dialog
   });
+}
+
+function createSubMaterialSelect(jobElement, materialSelect) {
+  const select = document.createElement('select');
+  select.addEventListener("change", () => {
+    const material = htmlHelpers.getSelectText(materialSelect);
+    const subMaterial = htmlHelpers.getSelectText(select);
+    const stageElements = getStageElements(jobElement);
+    for (let stageElement of stageElements) {
+      setStageMaterial(stageElement, material, subMaterial);
+    }
+  });
   return select;
+}
+
+// --------------------------------------
+// ------------------------- HTML HELPERS
+
+function createJobHeader(jobId) {
+  const element = htmlHelpers.createElement('h2', 'job-header', `Job #${jobId}`);
+  return element;
 }
 
 // TODO use or delete all bellow
@@ -98,64 +116,17 @@ function getMaterialCategory(material) {
 }
 
 // --------------------------------------
-// --------------------------- STAGE DATA
+// ------------------------------- STAGES
 
 let jobData = await loadFile('stages');
 //console.log(jobData);
 
+function getStageElements(ancestorElement) {
+  return ancestorElement.getElementsByClassName("stage");
+}
+
 // --------------------------------------
 // ------------------------------- ENERGY
-
-function getStageEnergyLabel(jobId, stageName) {
-  let stage = getStageElement(jobId, stageName);
-  return stage.querySelector('.energy-label label');
-}
-
-function calculateStageEnergy(jobId, stageData) {
-  if (!stageData.usesEnergy)
-    return 0;
-  
-  let job = document.getElementById(`job-${jobId}`);
-  
-  let formulaData = {};
-  // collect data for the formula
-  for (const param of Object.values(stageData.formula.params)) {
-    //console.log('Processing param: ' + param.id + ' of ' + param.source);
-    let stageName = param.source == 'current-stage' ? stageData.stageName : param.source;
-    let stage = job.querySelector('.stage-' + stageName);
-    let input = stage.querySelector('.' + param.id); // the html input
-    let value;
-
-    if (input.type == 'number') {
-      value = input.value;
-    } else if (input.type == 'select-one') {
-      value = htmlHelpers.getSelectData(input);
-    } else {
-      throw('Unknown param type for a stage formula');
-    }
-    
-    formulaData[param.id] = parseFloat(value);
-  }
-  
-  //console.log('formula data:');
-  //console.log(formulaData);
-  let result = 1;
-  if (stageData.formula.type == 'multiply') {
-    stageData.formula.params.forEach((param) => {
-      result *= formulaData[param.id];
-    });
-  }
-  return result;
-}
-
-function updateStageEnergy(jobId, stageData) {
-  if (!stageData.usesEnergy)
-    return 0;
-  const label = getStageEnergyLabel(jobId, stageData.stageName);
-  let newEnergy = calculateStageEnergy(jobId, stageData);
-  label.textContent = helpers.formatEnergy(newEnergy);
-  return newEnergy;
-}
 
 function recalculateJobEnergy(jobId) {
   let totalJobEnergy = 0;
@@ -190,8 +161,9 @@ function createJob(jobId, stages) {
   
   
   // (sub)Material selects
-  const subMaterialSelect = document.createElement('select');
-  const materialSelect = createMaterialSelect(subMaterialSelect);
+  const materialSelect = createMaterialSelect();
+  const subMaterialSelect = createSubMaterialSelect(jobDiv, materialSelect);
+  setMaterialSelectEvent(jobDiv, materialSelect, subMaterialSelect);
   
   // TODO rename submaterial to material
   
@@ -203,7 +175,7 @@ function createJob(jobId, stages) {
 
   for (const stageData of Object.values(jobData)) {
     let stage = createStage(jobId, stageData);
-    setStageMaterial(stageData.stageName, stage, "stone", "limestone"); // TODO Read from selected materia1
+    setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
     let td = htmlHelpers.createTd(stage);
     td.colSpan = columnCount;
     jobTable.appendChild(htmlHelpers.createTr(td));
