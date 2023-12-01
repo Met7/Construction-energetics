@@ -10,7 +10,7 @@ import { createStage, setStageMaterial } from "./stage-generator.js";
 // Carry: 20kg*5km/h = 10t/m/270kJ = 27kJ/1t/m
 
 // event for manual triggering
-const event = new CustomEvent("change", { "detail": "Material manual trigger" });
+const event = new CustomEvent("change", { "detail": "MaterialCategory manual trigger" });
 
 const materialsData = await loadFile('materials');
 //console.log(materialsData);
@@ -31,15 +31,15 @@ function updateTotal() {
 // --------------------------------------
 // ---------------------- MATERIAL EVENTS
 
-function fillSubMaterialSelect(jobElement, subMaterialSelect, material) {
-  //console.log("XXX making options for sub materials");
+function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
+  //console.log("XXX making options for materials");
   
   let subMaterials = [];
-  console.log(materialsData[material]);
-  for (const subMaterial of materialsData[material]) {
+  console.log(materialsData[materialCategory]);
+  for (const subMaterial of materialsData[materialCategory]) {
     subMaterials.push(subMaterial.name);
   }
-  htmlHelpers.createOptions(subMaterialSelect, subMaterials);
+  htmlHelpers.createOptions(materialSelect, subMaterials);
   //console.log("YYY done");
   
   // TODO change event:
@@ -47,29 +47,29 @@ function fillSubMaterialSelect(jobElement, subMaterialSelect, material) {
   // TODO confirm dialog
 }
 
-function createMaterialSelect() {
+function createMaterialCategorySelect() {
   const select = document.createElement('select');
   htmlHelpers.createOptions(select, Object.keys(materialsData));
   //console.log(Object.keys(materialsData));
   return select;
 }
 
-function setMaterialSelectEvent(jobElement, materialSelect, subMaterialSelect) {
-  materialSelect.addEventListener("change", () => {
-    fillSubMaterialSelect(jobElement, subMaterialSelect, htmlHelpers.getSelectText(materialSelect));
-    // TODO disable stages until sub-material is selected.
+function setMaterialCategorySelectEvent(jobElement, materialCategorySelect, materialSelect) {
+  materialCategorySelect.addEventListener("change", () => {
+    fillMaterialSelect(jobElement, materialSelect, htmlHelpers.getSelectText(materialCategorySelect));
+    // TODO disable stages until material is selected.
     // TODO confirm dialog
   });
 }
 
-function createSubMaterialSelect(jobElement, materialSelect) {
+function creatematerialSelect(jobElement, materialCategorySelect) {
   const select = document.createElement('select');
   select.addEventListener("change", () => {
-    const material = htmlHelpers.getSelectText(materialSelect);
+    const materialCategory = htmlHelpers.getSelectText(materialCategorySelect);
     const subMaterial = htmlHelpers.getSelectText(select);
     const stageElements = getStageElements(jobElement);
     for (let stageElement of stageElements) {
-      setStageMaterial(stageElement, material, subMaterial);
+      setStageMaterial(stageElement, materialCategory, subMaterial);
     }
   });
   return select;
@@ -85,35 +85,35 @@ function createJobHeader(jobId) {
 
 // TODO use or delete all bellow
 
-function getJobElement(jobId) {
-  return document.getElementById('job-' + jobId);
-}
+// function getJobElement(jobId) {
+  // return document.getElementById('job-' + jobId);
+// }
 
-function getStageElementInJob(jobElement, stageName) {
-  return jobElement.querySelector('.stage-'  + stageName);
-}
+// function getStageElementInJob(jobElement, stageName) {
+  // return jobElement.querySelector('.stage-'  + stageName);
+// }
 
-function getStageElement(jobId, stageName) {
-  const jobElement = getJobElement(jobId);
-  return getStageElementInJob(jobElement, stageName);
-}
+// function getStageElement(jobId, stageName) {
+  // const jobElement = getJobElement(jobId);
+  // return getStageElementInJob(jobElement, stageName);
+// }
 
-function getStageMaterialInJob(jobElement) {
-  const stage = getStageElementInJob(jobElement, 'material');
-  const input = stage.querySelector('.base-energy');
-  return htmlHelpers.getSelectData(input);
-}
+// function getStageMaterialCategoryInJob(jobElement) {
+  // const stage = getStageElementInJob(jobElement, 'material');
+  // const input = stage.querySelector('.base-energy');
+  // return htmlHelpers.getSelectData(input);
+// }
 
-function getStageMaterial(jobId) {
-  return getStageMaterialInJob(getJobElement(jobId));
-}
+// function getStageMaterialCategory(jobId) {
+  // return getStageMaterialCategoryInJob(getJobElement(jobId));
+// }
 
-function getMaterialCategory(material) {
-  const materialData = materialsData.find(element => element.name == material)
-  if (typeof(material) == 'undefined')
-    throw('No category for material ' + material);
-  return materialData.category;
-}
+// function getMaterialCategoryCategory(material) {
+  // const materialData = materialsData.find(element => element.name == material)
+  // if (typeof(material) == 'undefined')
+    // throw('No category for material ' + material);
+  // return materialData.category;
+// }
 
 // --------------------------------------
 // ------------------------------- STAGES
@@ -128,15 +128,15 @@ function getStageElements(ancestorElement) {
 // --------------------------------------
 // ------------------------------- ENERGY
 
-function recalculateJobEnergy(jobId) {
-  let totalJobEnergy = 0;
-  for (const stage of Object.values(jobData))
-    totalJobEnergy += updateStageEnergy(jobId, stage);
+// function recalculateJobEnergy(jobId) {
+  // let totalJobEnergy = 0;
+  // for (const stage of Object.values(jobData))
+    // totalJobEnergy += updateStageEnergy(jobId, stage);
 
-  let job = document.getElementById(`job-${jobId}`);
-  let label = job.querySelector('.job-energy-label');
-  label.textContent = helpers.formatEnergy(totalJobEnergy);
-}
+  // let job = document.getElementById(`job-${jobId}`);
+  // let label = job.querySelector('.job-energy-label');
+  // label.textContent = helpers.formatEnergy(totalJobEnergy);
+// }
 
 // --------------------------------------
 // --------------------------------- JOBS
@@ -160,17 +160,17 @@ function createJob(jobId, stages) {
   const columnCount = 2;
   
   
-  // (sub)Material selects
-  const materialSelect = createMaterialSelect();
-  const subMaterialSelect = createSubMaterialSelect(jobDiv, materialSelect);
-  setMaterialSelectEvent(jobDiv, materialSelect, subMaterialSelect);
+  // Material(Category) selects
+  const materialCategorySelect = createMaterialCategorySelect();
+  const materialSelect = creatematerialSelect(jobDiv, materialCategorySelect);
+  setMaterialCategorySelectEvent(jobDiv, materialCategorySelect, materialSelect);
   
   // TODO rename submaterial to material
   
-  let row = htmlHelpers.createTableRow("Material category:", [materialSelect], columnCount);
+  let row = htmlHelpers.createTableRow("MaterialCategory category:", [materialCategorySelect], columnCount);
   jobTable.appendChild(row); 
   
-  row = htmlHelpers.createTableRow("Material:", [subMaterialSelect], columnCount);
+  row = htmlHelpers.createTableRow("MaterialCategory:", [materialSelect], columnCount);
   jobTable.appendChild(row); 
 
   for (const stageData of Object.values(jobData)) {
@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const addJobButton = document.querySelector("#add-job-button");
 
   addJobButton.addEventListener("click", () => {
-    addMaterialSelectEvent(jobNumber);
+    addMaterialCategorySelectEvent(jobNumber);
     document.querySelector(`#materials-${jobNumber}`).dispatchEvent(event);
     calculateJobEnergy(jobNumber);  
     
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  addMaterialSelectEvent(1);
+  addMaterialCategorySelectEvent(1);
 
   // Dispatch/Trigger/Fire the event
   document.querySelector("#materials-1").dispatchEvent(event);

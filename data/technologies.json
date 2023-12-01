@@ -1,0 +1,56 @@
+{
+  "technologies": {
+    "extraction": [
+      {
+        "author": "Erasmus",
+        "year": "1965",
+        "material_category": "stone",
+        "material": "limestone",
+        "approach": "Collecting",
+        "tool": "Wooden pole",
+        "unit": "ton",
+        "speed": "0.3"
+      },
+      {
+        "author": "Erasmus",
+        "year": "1965",
+        "material_category": "stone",
+        "material": "limestone",
+        "approach": "Collecting",
+        "tool": "Iron crowbar",
+        "unit": "ton",
+        "speed": "1"
+      },
+      {
+        "author": "YoMamma",
+        "year": "1822",
+        "material_category": "stone",
+        "material": "limestone",
+        "approach": "Collecting",
+        "tool": "Hands",
+        "unit": "ton",
+        "speed": "100"
+      }, 
+      {
+        "author": "YoMamma",
+        "year": "1822",
+        "material_category": "stone",
+        "material": "limestone",
+        "approach": "Explosive - breaking",
+        "tool": "Dynamite",
+        "unit": "ton",
+        "speed": "1000"
+      },
+      {
+        "author": "YoMamma",
+        "year": "1822",
+        "material_category": "stone",
+        "material": "marble",
+        "approach": "Collecting",
+        "tool": "Hands",
+        "unit": "ton",
+        "speed": "10"
+      }
+    ]
+  }
+}
