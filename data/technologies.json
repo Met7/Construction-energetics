@@ -50,6 +50,26 @@
         "tool": "Hands",
         "unit": "ton",
         "speed": "10"
+      },
+      {
+        "author": "Jesus",
+        "year": "-8",
+        "material_category": "stone",
+        "material": "Granite",
+        "approach": "Explosive - breaking",
+        "tool": "Dynamite",
+        "unit": "ton",
+        "speed": "100"
+      },
+      {
+        "author": "Jesus",
+        "year": "-8",
+        "material_category": "stone",
+        "material": "Granite",
+        "approach": "Collecting",
+        "tool": "Hands",
+        "unit": "ton",
+        "speed": "10"
       }
     ]
   }

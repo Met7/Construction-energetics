@@ -48,7 +48,7 @@ function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
 }
 
 function createMaterialCategorySelect() {
-  const select = document.createElement('select');
+  const select = htmlHelpers.createElement('select', 'material-category-select');
   htmlHelpers.createOptions(select, Object.keys(materialsData));
   //console.log(Object.keys(materialsData));
   return select;
@@ -63,7 +63,7 @@ function setMaterialCategorySelectEvent(jobElement, materialCategorySelect, mate
 }
 
 function creatematerialSelect(jobElement, materialCategorySelect) {
-  const select = document.createElement('select');
+  const select = htmlHelpers.createElement('select', 'material-select');
   select.addEventListener("change", () => {
     const materialCategory = htmlHelpers.getSelectText(materialCategorySelect);
     const subMaterial = htmlHelpers.getSelectText(select);
@@ -192,39 +192,5 @@ function createJob(jobId, stages) {
   return jobDiv;
 }
 
-/*
-document.addEventListener("DOMContentLoaded", () => {
-  const jobsContainer = document.querySelector("#jobs-container");
-  const jobContainer = jobsContainer.querySelector(".job-container");
-  const addJobButton = document.querySelector("#add-job-button");
 
-  addJobButton.addEventListener("click", () => {
-    addMaterialCategorySelectEvent(jobNumber);
-    document.querySelector(`#materials-${jobNumber}`).dispatchEvent(event);
-    calculateJobEnergy(jobNumber);  
-    
-    newJob.addEventListener("input", (event) => {
-      if (event.target.matches(".job input, .job select")) {
-        calculateJobEnergy(jobNumber);
-      }
-    });
-  });
-
-  jobContainer.addEventListener("input", (event) => {
-    if (event.target.matches(".job input, .job select")) {
-      //const job = event.target.closest(".job");
-      calculateJobEnergy(1);
-    }
-  });
-
-  addMaterialCategorySelectEvent(1);
-
-  // Dispatch/Trigger/Fire the event
-  document.querySelector("#materials-1").dispatchEvent(event);
-
-  //const firstJob = jobContainer.querySelector(".job");
-  //calculateJobEnergy(firstJob);
-  calculateJobEnergy(1);
-});
-*/
 export { createJob };

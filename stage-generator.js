@@ -222,28 +222,12 @@ function setStageMaterial(stageElement, materialCategory, material) {
   htmlHelpers.createOptions(toolSelect, []);
 }
 
-function getJobMaterial(stageSelect) {
-  // TODO change for a while loop until the right class is found
-  // select-td-tr-table-div-table[TODO change to job div]
-  if (stageSelect.nodeName != 'SELECT') throw ('Unexpected element ' + stageSelect.nodeName);
-  
-  const stageTable = stageSelect.parentElement.parentElement.parentElement;
-  if (stageTable.nodeName != 'TABLE') throw ('Unexpected element' + stageSelect.nodeName);
-  
-  let jobElement = stageTable.parentElement.parentElement;
-  if (stageTable.nodeName != 'TABLE') throw ('Unexpected element' + stageSelect.nodeName);
-  
-  const materialCategory = getStageMaterialInJob(jobElement);
-  
-  alert(materialCategory);
-}
-
 function chooseStageApproach(stageName, toolSelect, approach) {
   console.log("ChooseStageApproach for : " + stageName + ", approach: " + approach);
   
-  //const materialCategory = getJobMaterial(toolSelect); // TODO update values of materials
-  const materialCategory = "stone";
-  const material = "limestone";
+  const [materialCategory, material] =  getJobMaterial(toolSelect);
+  //const materialCategory = "stone";
+  //const material = "limestone";
   const technologies = getApplicableTechnologies(stageName, materialCategory, material, approach);
 
   //console.log(technologies);
@@ -254,5 +238,41 @@ function chooseStageApproach(stageName, toolSelect, approach) {
   }
   htmlHelpers.createOptions(toolSelect, options);
 }
+
+// --------------------------------------
+// ---------------------------------- JOB
+
+function getJobElement(element) {
+  let i = 0;
+  do {
+    element = element.parentElement;
+    if (!element)
+      throw("stage-generator::getJobMaterial: Job element not found.");
+    i++;
+  } while (!element.classList.contains("job"));
+  return element;
+}
+
+function getStageMaterialInJob(element) {
+  //console.log(element);
+  const materialCategorySelect = element.querySelector(".material-category-select");
+  if (!materialCategorySelect)
+      throw("stage-generator::getStageMaterialInJob: Material category select not found.");
+  const materialSelect = element.querySelector(".material-select");
+  if (!materialSelect)
+      throw("stage-generator::getStageMaterialInJob: Material select not found.");
+  return [htmlHelpers.getSelectText(materialCategorySelect), htmlHelpers.getSelectText(materialSelect)];
+}
+
+// element is something inside the stage typically a select that changed.
+function getJobMaterial(element) {
+  // select-td-tr-table-div-table[TODO change to job div]
+  if (element.nodeName != 'SELECT') throw ('Unexpected element ' + element.nodeName);
+  
+  element = getJobElement(element);
+  return getStageMaterialInJob(element);
+}
+
+
 
 export { createStage, setStageMaterial };
