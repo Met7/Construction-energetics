@@ -29,7 +29,7 @@ function updateTotal() {
 }
 
 // --------------------------------------
-// ---------------------- MATERIAL EVENTS
+// ---------------------------- MATERIALS
 
 function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
   //console.log("XXX making options for materials");
@@ -75,6 +75,22 @@ function creatematerialSelect(jobElement, materialCategorySelect) {
   return select;
 }
 
+
+// --------------------------------------
+// -------------------------------- UNITS
+
+function createUnitSelect() {
+  const select = htmlHelpers.createElement('select', 'unit-select');
+  htmlHelpers.createOptions(select, ["ton", "m3", "m2", "units"]);
+  return select;
+}
+
+function createQuantityInput() {
+  const input = htmlHelpers.createElement('input', 'amount-input');
+  input.setAttribute("type", "number");
+  return input;
+}
+
 // --------------------------------------
 // ------------------------- HTML HELPERS
 
@@ -82,7 +98,7 @@ function createJobHeader(jobId) {
   const element = htmlHelpers.createElement('h2', 'job-header', `Job #${jobId}`);
   return element;
 }
-
+ 
 // TODO use or delete all bellow
 
 // function getJobElement(jobId) {
@@ -152,27 +168,34 @@ function createJobButton() {
 }
 
 function createJob(jobId, stages) {
+  // Element structure
   let jobDiv = htmlHelpers.createElement('div', 'job'); 
   jobDiv.id = `job-${jobId}`;
   jobDiv.appendChild(createJobHeader(jobId));
- 
   let jobTable = htmlHelpers.createElement('table', 'job-table'); 
   const columnCount = 2;
   
+  // Job name
+  const input = document.createElement("input");
+  input.value = "Postav treba zed";
+  jobTable.appendChild(htmlHelpers.createTableRow("Target number of units:", [input], columnCount));
   
   // Material(Category) selects
   const materialCategorySelect = createMaterialCategorySelect();
   const materialSelect = creatematerialSelect(jobDiv, materialCategorySelect);
   setMaterialCategorySelectEvent(jobDiv, materialCategorySelect, materialSelect);
-  
-  // TODO rename submaterial to material
-  
-  let row = htmlHelpers.createTableRow("MaterialCategory category:", [materialCategorySelect], columnCount);
+  let row = htmlHelpers.createTableRow("Material category:", [materialCategorySelect], columnCount);
+  jobTable.appendChild(row); 
+  row = htmlHelpers.createTableRow("Material:", [materialSelect], columnCount);
   jobTable.appendChild(row); 
   
-  row = htmlHelpers.createTableRow("MaterialCategory:", [materialSelect], columnCount);
-  jobTable.appendChild(row); 
-
+  // Unit and quantity
+  row = htmlHelpers.createTableRow("Unit for the material:", [createUnitSelect()], columnCount);
+  jobTable.appendChild(row);
+  row = htmlHelpers.createTableRow("Target number of units:", [createQuantityInput()], columnCount);
+  jobTable.appendChild(row);
+  
+  // Stages
   for (const stageData of Object.values(jobData)) {
     let stage = createStage(jobId, stageData);
     setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
@@ -181,6 +204,7 @@ function createJob(jobId, stages) {
     jobTable.appendChild(htmlHelpers.createTr(td));
     break; // TODO remove
   }
+  
   jobDiv.appendChild(jobTable);// TODO consider whether table is needed
     
   const jobEnergyLabel = htmlHelpers.createElement('label', 'job-energy-label', 'E');

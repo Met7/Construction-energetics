@@ -1,3 +1,21 @@
+import { loadFile } from "./data-handler.js";
+
+const studiesData = await loadFile('studies');
+
+function getStudyCitation(author, year) {
+  if (!(author in studiesData) || !(year in studiesData[author])) {
+    console.log("Helpers: study for (" + author + ", " + year + ") not found.");
+    return "";
+  }
+  return studiesData[author];
+}
+
+function formatEnergy(energy) {
+  if (typeof(energy) != 'number') // energy.isNaN()
+    return energy;
+  return energy.toFixed(1) + "kJ";
+}
+
 // returns tons per cubic meter
 function materialDensity(material) {
   if (material == "timber") {
@@ -11,20 +29,16 @@ function materialDensity(material) {
   } else alert("materialDensity: unknown material");
 }
 
-function formatEnergy(energy) {
-  if (typeof(energy) != 'number') // energy.isNaN()
-    return energy;
-  return energy.toFixed(1) + "kJ";
-}
-
 // case insensitive; this may change.
 // usually used to compare strings in FE with those in JSON.
 function strEq(str1, str2) {
   return !str1.localeCompare(str2, undefined, { sensitivity: 'accent' });
 }
 
+
 export {
-  strEq,
   formatEnergy,
-  materialDensity
+  getStudyCitation,
+  materialDensity,
+  strEq
 };

@@ -122,24 +122,28 @@ function createStage(jobId, stageData) {
   
   // Approach select
   let approachSelect = htmlHelpers.createElement('select', 'approach-select');
-  //htmlHelpers.createOptions(select, [["Kick", 0], ["Bite", 1]]);
-  //select.selectedIndex = 1;
-    
-  row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount);  
+  row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount);
   stageTable.appendChild(row);
   
   // Tool select
   let toolSelect = htmlHelpers.createElement('select', 'tool-select');
-  //htmlHelpers.createOptions(select, [["Stick", 0], ["Butt", 1], ["Paper", 2]]);
-  //select.selectedIndex = 1;
-  
-  row = htmlHelpers.createTableRow("Tool: ", [toolSelect], columnCount);  
+  toolSelect.addEventListener("change", () => {
+    chooseStageTool(stageTable, "AAA", "Josef", "1922", "Gigaton", "10");
+  });
+  row = htmlHelpers.createTableRow("Tool: ", [toolSelect], columnCount);
   stageTable.appendChild(row);
   
   // Approach select event
   approachSelect.addEventListener("change", () => {
     chooseStageApproach(stageData.stageName, toolSelect, htmlHelpers.getSelectText(approachSelect));
   });
+  
+  // output fields
+  stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement('p', 'citation')], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Study unit: ", [htmlHelpers.createElement('p', 'study-unit')], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Study units/h: ", [htmlHelpers.createElement('p', 'study-speed')], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [htmlHelpers.createElement('input', 'unit-conversion')], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Total MH:", [htmlHelpers.createElement('p', 'total-mh')], columnCount));
   
   // further inputs
   for (const input of Object.values(stageData.inputs)) {
@@ -178,7 +182,7 @@ function createStage(jobId, stageData) {
 }
 
 // --------------------------------------
-// -------------------- POPULATE WITH DATA
+// ------------------------------- EVENTS
 
 function getApplicableTechnologies(stageName, materialCategory, material, approach = "") {
   console.log("Get applicable tech XXX for: " + stageName + ", " + materialCategory + ", " + material + ", " + approach);
@@ -239,6 +243,22 @@ function chooseStageApproach(stageName, toolSelect, approach) {
   htmlHelpers.createOptions(toolSelect, options);
 }
 
+// stageElement is some ancestor of the affected elements in the stage.
+function chooseStageTool(stageElement, approach, author, year, unit, speed) {
+  // TODO
+  console.log("chooseStageTool for " + approach + ", " + author + ", " + year + ", " + unit + ", " + speed + ".");
+  const citationP = stageElement.querySelector(".citation");
+  const studyUnitP = stageElement.querySelector(".study-unit");
+  const studySpeedP = stageElement.querySelector(".study-speed");
+  const unitConversionInput = stageElement.querySelector(".unit-conversion");
+  const totalMhP = stageElement.querySelector(".total-mh");
+  citationP.innerText = helpers.getStudyCitation(author, year);
+  studyUnitP.innerText = unit;
+  studySpeedP.innerText = speed + " " + unit + "/h";
+  unitConversionInput.value = "LLLL";
+  totalMhP.innerText = "CCCC";
+}
+
 // --------------------------------------
 // ---------------------------------- JOB
 
@@ -253,26 +273,26 @@ function getJobElement(element) {
   return element;
 }
 
-function getStageMaterialInJob(element) {
+function getJobMaterial(element) {
   //console.log(element);
+  element = getJobElement(element);
   const materialCategorySelect = element.querySelector(".material-category-select");
   if (!materialCategorySelect)
-      throw("stage-generator::getStageMaterialInJob: Material category select not found.");
+      throw("stage-generator::getJobMaterial: Material category select not found.");
   const materialSelect = element.querySelector(".material-select");
   if (!materialSelect)
-      throw("stage-generator::getStageMaterialInJob: Material select not found.");
+      throw("stage-generator::getJobMaterial: Material select not found.");
   return [htmlHelpers.getSelectText(materialCategorySelect), htmlHelpers.getSelectText(materialSelect)];
 }
 
-// element is something inside the stage typically a select that changed.
-function getJobMaterial(element) {
-  // select-td-tr-table-div-table[TODO change to job div]
-  if (element.nodeName != 'SELECT') throw ('Unexpected element ' + element.nodeName);
-  
+function getJobQuantity(element) {
+  //console.log(element);
   element = getJobElement(element);
-  return getStageMaterialInJob(element);
+  const quantityInput = element.querySelector(".quantity-input");
+  if (!quantityInput)
+      throw("stage-generator::getJobQuantity: Quantity input not found.");
+  return quantityInput.value;
 }
-
 
 
 export { createStage, setStageMaterial };
