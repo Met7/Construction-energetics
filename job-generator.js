@@ -1,5 +1,5 @@
-import * as htmlHelpers from "./html-helpers.js"; 
-import * as helpers from "./helpers.js"; 
+import * as htmlHelpers from "./helpers/html-helpers.js"; 
+import * as helpers from "./helpers/helpers.js"; 
 import { loadFile } from "./data-handler.js";
 import { createStage, setStageMaterial } from "./stage-generator.js";
 
@@ -32,19 +32,19 @@ function updateTotal() {
 // ---------------------------- MATERIALS
 
 function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
-  //console.log("XXX making options for materials");
-  
-  let subMaterials = [];
+  //console.log("filling material select for " + materialCategory);
+  let materials = [];
   console.log(materialsData[materialCategory]);
-  for (const subMaterial of materialsData[materialCategory]) {
-    subMaterials.push(subMaterial.name);
+  for (const material of materialsData[materialCategory]["data"]) {
+    materials.push(material.name);
   }
-  htmlHelpers.createOptions(materialSelect, subMaterials);
+  htmlHelpers.createOptions(materialSelect, materials);
   //console.log("YYY done");
   
   // TODO change event:
   // TODO enable and reset stages
   // TODO confirm dialog
+  // TODO maybe put it on a button
 }
 
 function createMaterialCategorySelect() {
@@ -66,10 +66,10 @@ function creatematerialSelect(jobElement, materialCategorySelect) {
   const select = htmlHelpers.createElement('select', 'material-select');
   select.addEventListener("change", () => {
     const materialCategory = htmlHelpers.getSelectText(materialCategorySelect);
-    const subMaterial = htmlHelpers.getSelectText(select);
+    const material = htmlHelpers.getSelectText(select);
     const stageElements = getStageElements(jobElement);
     for (let stageElement of stageElements) {
-      setStageMaterial(stageElement, materialCategory, subMaterial);
+      setStageMaterial(stageElement, materialCategory, material);
     }
   });
   return select;

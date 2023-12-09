@@ -1,5 +1,6 @@
-import * as htmlHelpers from "./html-helpers.js"; 
-import * as helpers from "./helpers.js"; 
+import * as helpers from "./helpers/helpers.js"; 
+import * as htmlHelpers from "./helpers/html-helpers.js"; 
+import * as studiesHelpers from "./helpers/studies-helpers.js"; 
 import { loadFile } from "./data-handler.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
@@ -128,7 +129,14 @@ function createStage(jobId, stageData) {
   // Tool select
   let toolSelect = htmlHelpers.createElement('select', 'tool-select');
   toolSelect.addEventListener("change", () => {
-    chooseStageTool(stageTable, "AAA", "Josef", "1922", "Gigaton", "10");
+    chooseStageTool(
+      stageTable,
+      htmlHelpers.getSelectText(toolSelect),
+      htmlHelpers.getSelectData(toolSelect, "author"),
+      htmlHelpers.getSelectData(toolSelect, "year"),
+      htmlHelpers.getSelectData(toolSelect, "unit"),
+      htmlHelpers.getSelectValue(toolSelect)
+    );
   });
   row = htmlHelpers.createTableRow("Tool: ", [toolSelect], columnCount);
   stageTable.appendChild(row);
@@ -229,16 +237,28 @@ function setStageMaterial(stageElement, materialCategory, material) {
 function chooseStageApproach(stageName, toolSelect, approach) {
   console.log("ChooseStageApproach for : " + stageName + ", approach: " + approach);
   
-  const [materialCategory, material] =  getJobMaterial(toolSelect);
-  //const materialCategory = "stone";
-  //const material = "limestone";
+  const [materialCategory, material, unit] =  getJobProperties(toolSelect);
   const technologies = getApplicableTechnologies(stageName, materialCategory, material, approach);
 
   //console.log(technologies);
   
   let options = [];
   for (const tech of technologies) {
-    options.push([ tech.tool, tech.speed ]);
+    let optionsData = {
+      "text": tech.tool + " (" + tech.author + " " + tech.year + ")",
+      "value": tech.speed,
+      "author": tech.author,
+      "year": tech.year,
+      "unit": tech.unit
+      // TODO conversion factor
+    };
+    // TODO tohle je blbe. 1) Nechceme delat konverze blbosti, jako prevoz vahy na m^2; 2) neni reseny prevod pres default unit do target unit
+    //console.log("Checking conversions for select entry. Job unit> " + unit + ", tech unit:" + tech.unit);
+    if (tech.unit != unit && ("conversions" in tech)) {
+      for (const conversionUnit of Object.keys(tech["conversions"]))
+        optionsData["conversion-" + conversionUnit] = tech["conversions"][conversionUnit];
+    }
+    options.push(optionsData);
   }
   htmlHelpers.createOptions(toolSelect, options);
 }
@@ -252,7 +272,7 @@ function chooseStageTool(stageElement, approach, author, year, unit, speed) {
   const studySpeedP = stageElement.querySelector(".study-speed");
   const unitConversionInput = stageElement.querySelector(".unit-conversion");
   const totalMhP = stageElement.querySelector(".total-mh");
-  citationP.innerText = helpers.getStudyCitation(author, year);
+  citationP.innerText = studiesHelpers.getStudyCitation(author, year);
   studyUnitP.innerText = unit;
   studySpeedP.innerText = speed + " " + unit + "/h";
   unitConversionInput.value = "LLLL";
@@ -267,22 +287,25 @@ function getJobElement(element) {
   do {
     element = element.parentElement;
     if (!element)
-      throw("stage-generator::getJobMaterial: Job element not found.");
+      throw("stage-generator::getJobElement: Job element not found.");
     i++;
   } while (!element.classList.contains("job"));
   return element;
 }
 
-function getJobMaterial(element) {
+function getJobProperties(element) {
   //console.log(element);
   element = getJobElement(element);
   const materialCategorySelect = element.querySelector(".material-category-select");
   if (!materialCategorySelect)
-      throw("stage-generator::getJobMaterial: Material category select not found.");
+      throw("stage-generator::getJobProperties: Material category select not found.");
   const materialSelect = element.querySelector(".material-select");
   if (!materialSelect)
-      throw("stage-generator::getJobMaterial: Material select not found.");
-  return [htmlHelpers.getSelectText(materialCategorySelect), htmlHelpers.getSelectText(materialSelect)];
+      throw("stage-generator::getJobProperties: Material select not found.");
+  const unitSelect = element.querySelector(".unit-select");
+    if (!unitSelect)
+        throw("stage-generator::getJobProperties: Unit select not found.");
+  return [htmlHelpers.getSelectText(materialCategorySelect), htmlHelpers.getSelectText(materialSelect), htmlHelpers.getSelectText(unitSelect)];
 }
 
 function getJobQuantity(element) {

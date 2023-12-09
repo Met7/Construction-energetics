@@ -1,89 +1,144 @@
 {
+  "comment": "Default unit is 1m^3. Conversions are from it to the stated unit.",
   "materials": {
-    "earth": [
-      {
-        "name": "Adobe",
-        "density": 1.6,
-        "base_energy": 100000
-      },
-      {
-        "name": "Cob",
-        "density": 1.8,
-        "base_energy": 120000
-      },
-      {
-        "name": "Rammed Earth",
-        "density": 1.9,
-        "base_energy": 110000
+    "earth": {
+      "data": [
+        {
+          "name": "Adobe",
+          "conversions": {
+            "ton": 1.6
+          },
+          "base_energy": 100000
+        },
+        {
+          "name": "Cob",
+          "conversions": {
+            "ton": 1.8
+          },
+          "base_energy": 120000
+        },
+        {
+          "name": "Rammed Earth",
+          "conversions": {
+            "ton": 1.9
+          },
+          "base_energy": 110000
+        }
+      ],
+      "conversions": {
+        "ton": 1.2
       }
-    ],
-    "stone": [
-      {
-        "name": "Limestone",
-        "density": 2.3,
-        "base_energy": 150000
-      },
-      {
-        "name": "Granite",
-        "density": 2.7,
-        "base_energy": 180000
-      },
-      {
-        "name": "Sandstone",
-        "density": 2.2,
-        "base_energy": 140000
+    },
+    "stone": {
+      "data": [
+        {
+          "name": "Limestone",
+          "conversions": {
+            "ton": 2.3
+          },
+          "base_energy": 150000
+        },
+        {
+          "name": "Granite",
+          "conversions": {
+            "ton": 2.7
+          },
+          "base_energy": 180000
+        },
+        {
+          "name": "Sandstone",
+          "conversions": {
+            "ton": 2.2
+          },
+          "base_energy": 140000
+        }
+      ],
+      "conversions": {
+        "ton": 2.3
       }
-    ],
-    "wood": [
-      {
-        "name": "Oak",
-        "density": 0.7,
-        "base_energy": 80000
-      },
-      {
-        "name": "Cedar",
-        "density": 0.5,
-        "base_energy": 70000
-      },
-      {
-        "name": "Pine",
-        "density": 0.6,
-        "base_energy": 75000
+    },
+    "wood": {
+      "data": [
+        {
+          "name": "Oak",
+          "conversions": {
+            "ton": 0.7
+          },
+          "base_energy": 80000
+        },
+        {
+          "name": "Cedar",
+          "conversions": {
+            "ton": 0.5
+          },
+          "base_energy": 70000
+        },
+        {
+          "name": "Pine",
+          "conversions": {
+            "ton": 0.6
+          },
+          "base_energy": 75000
+        }
+      ],
+      "conversions": {
+        "ton": 0.6
       }
-    ],
-    "metal": [
-      {
-        "name": "Iron",
-        "density": 7.9,
-        "base_energy": 500000
-      },
-      {
-        "name": "Copper",
-        "density": 8.9,
-        "base_energy": 550000
-      },
-      {
-        "name": "Bronze",
-        "density": 8.7,
-        "base_energy": 520000
+    },
+    "metal": {
+      "data": [
+        {
+          "name": "Iron",
+          "conversions": {
+            "ton": 7.9
+          },
+          "base_energy": 500000
+        },
+        {
+          "name": "Copper",
+          "conversions": {
+            "ton": 8.9
+          },
+          "base_energy": 550000
+        },
+        {
+          "name": "Bronze",
+          "conversions": {
+            "ton": 8.7
+          },
+          "base_energy": 520000
+        }
+      ],
+      "conversions": {
+        "ton": 8.5
       }
-    ],
-    "other": [
-      {
-        "name": "Bamboo",
-        "density": 0.4,
-        "base_energy": 60000
-      },
-      {
-        "name": "Straw",
-        "density": 0.1,
-        "base_energy": 40000
-      },
-      {
-        "name": "Mud Brick",
-        "density": 1.8,
-        "base_energy": 90000
+    },
+    "other": {
+      "data": [
+        {
+          "name": "Bamboo",
+          "conversions": {
+            "ton": 0.4
+          },
+          "base_energy": 60000
+        },
+        {
+          "name": "Straw",
+          "conversions": {
+            "ton": 0.1
+          },
+          "base_energy": 40000
+        },
+        {
+          "name": "Mud Brick",
+          "conversions": {
+            "ton": 1.8
+          },
+          "base_energy": 90000
+        }
+      ],
+      "conversions": {
       }
-    ]
+    }
   }
 }

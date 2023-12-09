@@ -43,7 +43,9 @@ function createOptions(selectElement, options) {
       if (!("text" in option))
         throw('createOptions: option missing "text" key');
       for (const key of Object.keys(option)) {
-        if (key == "value")
+        if (key == "text")
+          selectOption.textContent = option["text"];
+        else if (key == "value")
           selectOption.value = option["value"];
         else
           selectOption.setAttribute("data-" + key, option[key]);
@@ -69,8 +71,9 @@ function getSelectValue(input) {
   return getSelected(input).value;
 }
 
-function getSelectData(input) {
-  return getSelected(input).getAttribute('data')
+function getSelectData(input, dataKey = "") {
+  dataKey = dataKey ? "data-" + dataKey : "data";
+  return getSelected(input).getAttribute(dataKey)
 }
 
 // --------------------------------------
