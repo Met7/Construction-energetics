@@ -2,45 +2,91 @@ import { loadFile } from "../data-handler.js";
 
 const materialsData = await loadFile('materials', "../data/");
 
-// customConversions - "conversions" object that is directly at a specific study. It has priority.
-// returns -1 if the conversion was not resolved
-function convertQuantity(materialCategory, material, sourceUnit, targetUnit, Quantity, customConversions) {
-  let conversionFactor = 0;
+const defaultUnit = "m3";
 
-  if (targetUnit == sourceUnit) // nothing to do
-    conversionFactor = 1;
-  
-  // a direct custom conversion (in tech)
-  else if (targetUnit in customConversions)
-    conversionFactor = customConversions[targetUnit];
+function reverseConversionRatio(ratio) {
+  if (ratio == 0)
+    throw("Materials helper: conversion ratio is zero");
+  return 1.0 / ratio // TODO maybe add some rounding
+}
 
-  else { // look in materials
-    // first, safety checks
-    if (!(materialCategory in materialsData) || !(material in materialsData[materialCategory][data]))
-      throw("materials-helper::convertQuantity: material not found (" + materialCategory + ", " + material + ")");
-    material = materialsData[materialCategory][data][material];
-    if (!(conversions in material))
-      throw("materials-helper::convertQuantity: Wrong JSON format - (" + materialCategory + ", " + material + ") missing \"conversions\".");
-    
-    // Try to find a conversion using materials data.
-    // Priority: 1) chain conversion using a conversion from tech and material 2) material conversion 3) material category level conversion
-    
-    
-    if (targetUnit in material[conversions]) // specific for material
-      conversionFactor = material[conversions][targetUnit];
-    else {
-      if (!(conversions in materialsData[materialCategory]))
-        throw("materials-helper::convertQuantity: Wrong JSON format - (" + materialCategory + ") missing \"conversions\".");
-      if (targetUnit in materialsData[materialCategory][conversions]) // average for material category
-        conversionFactor = materialsData[materialCategory][conversions][targetUnit];
-    }
+
+function getAllConversions(sourceUnit, conversions) {
+  const newConversions = [];
+  for (const conversionUnit of Object.keys(conversions)) {
+    newConversions.push({
+      "from": sourceUnit,
+      "to": conversionUnit,
+      "ratio": conversions[conversionUnit]
+    });
+    // reverse
+    newConversions.push({
+      "from": conversionUnit,
+      "to": sourceUnit,
+      "ratio": reverseConversionRatio(conversions[conversionUnit])
+    });
   }
-  if (conversionFactor)
-    return Quantity * conversionFactor;
+}
+
+
+function getConversionFactorFromConversions(sourceUnit, targetUnit, converionsSourceUnit, conversions) {
+  if (sourceUnit == converionsSourceUnit && (targetUnit in conversions)
+    return conversions[targetUnit];
+  if (targetUnit == converionsSourceUnit && (sourceUnit in conversions)
+    return reverseConversionRatio(conversions[sourceUnit]);
   return -1;
 }
 
 
+function getConversionFactor(materialCategory, material, sourceUnit, targetUnit, quantity, customSourceUnit, customConversions) {
+  let conversionFactor;
+
+  if (targetUnit == sourceUnit) // nothing to do
+    return 1;
+    
+  // a direct custom conversion (in tech)
+  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, customSourceUnit, customConversions) != -1)
+    return conversionFactor;
+
+  // look in materials
+  // first, safety checks
+  if (!(materialCategory in materialsData) || !(material in materialsData[materialCategory]["data"]))
+    throw("materials-helper::convertQuantity: material not found (" + materialCategory + ", " + material + ")");
+  
+  // material
+  material = materialsData[materialCategory]["data"][material];
+  if (!(conversions in material))
+    throw("materials-helper::convertQuantity: Wrong JSON format - (" + materialCategory + ", " + material + ") missing \"conversions\".");
+  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, defaultUnit, material["conversions"]) != -1)
+    return conversionFactor;
+  
+  // material category
+  if (!(conversions in materialsData[materialCategory]))
+    throw("materials-helper::convertQuantity: Wrong JSON format - (" + materialCategory + ") missing \"conversions\".");
+  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, defaultUnit, materialsData[materialCategory]["conversions"]) != -1)
+    return conversionFactor;
+      
+  return -1;
+}
+
+
+// customConversions - "conversions" object that is directly at a specific study. It has priority.
+// customSourceUnit, customConversions - the unit of the chosen tech and conversions it offers
+// returns -1 if the conversion was not resolved
+function convertQuantity(materialCategory, material, sourceUnit, targetUnit, quantity, customSourceUnit, customConversions) {
+  let conversionFactor = getConversionFactor(materialCategory, material, sourceUnit, targetUnit, quantity, customSourceUnit, customConversions);
+  
+  if (conversionFactor == 0)
+    throw("Materials-helper::convertQuantity: conversion factor is zero");
+  
+  if (conversionFactor == -1)
+    return -1;
+  
+  return quantity * conversionFactor;
+}
+
+
 export {
+  getConversionFactor,
   convertQuantity
 };

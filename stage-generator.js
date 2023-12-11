@@ -252,9 +252,9 @@ function chooseStageApproach(stageName, toolSelect, approach) {
       "unit": tech.unit
       // TODO conversion factor
     };
-    // TODO tohle je blbe. 1) Nechceme delat konverze blbosti, jako prevoz vahy na m^2; 2) neni reseny prevod pres default unit do target unit
     //console.log("Checking conversions for select entry. Job unit> " + unit + ", tech unit:" + tech.unit);
-    if (tech.unit != unit && ("conversions" in tech)) {
+    //if (tech.unit != unit && ("conversions" in tech)) {
+    if ("conversions" in tech) {
       for (const conversionUnit of Object.keys(tech["conversions"]))
         optionsData["conversion-" + conversionUnit] = tech["conversions"][conversionUnit];
     }
@@ -293,6 +293,7 @@ function getJobElement(element) {
   return element;
 }
 
+
 function getJobProperties(element) {
   //console.log(element);
   element = getJobElement(element);
@@ -307,6 +308,17 @@ function getJobProperties(element) {
         throw("stage-generator::getJobProperties: Unit select not found.");
   return [htmlHelpers.getSelectText(materialCategorySelect), htmlHelpers.getSelectText(materialSelect), htmlHelpers.getSelectText(unitSelect)];
 }
+
+
+function getJobUnit(element) {
+  //console.log(element);
+  element = getJobElement(element);
+  const unitSelect = element.querySelector(".unit-select");
+    if (!unitSelect)
+        throw("stage-generator::getJobProperties: Unit select not found.");
+  return htmlHelpers.getSelectText(unitSelect);
+}
+
 
 function getJobQuantity(element) {
   //console.log(element);
