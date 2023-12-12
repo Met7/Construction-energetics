@@ -1,5 +1,6 @@
 import * as htmlHelpers from "./helpers/html-helpers.js"; 
 import * as helpers from "./helpers/helpers.js"; 
+import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import { loadFile } from "./data-handler.js";
 import { createStage, setStageMaterial } from "./stage-generator.js";
 
@@ -33,12 +34,7 @@ function updateTotal() {
 
 function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
   //console.log("filling material select for " + materialCategory);
-  let materials = [];
-  console.log(materialsData[materialCategory]);
-  for (const material of materialsData[materialCategory]["data"]) {
-    materials.push(material.name);
-  }
-  htmlHelpers.createOptions(materialSelect, materials);
+  htmlHelpers.createOptions(materialSelect, Object.keys(materialsData[materialCategory]["data"]));
   //console.log("YYY done");
   
   // TODO change event:
@@ -81,7 +77,7 @@ function creatematerialSelect(jobElement, materialCategorySelect) {
 
 function createUnitSelect() {
   const select = htmlHelpers.createElement('select', 'unit-select');
-  htmlHelpers.createOptions(select, ["ton", "m3", "m2", "units"]);
+  htmlHelpers.createOptions(select, materialsHelpers.getSupportedUnits());
   return select;
 }
 
@@ -178,7 +174,7 @@ function createJob(jobId, stages) {
   // Job name
   const input = document.createElement("input");
   input.value = "Postav treba zed";
-  jobTable.appendChild(htmlHelpers.createTableRow("Target number of units:", [input], columnCount));
+  jobTable.appendChild(htmlHelpers.createTableRow("Job name:", [input], columnCount));
   
   // Material(Category) selects
   const materialCategorySelect = createMaterialCategorySelect();
@@ -196,13 +192,16 @@ function createJob(jobId, stages) {
   jobTable.appendChild(row);
   
   // Stages
+  let i = 0;
   for (const stageData of Object.values(jobData)) {
+    // if (i == 0) continue; // skip first
+    if (i == 1) break; // skip 2+
+    i++;
     let stage = createStage(jobId, stageData);
-    setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
+    //setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
     let td = htmlHelpers.createTd(stage);
     td.colSpan = columnCount;
     jobTable.appendChild(htmlHelpers.createTr(td));
-    break; // TODO remove
   }
   
   jobDiv.appendChild(jobTable);// TODO consider whether table is needed

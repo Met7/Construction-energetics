@@ -1,142 +1,127 @@
 {
   "comment": "Default unit is 1m^3. Conversions are from it to the stated unit.",
   "materials": {
-    "earth": {
-      "data": [
-        {
-          "name": "Adobe",
+    "Earth": {
+      "data": {
+        "Adobe": {
           "conversions": {
             "ton": 1.6
           },
           "base_energy": 100000
         },
-        {
-          "name": "Cob",
+        "Cob": {
           "conversions": {
             "ton": 1.8
           },
           "base_energy": 120000
         },
-        {
-          "name": "Rammed Earth",
+        "Rammed Earth": {
           "conversions": {
             "ton": 1.9
           },
           "base_energy": 110000
         }
-      ],
+      },
       "conversions": {
         "ton": 1.2
       }
     },
-    "stone": {
-      "data": [
-        {
-          "name": "Limestone",
+    "Stone": {
+      "data": {
+        "Limestone": {
           "conversions": {
             "ton": 2.3
           },
           "base_energy": 150000
         },
-        {
-          "name": "Granite",
+        "Granite": {
           "conversions": {
             "ton": 2.7
           },
           "base_energy": 180000
         },
-        {
-          "name": "Sandstone",
+        "Sandstone": {
           "conversions": {
             "ton": 2.2
           },
           "base_energy": 140000
         }
-      ],
+      },
       "conversions": {
         "ton": 2.3
       }
     },
-    "wood": {
-      "data": [
-        {
-          "name": "Oak",
+    "Wood": {
+      "data": {
+        "Oak": {
           "conversions": {
             "ton": 0.7
           },
           "base_energy": 80000
         },
-        {
-          "name": "Cedar",
+        "Cedar": {
           "conversions": {
             "ton": 0.5
           },
           "base_energy": 70000
         },
-        {
-          "name": "Pine",
+        "Pine": {
           "conversions": {
             "ton": 0.6
           },
           "base_energy": 75000
         }
-      ],
+      },
       "conversions": {
         "ton": 0.6
       }
     },
-    "metal": {
-      "data": [
-        {
-          "name": "Iron",
+    "Metal": {
+      "data": {
+        "Iron": {
           "conversions": {
             "ton": 7.9
           },
           "base_energy": 500000
         },
-        {
-          "name": "Copper",
+        "Copper": {
           "conversions": {
             "ton": 8.9
           },
           "base_energy": 550000
         },
-        {
-          "name": "Bronze",
+        "Bronze": {
           "conversions": {
             "ton": 8.7
           },
           "base_energy": 520000
         }
-      ],
+      },
       "conversions": {
         "ton": 8.5
       }
     },
-    "other": {
-      "data": [
-        {
-          "name": "Bamboo",
+    "Other": {
+      "data": {
+        "Bamboo": {
           "conversions": {
             "ton": 0.4
           },
           "base_energy": 60000
         },
-        {
-          "name": "Straw",
+        "Straw": {
           "conversions": {
             "ton": 0.1
           },
           "base_energy": 40000
         },
-        {
-          "name": "Mud Brick",
+        "Mud Brick": {
           "conversions": {
             "ton": 1.8
           },
           "base_energy": 90000
         }
-      ],
+      },
       "conversions": {
       }
     }

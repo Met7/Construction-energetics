@@ -2,14 +2,18 @@ import { loadFile } from "../data-handler.js";
 
 const materialsData = await loadFile('materials', "../data/");
 
+const supportedUnits = ["ton", "m3", "m2", "units"];
 const defaultUnit = "m3";
 
 function reverseConversionRatio(ratio) {
   if (ratio == 0)
     throw("Materials helper: conversion ratio is zero");
-  return 1.0 / ratio // TODO maybe add some rounding
+  return (1.0 / ratio); // TODO maybe .toFixed(2)
 }
 
+function getSupportedUnits() {
+  return supportedUnits;
+}
 
 function getAllConversions(sourceUnit, conversions) {
   const newConversions = [];
@@ -30,42 +34,50 @@ function getAllConversions(sourceUnit, conversions) {
 
 
 function getConversionFactorFromConversions(sourceUnit, targetUnit, converionsSourceUnit, conversions) {
-  if (sourceUnit == converionsSourceUnit && (targetUnit in conversions)
+  if (sourceUnit == converionsSourceUnit && (targetUnit in conversions))
     return conversions[targetUnit];
-  if (targetUnit == converionsSourceUnit && (sourceUnit in conversions)
+  if (targetUnit == converionsSourceUnit && (sourceUnit in conversions))
     return reverseConversionRatio(conversions[sourceUnit]);
   return -1;
 }
 
 
-function getConversionFactor(materialCategory, material, sourceUnit, targetUnit, quantity, customSourceUnit, customConversions) {
+function getConversionFactor(materialCategory, material, sourceUnit, targetUnit, customSourceUnit, customConversions) {
   let conversionFactor;
 
-  if (targetUnit == sourceUnit) // nothing to do
+  if (targetUnit == sourceUnit) { // nothing to do
+    console.log("Conversion: not needed");
     return 1;
-    
+  }
+
   // a direct custom conversion (in tech)
-  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, customSourceUnit, customConversions) != -1)
+  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, customSourceUnit, customConversions)) != -1) {
+    console.log("Conversion: tech - " + conversionFactor);
     return conversionFactor;
+  }
 
   // look in materials
   // first, safety checks
   if (!(materialCategory in materialsData) || !(material in materialsData[materialCategory]["data"]))
-    throw("materials-helper::convertQuantity: material not found (" + materialCategory + ", " + material + ")");
+    throw("materials-helper::getConversionFactor: material not found (" + materialCategory + ", " + material + ")");
   
   // material
-  material = materialsData[materialCategory]["data"][material];
-  if (!(conversions in material))
-    throw("materials-helper::convertQuantity: Wrong JSON format - (" + materialCategory + ", " + material + ") missing \"conversions\".");
-  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, defaultUnit, material["conversions"]) != -1)
+  if (!("conversions" in materialsData[materialCategory]["data"][material]))
+    throw("materials-helper::getConversionFactor: Wrong JSON format - (" + materialCategory + ", " + material + ") missing \"conversions\".");
+  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, defaultUnit, materialsData[materialCategory]["data"][material]["conversions"])) != -1) {
+    console.log("Conversion: material - " + conversionFactor);
     return conversionFactor;
+  }
   
   // material category
   if (!(conversions in materialsData[materialCategory]))
-    throw("materials-helper::convertQuantity: Wrong JSON format - (" + materialCategory + ") missing \"conversions\".");
-  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, defaultUnit, materialsData[materialCategory]["conversions"]) != -1)
+    throw("materials-helper::getConversionFactor: Wrong JSON format - (" + materialCategory + ") missing \"conversions\".");
+  if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, defaultUnit, materialsData[materialCategory]["conversions"])) != -1) {
+    console.log("Conversion: material category - " + conversionFactor);
     return conversionFactor;
+  }
       
+  console.log("Conversion: none found");
   return -1;
 }
 
@@ -87,6 +99,7 @@ function convertQuantity(materialCategory, material, sourceUnit, targetUnit, qua
 
 
 export {
+  getSupportedUnits,
   getConversionFactor,
   convertQuantity
 };

@@ -4,6 +4,14 @@ function formatEnergy(energy) {
   return energy.toFixed(1) + "kJ";
 }
 
+function formatUnit(unit) {
+  if (unit == "m2")
+    return "m<sup>2</sup>";
+  if (unit == "m3")
+    return "m<sup>3</sup>";
+  return unit;
+}
+
 // case insensitive; this may change.
 // usually used to compare strings in FE with those in JSON.
 function strEq(str1, str2) {
@@ -12,5 +20,6 @@ function strEq(str1, str2) {
 
 export {
   formatEnergy,
+  formatUnit,
   strEq
 };

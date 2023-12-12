@@ -1,11 +1,11 @@
 {
   "technologies": {
-    "extraction": [
+    "Extraction": [
       {
         "author": "Pavuk",
         "year": "2001",
-        "material_category": "stone",
-        "material": "limestone",
+        "material_category": "Stone",
+        "material": "Limestone",
         "approach": "Breaking",
         "tool": "Crowbar",
         "unit": "m3",
@@ -14,8 +14,8 @@
       {
         "author": "Erasmus",
         "year": "1965",
-        "material_category": "stone",
-        "material": "limestone",
+        "material_category": "Stone",
+        "material": "Limestone",
         "approach": "Collecting",
         "tool": "Wooden pole",
         "unit": "ton",
@@ -24,8 +24,8 @@
       {
         "author": "Erasmus",
         "year": "1965",
-        "material_category": "stone",
-        "material": "limestone",
+        "material_category": "Stone",
+        "material": "Limestone",
         "approach": "Collecting",
         "tool": "Iron crowbar",
         "unit": "ton",
@@ -38,8 +38,8 @@
       {
         "author": "YoMamma",
         "year": "1822",
-        "material_category": "stone",
-        "material": "limestone",
+        "material_category": "Stone",
+        "material": "Limestone",
         "approach": "Collecting",
         "tool": "Hands",
         "unit": "m3",
@@ -48,8 +48,8 @@
       {
         "author": "YoMamma",
         "year": "1822",
-        "material_category": "stone",
-        "material": "limestone",
+        "material_category": "Stone",
+        "material": "Limestone",
         "approach": "Explosive - breaking",
         "tool": "Dynamite",
         "unit": "m3",
@@ -62,8 +62,8 @@
       {
         "author": "YoMamma",
         "year": "1822",
-        "material_category": "stone",
-        "material": "marble",
+        "material_category": "Stone",
+        "material": "Marble",
         "approach": "Collecting",
         "tool": "Hands",
         "unit": "m3",
@@ -72,7 +72,7 @@
       {
         "author": "Jesus",
         "year": "-8",
-        "material_category": "stone",
+        "material_category": "Stone",
         "material": "Granite",
         "approach": "Explosive - breaking",
         "tool": "Dynamite",
@@ -82,7 +82,7 @@
       {
         "author": "Jesus",
         "year": "-8",
-        "material_category": "stone",
+        "material_category": "Stone",
         "material": "Granite",
         "approach": "Collecting",
         "tool": "Hands",

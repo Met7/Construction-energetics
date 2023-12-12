@@ -76,6 +76,11 @@ function getSelectData(input, dataKey = "") {
   return getSelected(input).getAttribute(dataKey)
 }
 
+// function getSelectAllData(input) {
+  // dataKey = dataKey ? "data-" + dataKey : "data";
+  // return getSelected(input).getAttribute(dataKey)
+// }
+
 // --------------------------------------
 // -------------------------------- TABLE
 

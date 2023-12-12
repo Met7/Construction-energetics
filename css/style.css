@@ -108,3 +108,10 @@ body {
   font-weight: bold;
   margin-left: 10px;
 }
+
+p.citation {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
+}

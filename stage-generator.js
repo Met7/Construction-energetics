@@ -1,5 +1,6 @@
 import * as helpers from "./helpers/helpers.js"; 
 import * as htmlHelpers from "./helpers/html-helpers.js"; 
+import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import * as studiesHelpers from "./helpers/studies-helpers.js"; 
 import { loadFile } from "./data-handler.js";
 
@@ -135,7 +136,8 @@ function createStage(jobId, stageData) {
       htmlHelpers.getSelectData(toolSelect, "author"),
       htmlHelpers.getSelectData(toolSelect, "year"),
       htmlHelpers.getSelectData(toolSelect, "unit"),
-      htmlHelpers.getSelectValue(toolSelect)
+      htmlHelpers.getSelectValue(toolSelect),
+      extractConversions(toolSelect)
     );
   });
   row = htmlHelpers.createTableRow("Tool: ", [toolSelect], columnCount);
@@ -151,6 +153,7 @@ function createStage(jobId, stageData) {
   stageTable.appendChild(htmlHelpers.createTableRow("Study unit: ", [htmlHelpers.createElement('p', 'study-unit')], columnCount));
   stageTable.appendChild(htmlHelpers.createTableRow("Study units/h: ", [htmlHelpers.createElement('p', 'study-speed')], columnCount));
   stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [htmlHelpers.createElement('input', 'unit-conversion')], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Converted units/h: ", [htmlHelpers.createElement('p', 'total-speed')], columnCount));
   stageTable.appendChild(htmlHelpers.createTableRow("Total MH:", [htmlHelpers.createElement('p', 'total-mh')], columnCount));
   
   // further inputs
@@ -237,7 +240,7 @@ function setStageMaterial(stageElement, materialCategory, material) {
 function chooseStageApproach(stageName, toolSelect, approach) {
   console.log("ChooseStageApproach for : " + stageName + ", approach: " + approach);
   
-  const [materialCategory, material, unit] =  getJobProperties(toolSelect);
+  const [materialCategory, material, unit] = getJobProperties(toolSelect);
   const technologies = getApplicableTechnologies(stageName, materialCategory, material, approach);
 
   //console.log(technologies);
@@ -263,20 +266,40 @@ function chooseStageApproach(stageName, toolSelect, approach) {
   htmlHelpers.createOptions(toolSelect, options);
 }
 
+function extractConversions(selectElement) {
+  const allUnits = materialsHelpers.getSupportedUnits();
+  let conversions = {};
+  for (const unit of allUnits) {
+    const conversionFactor = htmlHelpers.getSelectData(selectElement, "conversion-" + unit);
+    //console.log("extractConversions: LF conversion for " + unit + ", found " + conversionFactor);
+    if (conversionFactor) { // TODO what does it return if it is not found?
+      conversions[unit] = conversionFactor;
+      //console.log("extractConversions: found conversion for " + unit + " -> " + conversionFactor);
+    }
+  }
+  return conversions;
+}
+
 // stageElement is some ancestor of the affected elements in the stage.
-function chooseStageTool(stageElement, approach, author, year, unit, speed) {
+function chooseStageTool(stageElement, approach, author, year, techUnit, speed, conversions) {
   // TODO
-  console.log("chooseStageTool for " + approach + ", " + author + ", " + year + ", " + unit + ", " + speed + ".");
+  console.log("chooseStageTool for " + approach + ", " + author + ", " + year + ", " + techUnit + ", " + speed + ".");
+  const [materialCategory, material, jobUnit, jobAmount] = getJobProperties(stageElement);
+  
   const citationP = stageElement.querySelector(".citation");
   const studyUnitP = stageElement.querySelector(".study-unit");
   const studySpeedP = stageElement.querySelector(".study-speed");
   const unitConversionInput = stageElement.querySelector(".unit-conversion");
+  const convertedSpeedP = stageElement.querySelector(".total-speed");
   const totalMhP = stageElement.querySelector(".total-mh");
-  citationP.innerText = studiesHelpers.getStudyCitation(author, year);
-  studyUnitP.innerText = unit;
-  studySpeedP.innerText = speed + " " + unit + "/h";
-  unitConversionInput.value = "LLLL";
-  totalMhP.innerText = "CCCC";
+  citationP.innerHTML = studiesHelpers.getStudyCitation(author, year);
+  studyUnitP.innerText = techUnit;
+  studySpeedP.innerHTML = speed + " " + helpers.formatUnit(techUnit) + "/h";
+  const conversionFactor = materialsHelpers.getConversionFactor(materialCategory, material, techUnit, jobUnit, techUnit, conversions);
+  unitConversionInput.value = Number(conversionFactor.toFixed(2));
+  const convertedSpeed = speed * conversionFactor;
+  convertedSpeedP.innerHTML = Number(convertedSpeed.toFixed(2)) + " " + helpers.formatUnit(jobUnit) + "/h";
+  totalMhP.innerText = Number((jobAmount * convertedSpeed).toFixed(2));
 }
 
 // --------------------------------------
@@ -306,7 +329,10 @@ function getJobProperties(element) {
   const unitSelect = element.querySelector(".unit-select");
     if (!unitSelect)
         throw("stage-generator::getJobProperties: Unit select not found.");
-  return [htmlHelpers.getSelectText(materialCategorySelect), htmlHelpers.getSelectText(materialSelect), htmlHelpers.getSelectText(unitSelect)];
+  const amountInput = element.querySelector(".amount-input");
+    if (!amountInput)
+        throw("stage-generator::getJobProperties: Amount input not found.");
+  return [htmlHelpers.getSelectText(materialCategorySelect), htmlHelpers.getSelectText(materialSelect), htmlHelpers.getSelectText(unitSelect), amountInput.value];
 }
 
 

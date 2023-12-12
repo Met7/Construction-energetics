@@ -1,7 +1,7 @@
 {
   "stages": {
-    "extraction": { 
-      "stageName": "extraction",
+    "Extraction": { 
+      "stageName": "Extraction",
       "unit": "mass",
       "inputs": {},
       "usesEnergy": true,
@@ -11,8 +11,8 @@
         { "id": "technology", "source": "current-stage" }
       ]}
     },
-    "transportation": { 
-      "stageName": "transportation",
+    "Transportation": { 
+      "stageName": "Transportation",
       "unit": "distance",
       "inputs": {
         "distance": {
@@ -30,8 +30,8 @@
         { "id": "distance", "source": "current-stage" }
       ]}
     },
-    "processing": { 
-      "stageName": "processing",
+    "Processing": { 
+      "stageName": "Processing",
       "unit": "energy",
       "inputs": {},
       "usesEnergy": true,
@@ -41,8 +41,8 @@
         { "id": "technology", "source": "current-stage" }
       ]}
     },
-    "placement": { 
-      "stageName": "placement",
+    "Placement": { 
+      "stageName": "Placement",
       "unit": "distance",
       "inputs": {
         "elevation": {

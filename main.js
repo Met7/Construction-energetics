@@ -36,3 +36,28 @@ async function test() {
 }
 
 await test();
+
+// perform some actions to not do them manually on every refresh
+if (1) {
+  // select limestone in the one job
+  let select = document.querySelector(".material-category-select");
+  select.value = "Stone";
+  select.dispatchEvent(new Event('change'));
+  select = document.querySelector(".material-select");
+  select.value = "Limestone";
+  select.dispatchEvent(new Event('change'));
+  
+  // amount
+  let input = document.querySelector(".amount-input");
+  input.value = 12;
+
+  // select approach and tool
+  select = document.querySelector(".approach-select");
+  select.value = "Collecting";
+  select.dispatchEvent(new Event('change'));
+
+  select = document.querySelector(".tool-select");
+  select.value = "1";
+  select.dispatchEvent(new Event('change'));
+
+}
