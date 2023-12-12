@@ -3,62 +3,36 @@
     "Extraction": { 
       "stageName": "Extraction",
       "unit": "mass",
-      "inputs": {},
-      "usesEnergy": true,
-      "formula": { "type": "multiply", "params": [
-        { "id": "base-energy", "source": "material" },
-        { "id": "mass", "source": "material" },
-        { "id": "technology", "source": "current-stage" }
-      ]}
+      "inputs": {}
     },
     "Transportation": { 
       "stageName": "Transportation",
-      "unit": "distance",
-      "inputs": {
-        "distance": {
-          "id": "distance",
+      "inputs": [
+        {
           "label": "Distance (meters)", 
           "type": "number",
-          "valueType": "distance",
-          "defaultValue": 3
+          "unit": "m",
+          "defaultValue": 0
         }
-      },
-      "usesEnergy": true,
-      "formula": { "type": "multiply", "params": [
-        { "id": "mass", "source": "material" }, 
-        { "id": "technology", "source": "current-stage" },
-        { "id": "distance", "source": "current-stage" }
-      ]}
+      ],
+      "formula": "multiply"
     },
     "Processing": { 
       "stageName": "Processing",
       "unit": "energy",
-      "inputs": {},
-      "usesEnergy": true,
-      "formula": { "type": "multiply", "params": [
-        { "id": "base-energy", "source": "material" },
-        { "id": "mass", "source": "material" },
-        { "id": "technology", "source": "current-stage" }
-      ]}
+      "inputs": {}
     },
     "Placement": { 
       "stageName": "Placement",
-      "unit": "distance",
-      "inputs": {
-        "elevation": {
-          "id": "elevation",
+      "inputs": [
+        {
           "label": "Height (meters)", 
           "type": "number",
-          "valueType": "distance",
-          "defaultValue": 5
+          "unit": "m",
+          "defaultValue": 0
         }
-      },
-      "usesEnergy": true,
-      "formula": { "type": "multiply", "params": [
-        { "id": "mass", "source": "material" }, 
-        { "id": "technology", "source": "current-stage" },
-        { "id": "elevation", "source": "current-stage" }
-      ]}
+      ],
+      "formula": "multiply"
     }
   }
 }

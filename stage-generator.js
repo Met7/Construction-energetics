@@ -122,6 +122,26 @@ function createStage(jobId, stageData) {
   let row = htmlHelpers.createTableRow("STAGE: " + stageData.stageName, columns, columnCount, true);  
   stageTable.appendChild(row);
   
+  // Stage-specific inputs
+  for (const input of Object.values(stageData.inputs)) {
+    let inputElement;
+    if (input.type == 'select') {
+      const inputElement = htmlHelpers.createElement('select', 'custom-input');
+      htmlHelpers.createOptions(inputElement, input.options); 
+      inputElement.selectedIndex = stageData.selectedIndex;
+    }
+    else if (input.type == 'number') {
+      inputElement = htmlHelpers.createElement('input', 'custom-input');
+      inputElement.type = 'number';
+      inputElement.min = 0;
+      inputElement.value = input.defaultValue;
+    } else
+      throw('stage-generator::createStage: Unknown input type - ' + input.type);
+    
+    row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount);
+    stageTable.appendChild(row);
+  }
+  
   // Approach select
   let approachSelect = htmlHelpers.createElement('select', 'approach-select');
   row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount);
@@ -156,37 +176,6 @@ function createStage(jobId, stageData) {
   stageTable.appendChild(htmlHelpers.createTableRow("Converted units/h: ", [htmlHelpers.createElement('p', 'total-speed')], columnCount));
   stageTable.appendChild(htmlHelpers.createTableRow("Total MH:", [htmlHelpers.createElement('p', 'total-mh')], columnCount));
   
-  // further inputs
-  for (const input of Object.values(stageData.inputs)) {
-    let rowColumns = columnCount;
-    row = htmlHelpers.createElement('tr', 'job-stage-TODO');
-    row.appendChild(htmlHelpers.createLabelTd('quantity-label', input.label + ':'));
-    rowColumns--;
-    let cell = document.createElement('td');
-    
-    if (input.type == 'select') {
-      const select = htmlHelpers.createElement('select', input.id);
-      htmlHelpers.createOptions(select, input.options); 
-      select.selectedIndex = stageData.selectedIndex;
-      cell.appendChild(select);
-    }
-    else if (input.type == 'number') {
-      const inputElement = htmlHelpers.createElement('input', input.id);
-      inputElement.type = 'number';
-      inputElement.min = 0;
-      inputElement.value = input.defaultValue;
-      cell.appendChild(inputElement);
-    } else
-      throw('Unknown input type for a job stage: ' + input.type);
-    
-    row.appendChild(cell);
-    rowColumns--;
-    
-    for (let i = 0; i < rowColumns; i++)
-      row.appendChild(htmlHelpers.createLabelTd('', 'TODO'));
-    stageTable.appendChild(row);
-  }
-  
   stageDiv.appendChild(stageTable);
  
   return stageDiv;
@@ -197,6 +186,7 @@ function createStage(jobId, stageData) {
 
 function getApplicableTechnologies(stageName, materialCategory, material, approach = "") {
   console.log("Get applicable tech XXX for: " + stageName + ", " + materialCategory + ", " + material + ", " + approach);
+  //console.log(technologyData);
   if (!(stageName in technologyData)) {
     console.log("getApplicableTechnologies: Stage not found - quitting");
     return [];
@@ -273,18 +263,29 @@ function extractConversions(selectElement) {
     const conversionFactor = htmlHelpers.getSelectData(selectElement, "conversion-" + unit);
     //console.log("extractConversions: LF conversion for " + unit + ", found " + conversionFactor);
     if (conversionFactor) { // TODO what does it return if it is not found?
-      conversions[unit] = conversionFactor;
+      conversions[unit] = Number(conversionFactor);
       //console.log("extractConversions: found conversion for " + unit + " -> " + conversionFactor);
     }
   }
   return conversions;
 }
 
+function getExtraParameters(stageElement) {
+  let params = [];
+  const inputElements = stageElement.getElementsByClassName("custom-input");
+  for (let inputElement of inputElements) {
+    if (inputElement.nodeName  == "INPUT")
+      params.push(inputElement.value);
+    else if (inputElement.nodeName  == "SELECT")
+      params.push(htmlHelpers.getSelectValue(inputElement));
+  }
+  return params;
+}
+
 // stageElement is some ancestor of the affected elements in the stage.
 function chooseStageTool(stageElement, approach, author, year, techUnit, speed, conversions) {
-  // TODO
   console.log("chooseStageTool for " + approach + ", " + author + ", " + year + ", " + techUnit + ", " + speed + ".");
-  const [materialCategory, material, jobUnit, jobAmount] = getJobProperties(stageElement);
+  let [materialCategory, material, jobUnit, jobAmount] = getJobProperties(stageElement);
   
   const citationP = stageElement.querySelector(".citation");
   const studyUnitP = stageElement.querySelector(".study-unit");
@@ -292,13 +293,25 @@ function chooseStageTool(stageElement, approach, author, year, techUnit, speed, 
   const unitConversionInput = stageElement.querySelector(".unit-conversion");
   const convertedSpeedP = stageElement.querySelector(".total-speed");
   const totalMhP = stageElement.querySelector(".total-mh");
+  
   citationP.innerHTML = studiesHelpers.getStudyCitation(author, year);
   studyUnitP.innerText = techUnit;
-  studySpeedP.innerHTML = speed + " " + helpers.formatUnit(techUnit) + "/h";
+  studySpeedP.innerHTML = speed + " " + helpers.formatUnit(techUnit) + "/h"; // TODO update unit by stage (extra input)
   const conversionFactor = materialsHelpers.getConversionFactor(materialCategory, material, techUnit, jobUnit, techUnit, conversions);
   unitConversionInput.value = Number(conversionFactor.toFixed(2));
   const convertedSpeed = speed * conversionFactor;
-  convertedSpeedP.innerHTML = Number(convertedSpeed.toFixed(2)) + " " + helpers.formatUnit(jobUnit) + "/h";
+  convertedSpeedP.innerHTML = Number(convertedSpeed.toFixed(2)) + " " + helpers.formatUnit(jobUnit) + "/h"; // TODO update unit by stage (extra input)
+  
+  // stage specific param, such as distance
+  for (const extraParam of getExtraParameters(stageElement)) {
+    if (!extraParam) {
+      console.log("chooseStageTool: empty extra param");
+      continue;
+    }
+    console.log("chooseStageTool: multiplying jobAmount(" + jobAmount + ") by an extra param " + extraParam);
+    jobAmount *= extraParam;
+  }
+  
   totalMhP.innerText = Number((jobAmount * convertedSpeed).toFixed(2));
 }
 

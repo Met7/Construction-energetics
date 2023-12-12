@@ -8,7 +8,7 @@ const defaultUnit = "m3";
 function reverseConversionRatio(ratio) {
   if (ratio == 0)
     throw("Materials helper: conversion ratio is zero");
-  return (1.0 / ratio); // TODO maybe .toFixed(2)
+  return 1.0 / ratio; // TODO maybe .toFixed(2)
 }
 
 function getSupportedUnits() {

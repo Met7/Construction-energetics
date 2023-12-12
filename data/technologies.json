@@ -9,7 +9,7 @@
         "approach": "Breaking",
         "tool": "Crowbar",
         "unit": "m3",
-        "speed": "2"
+        "speed": 2
       },
       {
         "author": "Erasmus",
@@ -19,7 +19,7 @@
         "approach": "Collecting",
         "tool": "Wooden pole",
         "unit": "ton",
-        "speed": "0.3"
+        "speed": 0.3
       },
       {
         "author": "Erasmus",
@@ -33,7 +33,7 @@
           "m3": 20,
           "m2": 100
         },
-        "speed": "1"
+        "speed": 1
       },
       {
         "author": "YoMamma",
@@ -43,7 +43,7 @@
         "approach": "Collecting",
         "tool": "Hands",
         "unit": "m3",
-        "speed": "100"
+        "speed": 100
       }, 
       {
         "author": "YoMamma",
@@ -67,7 +67,7 @@
         "approach": "Collecting",
         "tool": "Hands",
         "unit": "m3",
-        "speed": "10"
+        "speed": 10
       },
       {
         "author": "Jesus",
@@ -77,7 +77,7 @@
         "approach": "Explosive - breaking",
         "tool": "Dynamite",
         "unit": "m2",
-        "speed": "100"
+        "speed": 100
       },
       {
         "author": "Jesus",
@@ -87,7 +87,40 @@
         "approach": "Collecting",
         "tool": "Hands",
         "unit": "m2",
-        "speed": "10"
+        "speed": 10
+      }
+    ],
+    "--comment": "Transportation speed is per meter of distance",
+    "Transportation": [
+      {
+        "author": "Pavuk",
+        "year": "2001",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Carry",
+        "tool": "Basket",
+        "unit": "ton",
+        "speed": 0.2
+      },
+      {
+        "author": "Pavuk",
+        "year": "2001",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Carry",
+        "tool": "Wheelbarrow",
+        "unit": "ton",
+        "speed": 0.3
+      },
+      {
+        "author": "YoMamma",
+        "year": "1822",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Throw",
+        "tool": "Hands",
+        "unit": "m3",
+        "speed": 40
       }
     ]
   }
