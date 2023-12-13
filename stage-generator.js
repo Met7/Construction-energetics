@@ -1,7 +1,8 @@
 import * as helpers from "./helpers/helpers.js"; 
 import * as htmlHelpers from "./helpers/html-helpers.js"; 
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
-import * as studiesHelpers from "./helpers/studies-helpers.js"; 
+import * as studiesHelpers from "./helpers/studies-helpers.js";
+import * as technologiesHelpers from "./helpers/technologies-helpers.js"; 
 import { loadFile } from "./data-handler.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
@@ -12,8 +13,6 @@ import { loadFile } from "./data-handler.js";
 
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "Material manual trigger" });
-
-const technologyData = await loadFile('technologies');
 
 let jobMaterials; // keep info about selected material per job
 
@@ -32,8 +31,8 @@ function getStageName(stageElement) {
 // --------------------------------------
 // ---------------------- TECHNOLOGY DATA
 
-let techData = await loadFile('technologies');
-console.log(techData);
+const technologyData = await technologiesHelpers.loadTechnologies();
+console.log(technologyData);
 
 // --------------------------------------
 // ------------------------------- ENERGY
