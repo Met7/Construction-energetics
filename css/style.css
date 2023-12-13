@@ -93,6 +93,10 @@ body {
   background-color: #d0d0d0;
 }
 
+.stage-mh-label {
+  text-align: right;
+}
+
 #add-job-button {
   margin-top: 20px;
   padding: 10px;

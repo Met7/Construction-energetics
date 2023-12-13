@@ -11,6 +11,18 @@ function createElement(tag, cssClass = '', text = '') {
 }
 
 // --------------------------------------
+// ------------------------------- LOOKUP
+
+function getAncestorElement(element, className) {
+  do {
+    element = element.parentElement;
+    if (!element)
+      throw("html-helpers::getAncestorElement: element not found.");
+  } while (!element.classList.contains(className));
+  return element;
+}
+
+// --------------------------------------
 // -------------------------------- SELECT
 
 // takes an array and fills the select.
@@ -130,6 +142,7 @@ function createTableRow(label, columns, totalColumns, isHeader = false) {
 
 export {
   createElement,
+  getAncestorElement,
   createOptions,
   getSelectText,
   getSelected,

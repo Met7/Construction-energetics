@@ -81,7 +81,7 @@ function createUnitSelect() {
   return select;
 }
 
-function createQuantityInput() {
+function createAmountInput() {
   const input = htmlHelpers.createElement('input', 'amount-input');
   input.setAttribute("type", "number");
   return input;
@@ -94,38 +94,6 @@ function createJobHeader(jobId) {
   const element = htmlHelpers.createElement('h2', 'job-header', `Job #${jobId}`);
   return element;
 }
- 
-// TODO use or delete all bellow
-
-// function getJobElement(jobId) {
-  // return document.getElementById('job-' + jobId);
-// }
-
-// function getStageElementInJob(jobElement, stageName) {
-  // return jobElement.querySelector('.stage-'  + stageName);
-// }
-
-// function getStageElement(jobId, stageName) {
-  // const jobElement = getJobElement(jobId);
-  // return getStageElementInJob(jobElement, stageName);
-// }
-
-// function getStageMaterialCategoryInJob(jobElement) {
-  // const stage = getStageElementInJob(jobElement, 'material');
-  // const input = stage.querySelector('.base-energy');
-  // return htmlHelpers.getSelectData(input);
-// }
-
-// function getStageMaterialCategory(jobId) {
-  // return getStageMaterialCategoryInJob(getJobElement(jobId));
-// }
-
-// function getMaterialCategoryCategory(material) {
-  // const materialData = materialsData.find(element => element.name == material)
-  // if (typeof(material) == 'undefined')
-    // throw('No category for material ' + material);
-  // return materialData.category;
-// }
 
 // --------------------------------------
 // ------------------------------- STAGES
@@ -185,10 +153,10 @@ function createJob(jobId, stages) {
   row = htmlHelpers.createTableRow("Material:", [materialSelect], columnCount);
   jobTable.appendChild(row); 
   
-  // Unit and quantity
+  // Unit and amount
   row = htmlHelpers.createTableRow("Unit for the material:", [createUnitSelect()], columnCount);
   jobTable.appendChild(row);
-  row = htmlHelpers.createTableRow("Target number of units:", [createQuantityInput()], columnCount);
+  row = htmlHelpers.createTableRow("Target number of units:", [createAmountInput()], columnCount);
   jobTable.appendChild(row);
   
   // Stages
