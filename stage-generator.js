@@ -251,8 +251,13 @@ function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmou
     return;
   if (!techConversions)
     techConversions = htmlHelpers.getSelectData(extractConversions(techSelect), "unit");
-  const conversionFactor = materialsHelpers.getConversionFactor(materialCategory, material, techUnit, jobUnit, techUnit, techConversions);
-  unitConversionInput.value = Number(conversionFactor.toFixed(2));
+  let conversionFactor = materialsHelpers.getConversionFactor(materialCategory, material, techUnit, jobUnit, techUnit, techConversions);
+  if (conversionFactor == -1) {
+    conversionFactor = 0;
+    unitConversionInput.value = '';
+  }
+  else
+    unitConversionInput.value = Number(conversionFactor.toFixed(2));
   updateMh(stageElement, conversionFactor, jobUnit, jobAmount);
 }
 

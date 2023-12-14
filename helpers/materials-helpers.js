@@ -70,7 +70,7 @@ function getConversionFactor(materialCategory, material, sourceUnit, targetUnit,
   }
   
   // material category
-  if (!(conversions in materialsData[materialCategory]))
+  if (!("conversions" in materialsData[materialCategory]))
     throw("materials-helper::getConversionFactor: Wrong JSON format - (" + materialCategory + ") missing \"conversions\".");
   if ((conversionFactor = getConversionFactorFromConversions(sourceUnit, targetUnit, defaultUnit, materialsData[materialCategory]["conversions"])) != -1) {
     console.log("Conversion: material category - " + conversionFactor);
