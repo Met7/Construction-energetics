@@ -13,12 +13,13 @@ function createElement(tag, cssClass = '', text = '') {
 // --------------------------------------
 // ------------------------------- LOOKUP
 
+// incl. the element itself.
 function getAncestorElement(element, className) {
-  do {
+  while (!element.classList.contains(className)) {
     element = element.parentElement;
     if (!element)
       throw("html-helpers::getAncestorElement: element not found.");
-  } while (!element.classList.contains(className));
+  }
   return element;
 }
 
@@ -76,16 +77,25 @@ function getSelected(input) {
 }
 
 function getSelectText(input) {
-  return getSelected(input).text;
+  const option = getSelected(input);
+  if (!option)
+    return '';
+  return option.text;
 }
 
 function getSelectValue(input) {
-  return getSelected(input).value;
+  const option = getSelected(input);
+  if (!option)
+    return '';
+  return option.value;
 }
 
 function getSelectData(input, dataKey = "") {
   dataKey = dataKey ? "data-" + dataKey : "data";
-  return getSelected(input).getAttribute(dataKey)
+  const option = getSelected(input);
+  if (!option)
+    return '';
+  return option.getAttribute(dataKey)
 }
 
 // function getSelectAllData(input) {

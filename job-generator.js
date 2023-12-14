@@ -2,7 +2,7 @@ import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as helpers from "./helpers/helpers.js"; 
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import { loadFile } from "./data-handler.js";
-import { createStage, setStageMaterial } from "./stage-generator.js";
+import { createStage, setStageMaterial, setStageUnit } from "./stage-generator.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
 // 1MD = 2.160kJ
@@ -58,7 +58,7 @@ function setMaterialCategorySelectEvent(jobElement, materialCategorySelect, mate
   });
 }
 
-function creatematerialSelect(jobElement, materialCategorySelect) {
+function createMaterialSelect(jobElement, materialCategorySelect) {
   const select = htmlHelpers.createElement('select', 'material-select');
   select.addEventListener("change", () => {
     const materialCategory = htmlHelpers.getSelectText(materialCategorySelect);
@@ -79,6 +79,22 @@ function createUnitSelect() {
   const select = htmlHelpers.createElement('select', 'unit-select');
   htmlHelpers.createOptions(select, materialsHelpers.getSupportedUnits());
   return select;
+}
+
+// To be used both for unit select and amount input
+function setJobQuantityInputEvent(eventInput, jobElement, unitSelect, materialSelect, materialCategorySelect, amountInput) {
+  eventInput.addEventListener("change", () => {
+    const materialCategory = htmlHelpers.getSelectText(materialCategorySelect);
+    const material = htmlHelpers.getSelectText(materialSelect);
+    const unit = htmlHelpers.getSelectText(unitSelect);
+    const jobAmount = amountInput.value;
+    const stageElements = getStageElements(jobElement);
+    //console.log("stageElements:");
+    //console.log(stageElements);
+    for (let stageElement of stageElements) {
+      setStageUnit(stageElement, materialCategory, material, unit, jobAmount);
+    }
+  });
 }
 
 function createAmountInput() {
@@ -146,7 +162,7 @@ function createJob(jobId, stages) {
   
   // Material(Category) selects
   const materialCategorySelect = createMaterialCategorySelect();
-  const materialSelect = creatematerialSelect(jobDiv, materialCategorySelect);
+  const materialSelect = createMaterialSelect(jobDiv, materialCategorySelect);
   setMaterialCategorySelectEvent(jobDiv, materialCategorySelect, materialSelect);
   let row = htmlHelpers.createTableRow("Material category:", [materialCategorySelect], columnCount);
   jobTable.appendChild(row); 
@@ -154,10 +170,16 @@ function createJob(jobId, stages) {
   jobTable.appendChild(row); 
   
   // Unit and amount
-  row = htmlHelpers.createTableRow("Unit for the material:", [createUnitSelect()], columnCount);
+  const unitSelect = createUnitSelect();
+  row = htmlHelpers.createTableRow("Unit for the material:", [unitSelect], columnCount);
   jobTable.appendChild(row);
-  row = htmlHelpers.createTableRow("Target number of units:", [createAmountInput()], columnCount);
+  const amountInput = createAmountInput();
+  row = htmlHelpers.createTableRow("Target number of units:", [amountInput], columnCount);
   jobTable.appendChild(row);
+  // events
+  setJobQuantityInputEvent(unitSelect, jobDiv, unitSelect, materialSelect, materialCategorySelect, amountInput);
+  setJobQuantityInputEvent(amountInput, jobDiv, unitSelect, materialSelect, materialCategorySelect, amountInput);
+  
   
   // Stages
   let i = 0;

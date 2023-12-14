@@ -240,13 +240,15 @@ function extractConversions(selectElement) {
 }
 
 // stageElement is a parent
-function changeJobUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit = '', techConversions = [], speed = -1) {
+function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit = '', techConversions = [], speed = -1) {
   const unitConversionInput = stageElement.querySelector(".unit-conversion");
   let techSelect;
   if (!techUnit || !techConversions)
     techSelect = stageElement.querySelector(".tool-select");
   if (!techUnit)
     techUnit = htmlHelpers.getSelectData(techSelect, "unit");
+  if (!techUnit) // no tech selected, so nothing else to do
+    return;
   if (!techConversions)
     techConversions = htmlHelpers.getSelectData(extractConversions(techSelect), "unit");
   const conversionFactor = materialsHelpers.getConversionFactor(materialCategory, material, techUnit, jobUnit, techUnit, techConversions);
@@ -296,7 +298,7 @@ function chooseStageTool(stageElement, approach, author, year, techUnit, speed, 
   studyUnitP.innerText = techUnit;
   studySpeedP.innerHTML = speed + " " + helpers.formatUnit(techUnit) + "/h"; // TODO update unit by stage (extra input)
   
-  changeJobUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit, conversions, speed);
+  setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit, conversions, speed);
 }
 
 // --------------------------------------
@@ -342,4 +344,8 @@ function getJobAmount(element) {
 }
 
 
-export { createStage, setStageMaterial };
+export {
+  createStage,
+  setStageMaterial,
+  setStageUnit
+};
