@@ -2,7 +2,7 @@ import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as helpers from "./helpers/helpers.js"; 
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import { loadFile } from "./data-handler.js";
-import { createStage, setStageMaterial, setStageUnit } from "./stage-generator.js";
+import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit } from "./stage-generator.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
 // 1MD = 2.160kJ
@@ -17,17 +17,6 @@ const materialsData = await loadFile('materials');
 //console.log(materialsData);
 
 var jobCount = 1;
-
-
-
-// TODO use or delete
-function updateTotal() {
-  var total = 0;
-  for (i = 1; i <= jobCount; i++) {
-    total += parseFloat(document.querySelector(`#total-energy-${i}`).textContent);
-  }
-  document.querySelector("#total-energy-label").textContent = "Total: " + total.toFixed(1) + "kJ";
-}
 
 // --------------------------------------
 // ---------------------------- MATERIALS
@@ -124,42 +113,51 @@ function getStageElements(ancestorElement) {
 // --------------------------------------
 // ------------------------------- ENERGY
 
-// function recalculateJobEnergy(jobId) {
-  // let totalJobEnergy = 0;
-  // for (const stage of Object.values(jobData))
-    // totalJobEnergy += updateStageEnergy(jobId, stage);
+function recalculateJobEnergy(jobElement) {
+  let totalJobEnergy = 0;
 
-  // let job = document.getElementById(`job-${jobId}`);
-  // let label = job.querySelector('.job-energy-label');
-  // label.textContent = helpers.formatEnergy(totalJobEnergy);
-// }
+  const stageElements = getStageElements(jobElement);
+  for (let stageElement of stageElements) {
+    const mhLabel = stageElement.querySelector(".stage-mh-label");
+    const energy = Number(mhLabel.innerText.split(" ")[0]);
+    totalJobEnergy += energy;
+  }
+  
+  jobElement.querySelector(".job-mh-label").innerText = helpers.formatEnergy(totalJobEnergy);
+  //return totalJobEnergy;
+}
+
+function onStageEnergyChanged(stageElement) {
+  recalculateJobEnergy(htmlHelpers.getAncestorElement(stageElement, "job"));
+}
 
 // --------------------------------------
-// --------------------------------- JOBS
+// ------------------------------ TESTING
 
-// for testing
-function createJobButton() {
+function createJobButton(jobDiv) {
   let button = document.createElement('button');
   button.textContent = 'Calculate energy';
   button.addEventListener('click', () => {
-    recalculateJobEnergy(1);
+    recalculateJobEnergy(jobDiv);
   });
   return button;
 }
+
+// --------------------------------------
+// --------------------------------- JOBS
 
 function createJob(jobId, stages) {
   // Element structure
   let jobDiv = htmlHelpers.createElement('div', 'job'); 
   jobDiv.id = `job-${jobId}`;
-  jobDiv.appendChild(createJobHeader(jobId));
   let jobTable = htmlHelpers.createElement('table', 'job-table'); 
-  const columnCount = 2;
+  const columnCount = 3;
   
-  // Job name
+  // Header - name, energy
   const input = document.createElement("input");
   input.value = "Postav treba zed";
-  jobTable.appendChild(htmlHelpers.createTableRow("Job name:", [input], columnCount));
-  
+  jobTable.appendChild(htmlHelpers.createTableRow("", [createJobHeader(jobId), input, htmlHelpers.createElement("p", "job-mh-label", "0 MH")], columnCount));
+
   // Material(Category) selects
   const materialCategorySelect = createMaterialCategorySelect();
   const materialSelect = createMaterialSelect(jobDiv, materialCategorySelect);
@@ -187,23 +185,27 @@ function createJob(jobId, stages) {
     i++;
     //if (i == 1) continue; // skip first
     if (i == 3) break; // skip 2+
-    let stage = createStage(jobId, stageData);
+    let stage = createStage(stageData);
     //setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
     let td = htmlHelpers.createTd(stage);
     td.colSpan = columnCount;
     jobTable.appendChild(htmlHelpers.createTr(td));
   }
   
-  jobDiv.appendChild(jobTable);// TODO consider whether table is needed
-    
-  const jobEnergyLabel = htmlHelpers.createElement('label', 'job-energy-label', 'E');
-  jobDiv.appendChild(jobEnergyLabel);
-  
+  jobDiv.appendChild(jobTable);
+      
   jobDiv.appendChild(document.createElement('br'));
-  jobDiv.appendChild(createJobButton());
+  jobDiv.appendChild(createJobButton(jobDiv));
   
   return jobDiv;
 }
 
+// --------------------------------------
+// -------------------------------- SETUP
+
+function setup() {
+    setEnergyChangeFunction(onStageEnergyChanged);
+}
+setup();
 
 export { createJob };

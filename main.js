@@ -1,6 +1,7 @@
 import { loadFile } from "./data-handler.js";
 import { createJob } from "./job-generator.js";
 
+var jobId = 1;
 
 function createOptions(selectElement, options) {
   //alert(selectElement.innerHTML);
@@ -32,7 +33,7 @@ async function test() {
   
   //console.log(data);
   const jobsContainer = document.querySelector("#jobs-container");
-  jobsContainer.prepend(createJob(1, data));
+  jobsContainer.prepend(createJob(jobId++, data));
 }
 
 await test();

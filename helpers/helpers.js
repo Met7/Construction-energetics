@@ -1,7 +1,7 @@
 function formatEnergy(energy) {
   if (typeof(energy) != 'number') // energy.isNaN()
     return energy;
-  return energy.toFixed(1) + "kJ";
+  return Number(energy.toFixed(2)) + " Mh";
 }
 
 function formatUnit(unit) {

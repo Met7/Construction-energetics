@@ -58,19 +58,28 @@ const technologyData = await technologiesHelpers.loadTechnologies();
 // --------------------------------------
 // ------------------------------- ENERGY
 
+// called by job to pass callback function
+let onEnergyChange;
+function setEnergyChangeFunction(energyChangeFunction) {
+  //console.log("setEnergyChangeFunction");
+  //console.log(energyChangeFunction);
+  onEnergyChange = energyChangeFunction;
+}
+
 function getStageMhElement(element) {
   return getStageElement(element).querySelector(".stage-mh-label");
 }
 
 function setStageMh(stageElement, mhAmount) {
-  getStageMhElement(stageElement).innerHTML = mhAmount + " MH";
+  getStageMhElement(stageElement).innerHTML = helpers.formatEnergy(mhAmount);
+  onEnergyChange(stageElement);
 }
 
 // --------------------------------------
 // ------------------------- CREATE STAGE
 
 
-function createStage(jobId, stageData) {
+function createStage(stageData) {
   console.log("Creating a stage - " + stageData.stageName);
   //console.log(stageData);
   
@@ -273,7 +282,7 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
     speed = htmlHelpers.getSelectValue(stageElement.querySelector(".tool-select"));
   
   const convertedSpeed = speed * conversionFactor;
-  convertedSpeedP.innerHTML = Number(convertedSpeed.toFixed(2)) + " " + helpers.formatUnit(jobUnit) + "/h"; // TODO update unit by stage (extra input)
+  convertedSpeedP.innerHTML = helpers.formatEnergy(convertedSpeed, false) + " " + helpers.formatUnit(jobUnit) + "/h"; // TODO update unit by stage (extra input)
   
   // stage specific param, such as distance
   for (const extraParam of getExtraParameters(stageElement)) {
@@ -285,7 +294,7 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
     jobAmount *= extraParam;
   }
   
-  const totalMh = Number((jobAmount * convertedSpeed).toFixed(2));
+  const totalMh = helpers.formatEnergy(jobAmount * convertedSpeed);
   totalMhP.innerText = totalMh;
   setStageMh(stageElement, totalMh);
 }
@@ -350,6 +359,7 @@ function getJobAmount(element) {
 
 
 export {
+  setEnergyChangeFunction,
   createStage,
   setStageMaterial,
   setStageUnit
