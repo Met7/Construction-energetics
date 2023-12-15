@@ -1,4 +1,6 @@
 
+const selectEmptyOptionText = "Choose...";
+
 // --------------------------------------
 // ------------------------------ GENERIC
 
@@ -28,7 +30,13 @@ function getAncestorElement(element, className) {
 // ------------------------------- INPUTS
 
 function emptyElement(input, defaultValue = "") {
+  let initSelect = false;
+
+  if (input.nodeName == "SELECT" && input.options[0].value == -1)
+    initSelect = true;
   input.innerHtml = defaultValue;
+  if (initSelect = true)
+    createSelectEmptyOption(input);
 }
 
 function resetInput(input, defaultValue = "") {
@@ -46,12 +54,19 @@ function resetLabel(input, defaultValue = "N/A") {
 // --------------------------------------
 // -------------------------------- SELECT
 
+function createSelectEmptyOption(select, defaultText = selectEmptyOptionText) {
+    const selectOption = document.createElement("option");
+    selectOption.textContent = defaultText;
+    selectOption.value = -1;
+    select.appendChild(selectOption);
+}
+
 // takes an array and fills the select.
 // The array is either
 // plain - fill the select with the values as text
 // array - 0 is text, 1 is value
 // object - "text" key for text, "value" is optional. Other keys will be stored as "data", key prepended by "data-".
-function createOptions(selectElement, options) {
+function createOptions(selectElement, options, useDefaultEmpty = true, defaultText = selectEmptyOptionText) {
   //console.log("Options: ");
   //console.log(options);
 
@@ -60,10 +75,12 @@ function createOptions(selectElement, options) {
   
   selectElement.innerHTML = "";
   
-  if (options.length == 0) {
+  if (options.length == 0)
     return;
-  }
-    
+  
+  if (useDefaultEmpty)
+    createSelectEmptyOption(selectElement, defaultText);
+  
   options.forEach((option) => {
     const selectOption = document.createElement("option");
     if (Array.isArray(option)) { // array of [text, value]
