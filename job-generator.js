@@ -162,26 +162,79 @@ function createLoadButton(jobDiv) {
 }
 
 
-let jobSave = { "stages": [] };
+//let jobSave = {};
 
 function saveJob(jobElement) {
-  jobSave.stages = [];
+  let jobSave = {};
+  jobSave["name"] = jobElement.querySelector(".job-name-input").value;
+  jobSave["material-category"] = htmlHelpers.getSelectText(jobElement.querySelector(".material-category-select"))
+  jobSave["material"] = htmlHelpers.getSelectText(jobElement.querySelector(".material-select"))
+  jobSave["unit"] = htmlHelpers.getSelectText(jobElement.querySelector(".unit-select"))
+  jobSave["amount"] = jobElement.querySelector(".amount-input").value;
+  jobSave["stages"] = [];
   const stageElements = getStageElements(jobElement);
   for (let stageElement of stageElements) {
-    jobSave.stages.push(saveStage(stageElement));
+    jobSave["stages"].push(saveStage(stageElement));
   }
-  console.log(jobSave);
+  
+  localStorage.setItem("save", JSON.stringify(jobSave));
+  
+  console.log("Saved job to local storage.");
 }
 
 function loadJob(jobElement) {
-  const stageElements = getStageElements(jobElement);
+  const jobSave = JSON.parse(localStorage.getItem("save"));
+  console.log(jobSave);
+  let input = jobElement.querySelector(".job-name-input");
+  input.value = jobSave["name"];
+  
+  let select = jobElement.querySelector(".material-category-select");
+  htmlHelpers.setSelectedByText(select, jobSave["material-category"]);
+  select.dispatchEvent(new Event('change'));
+  
+  select = jobElement.querySelector(".material-select");
+  htmlHelpers.setSelectedByText(select, jobSave["material"]);
+  select.dispatchEvent(new Event('change'));
+  
+  select = jobElement.querySelector(".unit-select");
+  htmlHelpers.setSelectedByText(select, jobSave["unit"]);
+  select.dispatchEvent(new Event('change'));
+  
+  input = jobElement.querySelector(".amount-input");
+  input.value = jobSave["amount"];
+  select.dispatchEvent(new Event('change'));
+  
+  // const stageElements = getStageElements(jobElement);
+  // for (const stageElement of stageElements) {
+    // const stageData = jobSave["stages"]
+    // loadStage(stageElement, stageData, jobData[stageData["stage"]]);
+  // }
+  
+  // load stages
   for (let stageData of jobSave["stages"]) {
-    loadStage(stageData);
+    //console.log(stageData);
+    loadStage(jobElement, stageData, jobData[stageData["stage"]]);
   }
+  
+  console.log("Loaded job from local storage.");
 }
 
 // --------------------------------------
 // --------------------------------- JOBS
+
+function createStages(jobTable, jobData, columnCount) {
+  let i = 0;
+  for (const stageData of Object.values(jobData)) {
+    i++;
+    //if (i == 1) continue; // skip first
+    if (i == 3) break; // skip 2+
+    let stage = createStage(stageData);
+    //setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
+    let td = htmlHelpers.createTd(stage);
+    td.colSpan = columnCount;
+    jobTable.appendChild(htmlHelpers.createTr(td));
+  }
+}
 
 function createJob(jobId, stages) {
   // Element structure
@@ -191,7 +244,7 @@ function createJob(jobId, stages) {
   const columnCount = 3;
   
   // Header - name, energy
-  const input = document.createElement("input");
+  const input = htmlHelpers.createElement("input", "job-name-input");
   input.value = "Postav treba zed";
   jobTable.appendChild(htmlHelpers.createTableRow("", [createJobHeader(jobId), input, htmlHelpers.createElement("p", "job-mh-label", "0 MH")], columnCount));
 
@@ -215,19 +268,8 @@ function createJob(jobId, stages) {
   setJobQuantityInputEvent(unitSelect, jobDiv, unitSelect, materialSelect, materialCategorySelect, amountInput);
   setJobQuantityInputEvent(amountInput, jobDiv, unitSelect, materialSelect, materialCategorySelect, amountInput);
   
-  
   // Stages
-  let i = 0;
-  for (const stageData of Object.values(jobData)) {
-    i++;
-    //if (i == 1) continue; // skip first
-    if (i == 3) break; // skip 2+
-    let stage = createStage(stageData);
-    //setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
-    let td = htmlHelpers.createTd(stage);
-    td.colSpan = columnCount;
-    jobTable.appendChild(htmlHelpers.createTr(td));
-  }
+  createStages(jobTable, jobData, columnCount);
   
   jobDiv.appendChild(jobTable);
   

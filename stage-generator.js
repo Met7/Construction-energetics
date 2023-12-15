@@ -92,7 +92,7 @@ function createStage(stageData) {
   stageTable.classList.add(`stage-${stageData.stageName}`);
 	
   // header row
-  let columns = [htmlHelpers.createElement('p', 'stage-mh-label', '0 MH')];
+  let columns = [htmlHelpers.createElement('p', 'stage-mh-label', helpers.formatEnergy(0))];
   let row = htmlHelpers.createTableRow("STAGE: " + stageData.stageName, columns, columnCount, true);  
   stageTable.appendChild(row);
   
@@ -143,16 +143,17 @@ function createStage(stageData) {
   });
   
   // output fields
-  stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement('p', 'citation')], columnCount));
-  stageTable.appendChild(htmlHelpers.createTableRow("Study unit: ", [htmlHelpers.createElement('p', 'study-unit')], columnCount));
-  stageTable.appendChild(htmlHelpers.createTableRow("Study units/h: ", [htmlHelpers.createElement('p', 'study-speed')], columnCount));
+  const defaultText = "N/A";
+  stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement('p', 'citation', defaultText)], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Study unit: ", [htmlHelpers.createElement('p', 'study-unit', defaultText)], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Study units/h: ", [htmlHelpers.createElement('p', 'study-speed', defaultText)], columnCount));
   const conversionFactorInput = htmlHelpers.createElement('input', 'unit-conversion');
   conversionFactorInput.addEventListener("change", () => {
     updateMh(stageTable, conversionFactorInput.value);
   });
   stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [conversionFactorInput], columnCount));
-  stageTable.appendChild(htmlHelpers.createTableRow("Converted units/h: ", [htmlHelpers.createElement('p', 'total-speed')], columnCount));
-  stageTable.appendChild(htmlHelpers.createTableRow("Total MH:", [htmlHelpers.createElement('p', 'total-mh')], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Converted units/h: ", [htmlHelpers.createElement('p', 'total-speed', defaultText)], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Total MH:", [htmlHelpers.createElement('p', 'total-mh', defaultText)], columnCount));
   
   stageDiv.appendChild(stageTable);
  
@@ -282,7 +283,7 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
     speed = htmlHelpers.getSelectValue(stageElement.querySelector(".tool-select"));
   
   const convertedSpeed = speed * conversionFactor;
-  convertedSpeedP.innerHTML = helpers.formatEnergy(convertedSpeed, false) + " " + helpers.formatUnit(jobUnit) + "/h"; // TODO update unit by stage (extra input)
+  convertedSpeedP.innerHTML = helpers.formatNumber(convertedSpeed, false) + " " + helpers.formatUnit(jobUnit) + "/h"; // TODO update unit by stage (extra input)
   
   // stage specific param, such as distance
   for (const extraParam of getExtraParameters(stageElement)) {
@@ -302,6 +303,7 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
 // stageElement is some ancestor of the affected elements in the stage.
 function chooseStageTool(stageElement, approach, author, year, techUnit, speed, conversions) {
   console.log("chooseStageTool for " + approach + ", " + author + ", " + year + ", " + techUnit + ", " + speed + ".");
+  clearStage(stageElement);
   let [materialCategory, material, jobUnit, jobAmount] = getJobProperties(stageElement);
   
   const citationP = stageElement.querySelector(".citation");
@@ -310,9 +312,22 @@ function chooseStageTool(stageElement, approach, author, year, techUnit, speed, 
   
   citationP.innerHTML = studiesHelpers.getStudyCitation(author, year);
   studyUnitP.innerText = techUnit;
-  studySpeedP.innerHTML = speed + " " + helpers.formatUnit(techUnit) + "/h"; // TODO update unit by stage (extra input)
+  studySpeedP.innerHTML = helpers.formatNumber(speed) + " " + helpers.formatUnit(techUnit) + "/h"; // TODO update unit by stage (extra input)
   
   setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit, conversions, speed);
+}
+
+// --------------------------------------
+// -------------------------- CLEAR STATE
+
+function clearStage(stageElement) {
+  const inputs = stageElement.querySelectorAll('input');
+  for (const input of inputs)
+    htmlHelpers.emptyElement(input);
+  
+  const outputs = stageElement.querySelectorAll('p, label');
+  for (const output of outputs)
+    htmlHelpers.resetLabel(output);
 }
 
 // --------------------------------------
@@ -320,6 +335,7 @@ function chooseStageTool(stageElement, approach, author, year, techUnit, speed, 
 
 function saveStage(stageElement) {
   let saveData = {
+    "stage": htmlHelpers.getAncestorElement(stageElement, "stage").getAttribute("data-stage"), // ancestor should not be needed, but it will work if code changes.
     "element": stageElement, // TODO remove, should be rebuild
     "approach": htmlHelpers.getSelectText(stageElement.querySelector(".approach-select")),
     "tool": htmlHelpers.getSelectText(stageElement.querySelector(".tool-select")),
@@ -328,17 +344,20 @@ function saveStage(stageElement) {
   return saveData;
 }
 
-
-function loadStage(saveData) {
-  let select = saveData["element"].querySelector(".approach-select");
+// TODO custom fields
+function loadStage(ancestorElement, saveData, stageData) {
+  //console.log("Fetching stage " + ".stage-" + saveData["stage"]);
+  const stageElement = ancestorElement.querySelector(".stage-" + saveData["stage"]);
+  clearStage(stageElement);
+  let select = stageElement.querySelector(".approach-select");
   htmlHelpers.setSelectedByText(select, saveData["approach"]);
   select.dispatchEvent(new Event('change'));
   
-  select = saveData["element"].querySelector(".tool-select");
+  select = stageElement.querySelector(".tool-select");
   htmlHelpers.setSelectedByText(select, saveData["tool"]);
   select.dispatchEvent(new Event('change'));
   
-  let input = saveData["element"].querySelector(".unit-conversion");
+  let input = stageElement.querySelector(".unit-conversion");
   input.value = saveData["conversion factor"];
 }
 

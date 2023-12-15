@@ -1,7 +1,11 @@
+function formatNumber(number) {
+  return Number(Number(number).toFixed(2));
+}
+
 function formatEnergy(energy) {
   if (typeof(energy) != 'number') // energy.isNaN()
     return energy;
-  return Number(energy.toFixed(2)) + " Mh";
+  return formatNumber(energy) + " Mh";
 }
 
 function formatUnit(unit) {
@@ -19,6 +23,7 @@ function strEq(str1, str2) {
 }
 
 export {
+  formatNumber,
   formatEnergy,
   formatUnit,
   strEq

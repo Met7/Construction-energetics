@@ -23,6 +23,26 @@ function getAncestorElement(element, className) {
   return element;
 }
 
+
+// --------------------------------------
+// ------------------------------- INPUTS
+
+function emptyElement(input, defaultValue = "") {
+  input.innerHtml = defaultValue;
+}
+
+function resetInput(input, defaultValue = "") {
+  if (input.nodeName == "INPUT")
+    input.value = defaultValue;
+  else if (input.nodeName = "SELECT")
+    input.selectedIndex = 0;
+}
+
+function resetLabel(input, defaultValue = "N/A") {
+  if (input.nodeName == "P"  || input.nodeName == "LABEL")
+    input.value = defaultValue;
+}
+
 // --------------------------------------
 // -------------------------------- SELECT
 
@@ -156,6 +176,9 @@ function createTableRow(label, columns, totalColumns, isHeader = false) {
 export {
   createElement,
   getAncestorElement,
+  emptyElement,
+  resetInput,
+  resetLabel,
   createOptions,
   getSelectText,
   getSelected,
