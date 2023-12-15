@@ -98,10 +98,13 @@ function getSelectData(input, dataKey = "") {
   return option.getAttribute(dataKey)
 }
 
-// function getSelectAllData(input) {
-  // dataKey = dataKey ? "data-" + dataKey : "data";
-  // return getSelected(input).getAttribute(dataKey)
-// }
+function setSelectedByText(select, text) {
+  for (let index = 0; index < select.options.length; index++)
+    if (select.options[index].text == text) {
+      select.selectedIndex = index;
+      return;
+    }
+}
 
 // --------------------------------------
 // -------------------------------- TABLE
@@ -158,6 +161,7 @@ export {
   getSelected,
   getSelectValue,
   getSelectData,
+  setSelectedByText,
   createTd,
   createTr,
   createLabelTd,

@@ -2,7 +2,7 @@ import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as helpers from "./helpers/helpers.js"; 
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import { loadFile } from "./data-handler.js";
-import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit } from "./stage-generator.js";
+import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit, saveStage, loadStage } from "./stage-generator.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
 // 1MD = 2.160kJ
@@ -143,6 +143,43 @@ function createJobButton(jobDiv) {
   return button;
 }
 
+function createSaveButton(jobDiv) {
+  let button = document.createElement('button');
+  button.textContent = 'Save';
+  button.addEventListener('click', () => {
+    saveJob(jobDiv);
+  });
+  return button;
+}
+
+function createLoadButton(jobDiv) {
+  let button = document.createElement('button');
+  button.textContent = 'Load';
+  button.addEventListener('click', () => {
+    loadJob(jobDiv);
+  });
+  return button;
+}
+
+
+let jobSave = { "stages": [] };
+
+function saveJob(jobElement) {
+  jobSave.stages = [];
+  const stageElements = getStageElements(jobElement);
+  for (let stageElement of stageElements) {
+    jobSave.stages.push(saveStage(stageElement));
+  }
+  console.log(jobSave);
+}
+
+function loadJob(jobElement) {
+  const stageElements = getStageElements(jobElement);
+  for (let stageData of jobSave["stages"]) {
+    loadStage(stageData);
+  }
+}
+
 // --------------------------------------
 // --------------------------------- JOBS
 
@@ -193,9 +230,12 @@ function createJob(jobId, stages) {
   }
   
   jobDiv.appendChild(jobTable);
-      
+  
+  // testing
   jobDiv.appendChild(document.createElement('br'));
   jobDiv.appendChild(createJobButton(jobDiv));
+  jobDiv.appendChild(createSaveButton(jobDiv));
+  jobDiv.appendChild(createLoadButton(jobDiv));
   
   return jobDiv;
 }

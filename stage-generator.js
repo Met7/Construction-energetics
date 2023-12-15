@@ -316,6 +316,33 @@ function chooseStageTool(stageElement, approach, author, year, techUnit, speed, 
 }
 
 // --------------------------------------
+// ---------------------------- SAVE/LOAD
+
+function saveStage(stageElement) {
+  let saveData = {
+    "element": stageElement, // TODO remove, should be rebuild
+    "approach": htmlHelpers.getSelectText(stageElement.querySelector(".approach-select")),
+    "tool": htmlHelpers.getSelectText(stageElement.querySelector(".tool-select")),
+    "conversion factor": stageElement.querySelector(".unit-conversion").value
+  };
+  return saveData;
+}
+
+
+function loadStage(saveData) {
+  let select = saveData["element"].querySelector(".approach-select");
+  htmlHelpers.setSelectedByText(select, saveData["approach"]);
+  select.dispatchEvent(new Event('change'));
+  
+  select = saveData["element"].querySelector(".tool-select");
+  htmlHelpers.setSelectedByText(select, saveData["tool"]);
+  select.dispatchEvent(new Event('change'));
+  
+  let input = saveData["element"].querySelector(".unit-conversion");
+  input.value = saveData["conversion factor"];
+}
+
+// --------------------------------------
 // ---------------------------------- JOB
 
 
@@ -362,5 +389,7 @@ export {
   setEnergyChangeFunction,
   createStage,
   setStageMaterial,
-  setStageUnit
+  setStageUnit,
+  saveStage,
+  loadStage
 };
