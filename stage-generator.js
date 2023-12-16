@@ -41,10 +41,15 @@ function getExtraParameters(stageElement) {
   let params = [];
   const inputElements = stageElement.getElementsByClassName("custom-input");
   for (let inputElement of inputElements) {
+    let param = {};
     if (inputElement.nodeName  == "INPUT")
-      params.push(inputElement.value);
+      param.value = inputElement.value;
     else if (inputElement.nodeName  == "SELECT")
-      params.push(htmlHelpers.getSelectValue(inputElement));
+      param.value = htmlHelpers.getSelectValue(inputElement);
+    if (param) {
+      param.formula = inputElement.getAttribute("data-formula");
+      params.push(param);
+    }
   }
   return params;
 }
@@ -110,6 +115,7 @@ function createStage(stageData) {
       inputElement.type = 'number';
       inputElement.min = 0;
       inputElement.value = input.defaultValue;
+      inputElement.setAttribute("data-formula", input.formula);
     } else
       throw('stage-generator::createStage: Unknown input type - ' + input.type);
     
@@ -303,8 +309,13 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
       console.log("chooseStageTool: empty extra param");
       continue;
     }
-    console.log("chooseStageTool: multiplying jobAmount(" + jobAmount + ") by an extra param " + extraParam);
-    jobAmount *= extraParam;
+    console.log("chooseStageTool: multiplying jobAmount(" + jobAmount + ") by an extra param " + extraParam.value + " by " + extraParam.formula);
+    if (extraParam.formula == "multiply")
+      jobAmount *= extraParam.value;
+    else if (extraParam.formula == "divide")
+      jobAmount /= extraParam.value;
+    else
+      throw("stage-generator::updateMh: missing formula for extra param");
   }
   
   const totalMh = helpers.formatEnergy(jobAmount * convertedSpeed);

@@ -12,10 +12,10 @@
           "label": "Distance (meters)", 
           "type": "number",
           "unit": "m",
-          "defaultValue": 0
+          "defaultValue": 0,
+          "formula": "divide"
         }
-      ],
-      "formula": "multiply"
+      ]
     },
     "Processing": { 
       "stageName": "Processing",
@@ -29,10 +29,10 @@
           "label": "Height (meters)", 
           "type": "number",
           "unit": "m",
-          "defaultValue": 0
+          "defaultValue": 0,
+          "formula": "multiply"
         }
-      ],
-      "formula": "multiply"
+      ]
     }
   }
 }
