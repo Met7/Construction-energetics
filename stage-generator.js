@@ -70,6 +70,7 @@ function getStageMhElement(element) {
   return getStageElement(element).querySelector(".stage-mh-label");
 }
 
+// Stage MH total - value in the header
 function setStageMh(stageElement, mhAmount) {
   getStageMhElement(stageElement).innerHTML = helpers.formatEnergy(mhAmount);
   onEnergyChange(stageElement);
@@ -250,6 +251,8 @@ function extractConversions(selectElement) {
 }
 
 // stageElement is a parent
+// This may be called from the chooseStageTool event, or from the outside when job unit changes.
+// The first case already has all the params. In the other the local values need to be fetched.
 function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit = '', techConversions = [], speed = -1) {
   const unitConversionInput = stageElement.querySelector(".unit-conversion");
   let techSelect;
@@ -271,6 +274,15 @@ function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmou
   updateMh(stageElement, conversionFactor, jobUnit, jobAmount);
 }
 
+// only used externally by job. No need to recalculate conversion.
+function setStageAmount(stageElement, materialCategory, material, jobUnit, jobAmount) {
+  const conversionFactor = stageElement.querySelector(".unit-conversion").value;
+  if (conversionFactor)
+    updateMh(stageElement, conversionFactor, jobUnit, jobAmount);
+}
+
+// Does the MH calculation and prints it.
+// Expects that conversion factor is already correct. Receives or fetches job params, reads any extra stage params.
 // stageElement is a parent
 function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, speed = -1) {
   const convertedSpeedP = stageElement.querySelector(".total-speed");
@@ -409,6 +421,7 @@ export {
   createStage,
   setStageMaterial,
   setStageUnit,
+  setStageAmount,
   saveStage,
   loadStage
 };

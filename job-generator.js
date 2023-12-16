@@ -2,7 +2,7 @@ import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as helpers from "./helpers/helpers.js"; 
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import { loadFile } from "./data-handler.js";
-import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit, saveStage, loadStage } from "./stage-generator.js";
+import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit, setStageAmount, saveStage, loadStage } from "./stage-generator.js";
 
 // 1m limestone 30.3mh/m -> 8.2MJ
 // 1MD = 2.160kJ
@@ -70,7 +70,7 @@ function createUnitSelect() {
   return select;
 }
 
-// To be used both for unit select and amount input
+// To be used both for unit select and amount input.
 function setJobQuantityInputEvent(eventInput, jobElement, unitSelect, materialSelect, materialCategorySelect, amountInput) {
   eventInput.addEventListener("change", () => {
     const materialCategory = htmlHelpers.getSelectText(materialCategorySelect);
@@ -80,8 +80,12 @@ function setJobQuantityInputEvent(eventInput, jobElement, unitSelect, materialSe
     const stageElements = getStageElements(jobElement);
     //console.log("stageElements:");
     //console.log(stageElements);
+    let isUnitInput= eventInput.classList.contains("unit-select"); // unit or amount input
     for (let stageElement of stageElements) {
-      setStageUnit(stageElement, materialCategory, material, unit, jobAmount);
+      if (isUnitInput)
+        setStageUnit(stageElement, materialCategory, material, unit, jobAmount);
+      else
+        setStageAmount(stageElement, materialCategory, material, unit, jobAmount);
     }
   });
 }
@@ -161,8 +165,8 @@ function createLoadButton(jobDiv) {
   return button;
 }
 
-
-//let jobSave = {};
+// --------------------------------------
+// ---------------------------- SAVE/LOAD
 
 function saveJob(jobElement) {
   let jobSave = {};
@@ -203,12 +207,6 @@ function loadJob(jobElement) {
   input = jobElement.querySelector(".amount-input");
   input.value = jobSave["amount"];
   select.dispatchEvent(new Event('change'));
-  
-  // const stageElements = getStageElements(jobElement);
-  // for (const stageElement of stageElements) {
-    // const stageData = jobSave["stages"]
-    // loadStage(stageElement, stageData, jobData[stageData["stage"]]);
-  // }
   
   // load stages
   for (let stageData of jobSave["stages"]) {

@@ -189,6 +189,18 @@ function createTableRow(label, columns, totalColumns, isHeader = false) {
   return row;
 }
 
+// --------------------------------------
+// -------------------------------- OTHER
+
+function createLink(text, ref, cssClass = '') {
+  const link = document.createElement("a");
+  link.href = ref;
+  if (typeof(cssClass) != 'undefined' && cssClass != '')
+    link.classList.add(cssClass);
+  return link;
+}
+
+
 
 export {
   createElement,

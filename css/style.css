@@ -9,8 +9,22 @@ body {
   padding: 20px;
 }
 
+/* ------------------------------ PROJECT LIST ---- */
 
-/* ---------------------------------- JOB --------  */
+#project-list {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#project-list table {
+  border: 0px solid red;
+  width: 100%;
+}
+
+/* ------------------------------ JOB ------------  */
 
 #jobs-container {}
 
@@ -82,7 +96,7 @@ body {
   margin-left: 10px;
 }
 
-/* ---------------------------------- STAGE -------  */
+/* ------------------------------ STAGE -----------  */
 
 .stage table {
   border: 1px solid red;
