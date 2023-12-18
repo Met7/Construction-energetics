@@ -1,5 +1,5 @@
 
-const selectEmptyOptionText = "Choose...";
+const emptySelectText = "Choose...";
 
 // --------------------------------------
 // ------------------------------ GENERIC
@@ -29,12 +29,14 @@ function getAncestorElement(element, className) {
 // --------------------------------------
 // ------------------------------- INPUTS
 
-function emptyElement(input, defaultValue = "") {
+function emptyInput(input, defaultValue = "") {
   let initSelect = false;
 
   if (input.nodeName == "SELECT" && input.options.length && input.options[0].value == -1)
     initSelect = true;
-  input.innerHtml = defaultValue;
+  
+  input.innerHTML = defaultValue;
+  input.value = defaultValue;
   if (initSelect = true)
     createSelectEmptyOption(input);
 }
@@ -46,19 +48,33 @@ function resetInput(input, defaultValue = "") {
     input.selectedIndex = 0;
 }
 
-function resetLabel(input, defaultValue = "N/A") {
-  if (input.nodeName == "P"  || input.nodeName == "LABEL")
-    input.value = defaultValue;
+function resetLabel(label, defaultValue = "N/A") {
+  if (label.nodeName != "P"  && label.nodeName != "LABEL")
+    throw("html-helpers::resetLabel: wrong element type.");
+  label.innerHTML = defaultValue;
 }
 
 // --------------------------------------
 // -------------------------------- SELECT
 
-function createSelectEmptyOption(select, defaultText = selectEmptyOptionText) {
+function createSelect(cssClass = '', useEmptyOption = true) {
+  let select = createElement("select", cssClass);
+  if (typeof(cssClass) != 'undefined' && cssClass != '')
+    select.classList.add(cssClass);
+  if (useEmptyOption)
+    createSelectEmptyOption(select);
+  return select;
+}
+
+function createSelectEmptyOption(select, defaultText = emptySelectText) {
     const selectOption = document.createElement("option");
     selectOption.textContent = defaultText;
     selectOption.value = -1;
     select.appendChild(selectOption);
+}
+
+function isEmptyOption(optionText) {
+  return optionText == emptySelectText;
 }
 
 // takes an array and fills the select.
@@ -66,7 +82,7 @@ function createSelectEmptyOption(select, defaultText = selectEmptyOptionText) {
 // plain - fill the select with the values as text
 // array - 0 is text, 1 is value
 // object - "text" key for text, "value" is optional. Other keys will be stored as "data", key prepended by "data-".
-function createOptions(selectElement, options, useDefaultEmpty = true, defaultText = selectEmptyOptionText) {
+function createOptions(selectElement, options, useDefaultEmpty = true, defaultText = emptySelectText) {
   //console.log("Options: ");
   //console.log(options);
 
@@ -205,10 +221,12 @@ function createLink(text, ref, cssClass = '') {
 export {
   createElement,
   getAncestorElement,
-  emptyElement,
+  emptyInput,
   resetInput,
   resetLabel,
+  createSelect,
   createOptions,
+  isEmptyOption,
   getSelectText,
   getSelected,
   getSelectValue,

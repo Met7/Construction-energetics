@@ -13,11 +13,15 @@ myButton.addEventListener('click', addJob);
 
 let projects;
 
-// TODO load from storage
 // TODO add import/export
 // projects = [
   // {"name" : "Project 1", "data" : ""}
 // ];
+
+function saveToStorage() {
+  localStorage.setItem("projects", JSON.stringify(projects));
+  console.log("Saved projects to local storage.");
+}
 
 function saveProject(index = -1, name = "") {
   let projectSave = {};
@@ -33,9 +37,9 @@ function saveProject(index = -1, name = "") {
   }
   
   projects[index].data = projectSave;
-
-  localStorage.setItem("projects", JSON.stringify(projects));
-  console.log("Saved project to local storage.");
+  
+  saveToStorage();
+  printProjects();
 }
 
 function openProject(index) {
@@ -51,33 +55,45 @@ function openProject(index) {
     loadJob(jobElement, jobData);
   }
 
-  //localStorage.setItem("save", JSON.stringify(jobSave));
   console.log("Loaded project from local storage.");
+}
+
+function deleteProject(index) {
+  if (index < 0 || index >= projects.length)
+    throw("main::openProject: bad index " + index);
+  projects[index] = projects[projects.length - 1];
+  projects.pop();
+  console.log("Deleted project from local storage.");
+  saveToStorage();
+  printProjects();
 }
 
 function printProjects() {
   const projectTable = document.querySelector("#project-table");
-  //const projects = JSON.parse(localStorage.getItem("save"));
+  projectTable.innerHTML = "";
+  
   const columnCount = 4;
   let projectIndex = 0;
   for (const project of projects) {
+    // Hack because for unknown reason the index inside events increases at the ++ after it was assigned.
+    const indexForIteration = projectIndex;
     let links = [];
 
     let link = htmlHelpers.createElement("a", "", "o");
     link.addEventListener("click", () => {
-      openProject(projectIndex);
+      openProject(indexForIteration);
     });
     links.push(link);
     
     link = htmlHelpers.createElement("a", "", "s");
     link.addEventListener("click", () => {
-      saveProject(projectIndex);
+      saveProject(indexForIteration);
     });
     links.push(link);
     
     link = htmlHelpers.createElement("a", "", "x");
     link.addEventListener("click", () => {
-      deleteProject(projectIndex);
+      deleteProject(indexForIteration);
     });
     links.push(link);
     
@@ -111,7 +127,7 @@ async function addJob(jobContainer) {
   jobContainer.prepend(createJob(jobId++, data));
 
   // perform some actions to not do them manually on every refresh
-  if (1) {
+  if (0) {
     // select limestone in the one job
     let select = document.querySelector(".material-category-select");
     select.value = "Stone";

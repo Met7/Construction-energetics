@@ -33,7 +33,7 @@ function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
 }
 
 function createMaterialCategorySelect() {
-  const select = htmlHelpers.createElement('select', 'material-category-select');
+  const select = htmlHelpers.createSelect('material-category-select');
   htmlHelpers.createOptions(select, Object.keys(materialsData));
   //console.log(Object.keys(materialsData));
   return select;
@@ -48,7 +48,7 @@ function setMaterialCategorySelectEvent(jobElement, materialCategorySelect, mate
 }
 
 function createMaterialSelect(jobElement, materialCategorySelect) {
-  const select = htmlHelpers.createElement('select', 'material-select');
+  const select = htmlHelpers.createSelect('material-select');
   select.addEventListener("change", () => {
     const materialCategory = htmlHelpers.getSelectText(materialCategorySelect);
     const material = htmlHelpers.getSelectText(select);
@@ -65,7 +65,7 @@ function createMaterialSelect(jobElement, materialCategorySelect) {
 // -------------------------------- UNITS
 
 function createUnitSelect() {
-  const select = htmlHelpers.createElement('select', 'unit-select');
+  const select = htmlHelpers.createSelect('unit-select');
   htmlHelpers.createOptions(select, materialsHelpers.getSupportedUnits());
   return select;
 }
@@ -225,7 +225,7 @@ function createStages(jobTable, jobData, columnCount) {
   for (const stageData of Object.values(jobData)) {
     i++;
     //if (i == 1) continue; // skip first
-    if (i == 3) break; // skip 2+
+    if (i == 2) break; // skip 2+
     let stage = createStage(stageData);
     //setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
     let td = htmlHelpers.createTd(stage);
