@@ -181,14 +181,14 @@ function saveJob(jobElement) {
     jobSave["stages"].push(saveStage(stageElement));
   }
   
-  localStorage.setItem("save", JSON.stringify(jobSave));
-  
-  console.log("Saved job to local storage.");
+  return jobSave;
+  //localStorage.setItem("save", JSON.stringify(jobSave));
+  //console.log("Saved job to local storage.");
 }
 
-function loadJob(jobElement) {
-  const jobSave = JSON.parse(localStorage.getItem("save"));
-  console.log(jobSave);
+function loadJob(jobElement, jobSave) {
+  //const jobSave = JSON.parse(localStorage.getItem("save"));
+  //console.log(jobSave);
   let input = jobElement.querySelector(".job-name-input");
   input.value = jobSave["name"];
   
@@ -234,7 +234,7 @@ function createStages(jobTable, jobData, columnCount) {
   }
 }
 
-function createJob(jobId, stages) {
+function createJob(jobId) {
   // Element structure
   let jobDiv = htmlHelpers.createElement('div', 'job'); 
   jobDiv.id = `job-${jobId}`;
@@ -288,4 +288,8 @@ function setup() {
 }
 setup();
 
-export { createJob };
+export { 
+  createJob,
+  saveJob,
+  loadJob
+};

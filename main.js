@@ -1,6 +1,6 @@
 import * as htmlHelpers from "./helpers/html-helpers.js"; 
 import { loadFile } from "./data-handler.js";
-import { createJob } from "./job-generator.js";
+import { createJob, saveJob, loadJob } from "./job-generator.js";
 
 var jobId = 1;
 
@@ -15,7 +15,45 @@ let projects;
 
 // TODO load from storage
 // TODO add import/export
-projects = [ "Project 1" ];
+// projects = [
+  // {"name" : "Project 1", "data" : ""}
+// ];
+
+function saveProject(index = -1, name = "") {
+  let projectSave = {};
+  projectSave["jobs"] = [];
+  const jobElements = getJobElements(document.querySelector("#jobs-container"));
+  for (let jobElement of jobElements) {
+    projectSave["jobs"].push(saveJob(jobElement));
+  }
+  
+  if (index == -1) { // new save
+    index = projects.length;
+    projects.push({ "name" : name, "data" : "" });
+  }
+  
+  projects[index].data = projectSave;
+
+  localStorage.setItem("projects", JSON.stringify(projects));
+  console.log("Saved project to local storage.");
+}
+
+function openProject(index) {
+  if (index < 0 || index >= projects.length)
+    throw("main::openProject: bad index " + index);
+  let projectData = projects[index].data;
+  const jobsContainer = document.querySelector("#jobs-container");
+  jobsContainer.innerHTML = "";
+  jobId = 1;
+  for (const jobData of projectData.jobs) {
+    const jobElement = createJob(jobId++);
+    jobsContainer.prepend(jobElement);
+    loadJob(jobElement, jobData);
+  }
+
+  //localStorage.setItem("save", JSON.stringify(jobSave));
+  console.log("Loaded project from local storage.");
+}
 
 function printProjects() {
   const projectTable = document.querySelector("#project-table");
@@ -43,20 +81,34 @@ function printProjects() {
     });
     links.push(link);
     
-    let row = htmlHelpers.createTableRow(project, links, columnCount);
+    let row = htmlHelpers.createTableRow(project.name, links, columnCount);
     projectTable.appendChild(row);
     projectIndex++;
   }
+  
+  let columns = [];
+  const newProjectInput = htmlHelpers.createElement("input", "new-project-input");
+  columns.push(newProjectInput);
+  let link = htmlHelpers.createElement("a", "", " save ");
+  link.addEventListener("click", () => {
+    saveProject(-1, newProjectInput.value);
+  });
+  columns.push(link);
+  let row = htmlHelpers.createTableRow("Save as: ", columns, columnCount);
+  projectTable.appendChild(row);
 }
 
 // --------------------------------------
 // --------------------------------- JOBS
 
-async function addJob() {
+function getJobElements(ancestorElement) {
+  return ancestorElement.getElementsByClassName("job");
+}
+
+async function addJob(jobContainer) {
   let data = await loadFile("Stages");  
   //console.log(data);
-  const jobsContainer = document.querySelector("#jobs-container");
-  jobsContainer.prepend(createJob(jobId++, data));
+  jobContainer.prepend(createJob(jobId++, data));
 
   // perform some actions to not do them manually on every refresh
   if (1) {
@@ -87,8 +139,14 @@ async function addJob() {
 // --------------------------------- MAIN
 
 async function main() {
+  if (localStorage.projects)
+    projects = JSON.parse(localStorage.getItem("projects"));
+  else {
+    projects = [];
+  }
   printProjects();
-  await addJob();
+  const jobsContainer = document.querySelector("#jobs-container");
+  await addJob(jobsContainer);
 }
 
 await main();
