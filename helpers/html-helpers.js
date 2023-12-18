@@ -32,7 +32,7 @@ function getAncestorElement(element, className) {
 function emptyElement(input, defaultValue = "") {
   let initSelect = false;
 
-  if (input.nodeName == "SELECT" && input.options[0].value == -1)
+  if (input.nodeName == "SELECT" && input.options.length && input.options[0].value == -1)
     initSelect = true;
   input.innerHtml = defaultValue;
   if (initSelect = true)
