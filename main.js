@@ -18,6 +18,11 @@ let projects;
   // {"name" : "Project 1", "data" : ""}
 // ];
 
+function checkProjectIndex(index, caller) {
+  if (index < 0 || index >= projects.length)
+    throw("main::" + caller + ": bad index " + index);
+}
+
 function saveToStorage() {
   localStorage.setItem("projects", JSON.stringify(projects));
   console.log("Saved projects to local storage.");
@@ -43,8 +48,7 @@ function saveProject(index = -1, name = "") {
 }
 
 function openProject(index) {
-  if (index < 0 || index >= projects.length)
-    throw("main::openProject: bad index " + index);
+  checkProjectIndex(index, "openProject");
   let projectData = projects[index].data;
   const jobsContainer = document.querySelector("#jobs-container");
   jobsContainer.innerHTML = "";
@@ -59,13 +63,39 @@ function openProject(index) {
 }
 
 function deleteProject(index) {
-  if (index < 0 || index >= projects.length)
-    throw("main::openProject: bad index " + index);
+  checkProjectIndex(index, "deleteProject");
   projects[index] = projects[projects.length - 1];
   projects.pop();
   console.log("Deleted project from local storage.");
   saveToStorage();
   printProjects();
+}
+
+function downloadProject(index) {
+  checkProjectIndex(index, "downloadProject");
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projects[index]));
+  const dlAnchorElem = document.getElementById("dl-project-" + index);
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", projects[index].name + ".json");
+  //dlAnchorElem.click();
+}
+
+function uploadProject(uploadProjectInput) {
+  const files = uploadProjectInput.files;
+  if (files.length == 0)
+    return;
+  
+  const fileReader = new FileReader();
+  fileReader.onload = function(file) { 
+    const uploadedProject = JSON.parse(file.target.result);
+    console.log("uploaded file - " + uploadedProject.name);
+    // TODO add file validity check
+    projects.push(uploadedProject);  
+    saveToStorage();
+    printProjects();
+  }
+
+  fileReader.readAsText(files.item(0));
 }
 
 function printProjects() {
@@ -91,6 +121,13 @@ function printProjects() {
     });
     links.push(link);
     
+    link = htmlHelpers.createElement("a", "", "export");
+    link.id = "dl-project-" + indexForIteration;
+    link.addEventListener("click", () => {
+      downloadProject(indexForIteration);
+    });
+    links.push(link);
+    
     link = htmlHelpers.createElement("a", "", "x");
     link.addEventListener("click", () => {
       deleteProject(indexForIteration);
@@ -110,7 +147,19 @@ function printProjects() {
     saveProject(-1, newProjectInput.value);
   });
   columns.push(link);
-  let row = htmlHelpers.createTableRow("Save as: ", columns, columnCount);
+  let row = htmlHelpers.createTableRow("Save current as: ", columns, columnCount);
+  projectTable.appendChild(row);
+  
+  columns = [];
+  const uploadProjectInput = htmlHelpers.createElement("input", "upload-project-input");
+  uploadProjectInput.type = "file";
+  columns.push(uploadProjectInput);
+  link = htmlHelpers.createElement("a", "", " upload ");
+  link.addEventListener("click", () => {
+    uploadProject(uploadProjectInput);
+  });
+  columns.push(link);
+  row = htmlHelpers.createTableRow("Import project: ", columns, columnCount);
   projectTable.appendChild(row);
 }
 
