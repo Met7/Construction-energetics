@@ -224,8 +224,8 @@ function createStages(jobTable, jobData, columnCount) {
   let i = 0;
   for (const stageData of Object.values(jobData)) {
     i++;
-    //if (i == 1) continue; // skip first
-    if (i == 2) break; // skip 2+
+    if (i == 1) continue; // skip first
+    if (i == 3) break; // skip 2+
     let stage = createStage(stageData);
     //setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
     let td = htmlHelpers.createTd(stage);

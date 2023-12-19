@@ -27,21 +27,41 @@ function getStageElement(element) {
 }
 
 // collect custom stage parameters
-function getExtraParameters(stageElement) {
+function getExtraParameters(stageElement, valuesOnly = false) {
   let params = [];
   const inputElements = stageElement.getElementsByClassName("custom-input");
   for (let inputElement of inputElements) {
-    let param = {};
+    let value;
     if (inputElement.nodeName  == "INPUT")
-      param.value = inputElement.value;
+      value = inputElement.value;
     else if (inputElement.nodeName  == "SELECT")
-      param.value = htmlHelpers.getSelectValue(inputElement);
-    if (param) {
-      param.formula = inputElement.getAttribute("data-formula");
-      params.push(param);
+      value = htmlHelpers.getSelectValue(inputElement);
+    if (value) {
+      if (valuesOnly)
+        params.push(value)
+      else
+        params.push({"formula": inputElement.getAttribute("data-formula"), "value": value});
     }
   }
   return params;
+}
+
+// collect custom stage parameters
+function setExtraParameters(stageElement, values) {
+  const inputElements = stageElement.getElementsByClassName("custom-input");
+  let i = 0;
+  for (const inputElement of inputElements) {
+    if (i == inputElements.length)
+      break;
+    if (inputElement.nodeName  == "INPUT") {
+      console.log("XXXXX Old input value: " + inputElement.value);
+      console.log("XXXXX setting input to " + values[i]);
+      inputElement.value = values[i];
+    }
+    else if (inputElement.nodeName  == "SELECT")
+      htmlHelpers.setSelectedByText(inputElement, values[i]);
+    i++;
+  }
 }
 
 
@@ -281,11 +301,9 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
 function chooseStageStudy(stageElement, approach, author, year, techUnit, speed, conversions) {
   console.log("chooseStageStudy for " + approach + ", " + author + ", " + year + ", " + techUnit + ", " + speed + ".");
 
-  clearStage(stageElement);
+  clearStage(stageElement, true);
   
   if (speed == -1) { // unsetting the study
-    //stageElement.querySelector(".study-unit").remove();
-    //console.log("XXX un-setting study unit");
     setStageMh(stageElement, 0);
     return;
   }
@@ -297,7 +315,6 @@ function chooseStageStudy(stageElement, approach, author, year, techUnit, speed,
   const studySpeedP = stageElement.querySelector(".study-speed");
   
   citationP.innerHTML = studiesHelpers.getStudyCitation(author, year);
-  //console.log("XXX setting study unit");
   studyUnitP.innerText = techUnit;
   studySpeedP.innerHTML = helpers.formatNumber(speed) + " " + helpers.formatUnit(techUnit) + "/h"; // TODO update unit by stage (extra input)
   
@@ -313,11 +330,8 @@ function extractConversions(selectElement) {
   let conversions = {};
   for (const unit of allUnits) {
     const conversionFactor = htmlHelpers.getSelectData(selectElement, "conversion-" + unit);
-    //console.log("extractConversions: LF conversion for " + unit + ", found " + conversionFactor);
-    if (conversionFactor) { // TODO what does it return if it is not found?
+    if (conversionFactor) // TODO what does it return if it is not found?
       conversions[unit] = Number(conversionFactor);
-      //console.log("extractConversions: found conversion for " + unit + " -> " + conversionFactor);
-    }
   }
   return conversions;
 }
@@ -390,10 +404,14 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
 // --------------------------------------
 // -------------------------- CLEAR STATE
 
-function clearStage(stageElement) {
+function clearStage(stageElement, leaveCustom = false) {
+  console.log("clearing stage");
   const inputs = stageElement.querySelectorAll('input');
-  for (const input of inputs)
+  for (const input of inputs) {
+    if (leaveCustom && input.classList.contains("custom-input"))
+      continue;
     htmlHelpers.emptyInput(input);
+  }
   
   const outputs = stageElement.querySelectorAll('p');
   for (const output of outputs)
@@ -404,22 +422,28 @@ function clearStage(stageElement) {
 // ---------------------------- SAVE/LOAD
 
 function saveStage(stageElement) {
+  const extra = getExtraParameters(stageElement, true);
   let saveData = {
     "stage": htmlHelpers.getAncestorElement(stageElement, "stage").getAttribute("data-stage"), // ancestor should not be needed, but it will work if code changes.
-    "element": stageElement, // TODO remove, should be rebuild
+    "custom-inputs": getExtraParameters(stageElement, true),
     "approach": htmlHelpers.getSelectText(stageElement.querySelector(".approach-select")),
     "tool": htmlHelpers.getSelectText(stageElement.querySelector(".tool-select")),
     "study": htmlHelpers.getSelectText(stageElement.querySelector(".study-select")),
     "conversion factor": stageElement.querySelector(".unit-conversion").value
   };
+  //console.log(saveData);
   return saveData;
 }
 
-// TODO custom fields
+
 function loadStage(ancestorElement, saveData, stageData) {
   //console.log("Fetching stage " + ".stage-" + saveData["stage"]);
+  //console.log(saveData);
   const stageElement = ancestorElement.querySelector(".stage-" + saveData["stage"]);
   clearStage(stageElement);
+  
+  setExtraParameters(stageElement, saveData["custom-inputs"])
+  
   let select = stageElement.querySelector(".approach-select");
   htmlHelpers.setSelectedByText(select, saveData["approach"]);
   select.dispatchEvent(new Event('change'));
@@ -434,6 +458,7 @@ function loadStage(ancestorElement, saveData, stageData) {
   
   let input = stageElement.querySelector(".unit-conversion");
   input.value = saveData["conversion factor"];
+  input.dispatchEvent(new Event('change'));
 }
 
 // --------------------------------------
