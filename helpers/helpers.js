@@ -5,7 +5,7 @@ function formatNumber(number) {
 function formatEnergy(energy) {
   if (typeof(energy) != 'number') // energy.isNaN()
     return energy;
-  return formatNumber(energy) + " Mh";
+  return formatNumber(energy) + " MH";
 }
 
 function formatUnit(unit) {

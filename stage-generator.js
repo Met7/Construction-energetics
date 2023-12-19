@@ -53,11 +53,8 @@ function setExtraParameters(stageElement, values) {
   for (const inputElement of inputElements) {
     if (i == inputElements.length)
       break;
-    if (inputElement.nodeName  == "INPUT") {
-      console.log("XXXXX Old input value: " + inputElement.value);
-      console.log("XXXXX setting input to " + values[i]);
+    if (inputElement.nodeName  == "INPUT")
       inputElement.value = values[i];
-    }
     else if (inputElement.nodeName  == "SELECT")
       htmlHelpers.setSelectedByText(inputElement, values[i]);
     i++;
@@ -77,8 +74,6 @@ const technologyData = await technologiesHelpers.loadTechnologies();
 // called by job to pass callback function
 let onEnergyChange;
 function setEnergyChangeFunction(energyChangeFunction) {
-  //console.log("setEnergyChangeFunction");
-  //console.log(energyChangeFunction);
   onEnergyChange = energyChangeFunction;
 }
 
@@ -88,8 +83,6 @@ function getStageMhElement(element) {
 
 // Stage MH total - value in the header
 function setStageMh(stageElement, mhAmount) {
-  const totalMhP = stageElement.querySelector(".total-mh");
-  totalMhP.innerText = mhAmount;
   getStageMhElement(stageElement).innerHTML = helpers.formatEnergy(mhAmount);
   onEnergyChange(stageElement);
 }
@@ -105,14 +98,14 @@ function createStage(stageData) {
   let stageDiv = htmlHelpers.createElement('div', 'stage');
   stageDiv.setAttribute("data-stage", stageData.stageName);
   
-  const columnCount = 3;
+  const columnCount = 4;
   // create the table
   let stageTable = htmlHelpers.createElement('table', 'stage-table');
   stageTable.classList.add(`stage-${stageData.stageName}`);
 	
   // header row
-  let columns = [htmlHelpers.createElement('p', 'stage-mh-label', helpers.formatEnergy(0))];
-  let row = htmlHelpers.createTableRow("STAGE: " + stageData.stageName, columns, columnCount, true);  
+  let columns = [htmlHelpers.createElement("p", 'stage-mh-label', helpers.formatEnergy(0))];
+  let row = htmlHelpers.createTableRow("STAGE: " + stageData.stageName, columns, columnCount, [1, 3], true);
   stageTable.appendChild(row);
   
   // Stage-specific inputs
@@ -124,7 +117,7 @@ function createStage(stageData) {
       inputElement.selectedIndex = stageData.selectedIndex;
     }
     else if (input.type == 'number') {
-      inputElement = htmlHelpers.createElement('input', 'custom-input');
+      inputElement = htmlHelpers.createElement("input", 'custom-input');
       inputElement.type = 'number';
       inputElement.min = 0;
       inputElement.value = input.defaultValue;
@@ -132,18 +125,18 @@ function createStage(stageData) {
     } else
       throw('stage-generator::createStage: Unknown input type - ' + input.type);
     
-    row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount);
+    row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 3]);
     stageTable.appendChild(row);
   }
   
   // Approach select
   let approachSelect = htmlHelpers.createSelect('approach-select');
-  row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount);
+  row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount, [1, 3]);
   stageTable.appendChild(row);
   
   // Tool select
   let toolSelect = htmlHelpers.createSelect('tool-select');
-  row = htmlHelpers.createTableRow("Tool: ", [toolSelect], columnCount);
+  row = htmlHelpers.createTableRow("Tool: ", [toolSelect], columnCount, [1, 3]);
   stageTable.appendChild(row);
   
   // Study select
@@ -159,7 +152,7 @@ function createStage(stageData) {
       extractConversions(studySelect)
     );
   });
-  row = htmlHelpers.createTableRow("Study: ", [studySelect], columnCount);
+  row = htmlHelpers.createTableRow("Study: ", [studySelect], columnCount, [1, 3]);
   stageTable.appendChild(row);
   
   // Approach and tool select events
@@ -172,17 +165,18 @@ function createStage(stageData) {
   
   // output fields
   const defaultText = "N/A";
-  stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement('p', 'citation', defaultText)], columnCount));
-  stageTable.appendChild(htmlHelpers.createTableRow("Study unit: ", [htmlHelpers.createElement('p', 'study-unit', defaultText)], columnCount));
-  stageTable.appendChild(htmlHelpers.createTableRow("Study units/h: ", [htmlHelpers.createElement('p', 'study-speed', defaultText)], columnCount));
-  const conversionFactorInput = htmlHelpers.createElement('input', 'unit-conversion');
+  stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement("p", "citation", defaultText)], columnCount, [1, 3]));
+  stageTable.appendChild(htmlHelpers.createTableRow("Study work speed: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 3]));
+  const conversionFactorInput = htmlHelpers.createElement("input", "unit-conversion");
   conversionFactorInput.addEventListener("change", () => {
     console.log("Conversion input changed");
     updateMh(stageTable, conversionFactorInput.value);
   });
-  stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [conversionFactorInput], columnCount));
-  stageTable.appendChild(htmlHelpers.createTableRow("Converted units/h: ", [htmlHelpers.createElement('p', 'total-speed', defaultText)], columnCount));
-  stageTable.appendChild(htmlHelpers.createTableRow("Total MH:", [htmlHelpers.createElement('p', 'total-mh', defaultText)], columnCount));
+  stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [
+    conversionFactorInput, 
+    htmlHelpers.createElement("label", "", "Converted speed:"), 
+    htmlHelpers.createElement("p", "total-speed", defaultText)
+  ], columnCount));
   
   stageDiv.appendChild(stageTable);
  
@@ -311,11 +305,9 @@ function chooseStageStudy(stageElement, approach, author, year, techUnit, speed,
   let [materialCategory, material, jobUnit, jobAmount] = getJobProperties(stageElement);
   
   const citationP = stageElement.querySelector(".citation");
-  const studyUnitP = stageElement.querySelector(".study-unit");
   const studySpeedP = stageElement.querySelector(".study-speed");
   
   citationP.innerHTML = studiesHelpers.getStudyCitation(author, year);
-  studyUnitP.innerText = techUnit;
   studySpeedP.innerHTML = helpers.formatNumber(speed) + " " + helpers.formatUnit(techUnit) + "/h"; // TODO update unit by stage (extra input)
   
   setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit, conversions, speed);
@@ -406,14 +398,14 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
 
 function clearStage(stageElement, leaveCustom = false) {
   console.log("clearing stage");
-  const inputs = stageElement.querySelectorAll('input');
+  const inputs = stageElement.querySelectorAll("input");
   for (const input of inputs) {
     if (leaveCustom && input.classList.contains("custom-input"))
       continue;
     htmlHelpers.emptyInput(input);
   }
   
-  const outputs = stageElement.querySelectorAll('p');
+  const outputs = stageElement.querySelectorAll("p");
   for (const output of outputs)
     htmlHelpers.resetLabel(output);
 }

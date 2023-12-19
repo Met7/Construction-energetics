@@ -109,32 +109,33 @@ function printProjects() {
     const indexForIteration = projectIndex;
     let links = [];
 
-    let link = htmlHelpers.createElement("a", "", "o");
-    link.addEventListener("click", () => {
+    let button = htmlHelpers.createElement("button", "", "open");
+    button.addEventListener("click", () => {
       openProject(indexForIteration);
     });
-    links.push(link);
+    links.push(button);
     
-    link = htmlHelpers.createElement("a", "", "s");
-    link.addEventListener("click", () => {
+    button = htmlHelpers.createElement("button", "", "save");
+    button.addEventListener("click", () => {
       saveProject(indexForIteration);
     });
-    links.push(link);
+    links.push(button);
     
-    link = htmlHelpers.createElement("a", "", "export");
-    link.id = "dl-project-" + indexForIteration;
-    link.addEventListener("click", () => {
+    button = htmlHelpers.createElement("button", "", "export");
+    button.id = "dl-project-" + indexForIteration;
+    button.addEventListener("click", () => {
       downloadProject(indexForIteration);
     });
-    links.push(link);
+    links.push(button);
     
-    link = htmlHelpers.createElement("a", "", "x");
-    link.addEventListener("click", () => {
+    button = htmlHelpers.createElement("button", "", "delete");
+    button.addEventListener("click", () => {
       deleteProject(indexForIteration);
     });
-    links.push(link);
+    links.push(button);
     
     let row = htmlHelpers.createTableRow(project.name, links, columnCount);
+    row.classList.add("project-list-row");
     projectTable.appendChild(row);
     projectIndex++;
   }
@@ -142,11 +143,11 @@ function printProjects() {
   let columns = [];
   const newProjectInput = htmlHelpers.createElement("input", "new-project-input");
   columns.push(newProjectInput);
-  let link = htmlHelpers.createElement("a", "", " save ");
-  link.addEventListener("click", () => {
+  let button = htmlHelpers.createElement("button", "", " save ");
+  button.addEventListener("click", () => {
     saveProject(-1, newProjectInput.value);
   });
-  columns.push(link);
+  columns.push(button);
   let row = htmlHelpers.createTableRow("Save current as: ", columns, columnCount);
   projectTable.appendChild(row);
   
@@ -154,11 +155,11 @@ function printProjects() {
   const uploadProjectInput = htmlHelpers.createElement("input", "upload-project-input");
   uploadProjectInput.type = "file";
   columns.push(uploadProjectInput);
-  link = htmlHelpers.createElement("a", "", " upload ");
-  link.addEventListener("click", () => {
+  button = htmlHelpers.createElement("button", "", " upload ");
+  button.addEventListener("click", () => {
     uploadProject(uploadProjectInput);
   });
-  columns.push(link);
+  columns.push(button);
   row = htmlHelpers.createTableRow("Import project: ", columns, columnCount);
   projectTable.appendChild(row);
 }

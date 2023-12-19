@@ -19,8 +19,26 @@ body {
   margin-bottom: 10px;
 }
 
-#project-list table {
+#project-table {
   border: 0px solid red;
+  width: 100%;
+}
+
+#project-table tr {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.project-list-row label {
+  color: #008CBA;
+  /*font-weight: bold;*/
+}
+
+#project-table button {
+  padding: 5px;
+  border: none;
+  background-color: #ddd;
+  border-radius: 3px;
   width: 100%;
 }
 
@@ -49,8 +67,9 @@ body {
   border: 0px solid red;
 }
 
-.job td.energy-label {
+.job-mh-label {
   text-align: right;
+  font-weight: bold;
   min-width: 100px;
 }
 
@@ -105,6 +124,7 @@ body {
 
 .stage-header {
   background-color: #d0d0d0;
+  font-weight: bold;
 }
 
 .stage-mh-label {

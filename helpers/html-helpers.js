@@ -185,22 +185,46 @@ function createLabelTd(css, text, tdCss) {
   return cell;
 }
 
-function createTableRow(label, columns, totalColumns, isHeader = false) {
+function createTableRow(label, columns, totalColumns, colspans = [], isHeader = false) {
   if (!Array.isArray(columns)) throw("createTableRow: columns not an array. Got " + typeof(columns) + " instead");
 
   let row = createElement('tr', (isHeader ? 'stage-header' : ''));
+  let i = 0;
+  
+  // Intial label
   if (label) {
-    row.appendChild(createLabelTd('', label));
-    totalColumns--;
+    const td = createLabelTd('', label);
+    row.appendChild(td);
+    if (colspans.length > i && colspans[i] > 1) {
+      if (totalColumns < colspans[i])
+        throw("createTableRow: colspan too large");
+      td.colSpan = colspans[i];
+      totalColumns -= colspans[i];
+    } else
+      totalColumns--;
+    i++;
   }
   
+  // Next columns
   for (const column of columns) {
-    row.appendChild(createTd(column));
-    totalColumns--;
+    const td = createTd(column)
+    row.appendChild(td);
+    if (colspans.length > i && colspans[i] > 1) {
+      if (totalColumns < colspans[i])
+        throw("createTableRow: colspan too large");
+      td.colSpan = colspans[i];
+      totalColumns -= colspans[i];
+    } else
+      totalColumns--;
+    i++;
   }
   
-  for (let i = 0; i < totalColumns; i++)
-    row.appendChild(document.createElement('td'));
+  // Fill the rest
+  if (totalColumns > 0) {
+    const td = document.createElement("td");
+    row.appendChild(td);
+    td.colSpan = totalColumns;
+  }
   
   return row;
 }
