@@ -138,32 +138,6 @@ function onStageEnergyChanged(stageElement) {
 // --------------------------------------
 // ------------------------------ TESTING
 
-function createJobButton(jobDiv) {
-  let button = document.createElement('button');
-  button.textContent = 'Calculate energy';
-  button.addEventListener('click', () => {
-    recalculateJobEnergy(jobDiv);
-  });
-  return button;
-}
-
-function createSaveButton(jobDiv) {
-  let button = document.createElement('button');
-  button.textContent = 'Save';
-  button.addEventListener('click', () => {
-    saveJob(jobDiv);
-  });
-  return button;
-}
-
-function createLoadButton(jobDiv) {
-  let button = document.createElement('button');
-  button.textContent = 'Load';
-  button.addEventListener('click', () => {
-    loadJob(jobDiv);
-  });
-  return button;
-}
 
 // --------------------------------------
 // ---------------------------- SAVE/LOAD
@@ -270,12 +244,6 @@ function createJob(jobId) {
   createStages(jobTable, jobData, columnCount);
   
   jobDiv.appendChild(jobTable);
-  
-  // testing
-  jobDiv.appendChild(document.createElement('br'));
-  jobDiv.appendChild(createJobButton(jobDiv));
-  jobDiv.appendChild(createSaveButton(jobDiv));
-  jobDiv.appendChild(createLoadButton(jobDiv));
   
   return jobDiv;
 }

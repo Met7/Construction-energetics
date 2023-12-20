@@ -9,14 +9,34 @@ body {
   padding: 20px;
 }
 
+#main-wrapper {
+  max-width: 1200px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+button {
+  padding: 2px 4px 2px 4px;
+  border: none;
+  background-color: #008CBA;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 /* ------------------------------ PROJECT LIST ---- */
 
-#project-list {
+#project-menu {
   background-color: #f1f1f1;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+  width: 30%;
+  max-width:350px;
+  float: left;
+  margin-right: 10px;
 }
 
 #project-table {
@@ -29,22 +49,52 @@ body {
   padding-bottom: 2px;
 }
 
+tr.project-list-row {
+  background-color: #ddd;
+}
+
+.project-list-row td {
+  padding: 2px;
+}
+
 .project-list-row label {
   color: #008CBA;
+  padding-left: 4px;
   /*font-weight: bold;*/
 }
 
-#project-table button {
-  padding: 5px;
-  border: none;
-  background-color: #ddd;
-  border-radius: 3px;
-  width: 100%;
+/* ------------------------------ ICONS ----------- */
+
+#project-table button.icon-button {
+    float: left;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+}
+
+#project-table button.icon-button-save {
+    background: url(../image/save-16.ico) no-repeat;
+}
+
+#project-table button.icon-button-download {
+    background: url(../image/download-16.ico) no-repeat;
+}
+
+#project-table button.icon-button-upload {
+    background: url(../image/upload-16.ico) no-repeat;
+}
+
+#project-table button.icon-button-delete {
+    background: url(../image/delete-16.ico) no-repeat;
 }
 
 /* ------------------------------ JOB ------------  */
 
-#jobs-container {}
+#jobs-container {
+  width: 70%;
+  max-width:840px;
+  float: left;
+}
 
 .job-container {
   /*margin-bottom: 10px;*/
@@ -118,7 +168,7 @@ body {
 /* ------------------------------ STAGE -----------  */
 
 .stage table {
-  border: 1px solid red;
+  border: 0px solid red;
   width: 100%;
 }
 
@@ -132,14 +182,9 @@ body {
 }
 
 #add-job-button {
-  margin-top: 20px;
-  padding: 10px;
-  border: none;
-  background-color: #008CBA;
-  color: white;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 6px;
 }
 
 #total-energy-label {

@@ -102,39 +102,45 @@ function printProjects() {
   const projectTable = document.querySelector("#project-table");
   projectTable.innerHTML = "";
   
-  const columnCount = 4;
+  const columnCount = 2;
   let projectIndex = 0;
   for (const project of projects) {
     // Hack because for unknown reason the index inside events increases at the ++ after it was assigned.
     const indexForIteration = projectIndex;
+    
+    let columns = [];
     let links = [];
 
-    let button = htmlHelpers.createElement("button", "", "open");
-    button.addEventListener("click", () => {
+    let label = htmlHelpers.createElement("label", "project-name", project.name);
+    label.addEventListener("click", () => {
       openProject(indexForIteration);
     });
-    links.push(button);
+    columns.push(label);
     
-    button = htmlHelpers.createElement("button", "", "save");
+    let button = htmlHelpers.createElement("button", ["icon-button", "icon-button-save"], "");
+    button.title = "Save";
     button.addEventListener("click", () => {
       saveProject(indexForIteration);
     });
     links.push(button);
     
-    button = htmlHelpers.createElement("button", "", "export");
+    button = htmlHelpers.createElement("button", ["icon-button", "icon-button-download"], "");
+    button.title = "Export";
     button.id = "dl-project-" + indexForIteration;
     button.addEventListener("click", () => {
       downloadProject(indexForIteration);
     });
     links.push(button);
     
-    button = htmlHelpers.createElement("button", "", "delete");
+    button = htmlHelpers.createElement("button", ["icon-button", "icon-button-delete"], "");
+    button.title = "Delete";
     button.addEventListener("click", () => {
       deleteProject(indexForIteration);
     });
     links.push(button);
     
-    let row = htmlHelpers.createTableRow(project.name, links, columnCount);
+    columns.push(links);
+    let row = htmlHelpers.createTableRow("", columns, columnCount);
     row.classList.add("project-list-row");
     projectTable.appendChild(row);
     projectIndex++;
@@ -143,24 +149,24 @@ function printProjects() {
   let columns = [];
   const newProjectInput = htmlHelpers.createElement("input", "new-project-input");
   columns.push(newProjectInput);
-  let button = htmlHelpers.createElement("button", "", " save ");
+  let button = htmlHelpers.createElement("button", "", "Save new");
   button.addEventListener("click", () => {
     saveProject(-1, newProjectInput.value);
   });
   columns.push(button);
-  let row = htmlHelpers.createTableRow("Save current as: ", columns, columnCount);
+  let row = htmlHelpers.createTableRow("", columns, columnCount);
   projectTable.appendChild(row);
   
   columns = [];
   const uploadProjectInput = htmlHelpers.createElement("input", "upload-project-input");
   uploadProjectInput.type = "file";
   columns.push(uploadProjectInput);
-  button = htmlHelpers.createElement("button", "", " upload ");
+  button = htmlHelpers.createElement("button", "", "Import");
   button.addEventListener("click", () => {
     uploadProject(uploadProjectInput);
   });
   columns.push(button);
-  row = htmlHelpers.createTableRow("Import project: ", columns, columnCount);
+  row = htmlHelpers.createTableRow("", columns, columnCount);
   projectTable.appendChild(row);
 }
 

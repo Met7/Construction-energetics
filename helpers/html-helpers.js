@@ -7,8 +7,14 @@ const emptySelectText = "Choose...";
 function createElement(tag, cssClass = '', text = '') {
   let element = document.createElement(tag);
   element.textContent = text;
-  if (typeof(cssClass) != 'undefined' && cssClass != '')
-    element.classList.add(cssClass);
+  if (typeof(cssClass) != 'undefined' && cssClass != '') {
+    if (Array.isArray(cssClass)) {
+      for (const item of cssClass)
+        element.classList.add(item);
+    }
+    else
+      element.classList.add(cssClass);
+  }
   return element;
 }
 
@@ -163,18 +169,19 @@ function setSelectedByText(select, text) {
 // -------------------------------- TABLE
 
 function createTr(content, cssClass = '') {
-  const tr = document.createElement("tr");
+  const tr = createElement("tr", cssClass);
   tr.appendChild(content);
-  if (typeof(cssClass) != 'undefined' && cssClass != '')
-    tr.classList.add(cssClass);
   return tr;
 }
 
 function createTd(content, cssClass = '') {
-  const td = document.createElement("td");
-  td.appendChild(content);
-  if (typeof(cssClass) != 'undefined' && cssClass != '')
-    td.classList.add(cssClass);
+  const td = createElement("td", cssClass);
+  if (Array.isArray(content)) {
+    for (const item of content)
+      td.appendChild(item);
+  }
+  else
+    td.appendChild(content);
   return td;
 }
 
