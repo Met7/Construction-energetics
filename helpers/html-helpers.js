@@ -18,6 +18,35 @@ function createElement(tag, cssClass = '', text = '') {
   return element;
 }
 
+function makeCollapsible(element, initHeight = 2000, startOpen = true) {
+  const content = element.nextElementSibling;
+  if (startOpen) {
+    content.setAttribute("data-open", 1);
+    // some reasonable initial maxHeight must be set in order for the first slid in to work.
+    // otherwise maxHeight is zero and slide is instant.
+    content.style.maxHeight = initHeight + "px";
+    //content.classList.add(contentClass);
+  }
+  else {
+    content.setAttribute("data-open", 0);
+    content.style.maxHeight = "0px"; //content.scrollHeight + "px";
+  }
+
+  element.addEventListener("click", function() {
+    element.classList.toggle("active");
+    if (content.getAttribute("data-open") == 0) {
+      //console.log("opening");
+      content.style.maxHeight = content.scrollHeight + "px";
+      content.setAttribute("data-open", 1);
+    } else {
+      //console.log("closing");
+      content.style.maxHeight = 0;
+      content.setAttribute("data-open", 0);
+    }
+  });
+  
+}
+
 // --------------------------------------
 // ------------------------------- LOOKUP
 
@@ -251,6 +280,7 @@ function createLink(text, ref, cssClass = '') {
 
 export {
   createElement,
+  makeCollapsible,
   getAncestorElement,
   emptyInput,
   resetInput,

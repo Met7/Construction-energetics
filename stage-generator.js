@@ -98,15 +98,28 @@ function createStage(stageData) {
   let stageDiv = htmlHelpers.createElement('div', 'stage');
   stageDiv.setAttribute("data-stage", stageData.stageName);
   
+  
+  
+  // Stage header
+  const stageHeader = htmlHelpers.createElement("div", ["stage-header", "collapsible"]);
+  const stageNameLabel = htmlHelpers.createElement("label", "stage-name", "STAGE: " + stageData.stageName);
+  const mhLabel = htmlHelpers.createElement("p", "stage-mh-label", helpers.formatEnergy(0));
+  stageHeader.appendChild(stageNameLabel);
+  stageHeader.appendChild(mhLabel);
+  stageDiv.appendChild(stageHeader);
+  
+  // Stage body
+  const stageBody = htmlHelpers.createElement("div", ["stage-list", "collapsible-content"]);  
+  
   const columnCount = 4;
   // create the table
   let stageTable = htmlHelpers.createElement('table', 'stage-table');
   stageTable.classList.add(`stage-${stageData.stageName}`);
 	
   // header row
-  let columns = [htmlHelpers.createElement("p", 'stage-mh-label', helpers.formatEnergy(0))];
-  let row = htmlHelpers.createTableRow("STAGE: " + stageData.stageName, columns, columnCount, [1, 3], true);
-  stageTable.appendChild(row);
+  // let columns = [htmlHelpers.createElement("p", 'stage-mh-label', helpers.formatEnergy(0))];
+  // let row = htmlHelpers.createTableRow("STAGE: " + stageData.stageName, columns, columnCount, [1, 3], true);
+  // stageTable.appendChild(row);
   
   // Stage-specific inputs
   for (const input of Object.values(stageData.inputs)) {
@@ -125,13 +138,13 @@ function createStage(stageData) {
     } else
       throw('stage-generator::createStage: Unknown input type - ' + input.type);
     
-    row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 3]);
+    let row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 3]);
     stageTable.appendChild(row);
   }
   
   // Approach select
   let approachSelect = htmlHelpers.createSelect('approach-select');
-  row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount, [1, 3]);
+  let row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount, [1, 3]);
   stageTable.appendChild(row);
   
   // Tool select
@@ -177,8 +190,12 @@ function createStage(stageData) {
     htmlHelpers.createElement("label", "", "Converted speed:"), 
     htmlHelpers.createElement("p", "total-speed", defaultText)
   ], columnCount));
+    
+  stageBody.appendChild(stageTable);
+  stageDiv.appendChild(stageBody);
   
-  stageDiv.appendChild(stageTable);
+  htmlHelpers.makeCollapsible(stageHeader, 200); // must be done after the content (stageBody) exists
+ 
  
   return stageDiv;
 }

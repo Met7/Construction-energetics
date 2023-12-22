@@ -99,11 +99,6 @@ function createAmountInput() {
 // --------------------------------------
 // ------------------------- HTML HELPERS
 
-function createJobHeader(jobId) {
-  const element = htmlHelpers.createElement('h2', 'job-header', `Job #${jobId}`);
-  return element;
-}
-
 // --------------------------------------
 // ------------------------------- STAGES
 
@@ -210,15 +205,24 @@ function createStages(jobTable, jobData, columnCount) {
 
 function createJob(jobId) {
   // Element structure
-  let jobDiv = htmlHelpers.createElement('div', 'job'); 
+  let jobDiv = htmlHelpers.createElement("div", "job"); 
   jobDiv.id = `job-${jobId}`;
-  let jobTable = htmlHelpers.createElement('table', 'job-table'); 
-  const columnCount = 3;
   
-  // Header - name, energy
+  // Job header row
+  const jobHeader = htmlHelpers.createElement("div", ["job-header", "collapsible"]);
+  const jobNameLabel = htmlHelpers.createElement("h2", "job-name", "Job #" + jobId);
   const input = htmlHelpers.createElement("input", "job-name-input");
   input.value = "Postav treba zed";
-  jobTable.appendChild(htmlHelpers.createTableRow("", [createJobHeader(jobId), input, htmlHelpers.createElement("p", "job-mh-label", "0 MH")], columnCount));
+  const mhLabel = htmlHelpers.createElement("p", "job-mh-label", "0 MH");
+  jobHeader.appendChild(jobNameLabel);
+  jobHeader.appendChild(input);
+  jobHeader.appendChild(mhLabel);
+  jobDiv.appendChild(jobHeader);
+  
+  // Job body
+  const jobBody = htmlHelpers.createElement("div", ["stage-list", "collapsible-content"]);
+  const jobTable = htmlHelpers.createElement("table", ["job-table"]);
+  const columnCount = 3;
 
   // Material(Category) selects
   const materialCategorySelect = createMaterialCategorySelect();
@@ -243,7 +247,10 @@ function createJob(jobId) {
   // Stages
   createStages(jobTable, jobData, columnCount);
   
-  jobDiv.appendChild(jobTable);
+  jobBody.appendChild(jobTable);
+  jobDiv.appendChild(jobBody);
+  
+  htmlHelpers.makeCollapsible(jobHeader, 1000); // must be done after the content (jobBody) exists
   
   return jobDiv;
 }

@@ -5,18 +5,13 @@ import { createJob, saveJob, loadJob } from "./job-generator.js";
 var jobId = 1;
 
 const myButton = document.getElementById('add-job-button');
-myButton.addEventListener('click', addJob);
+myButton.addEventListener('click', addJob(document.querySelector("#jobs-container")));
 
 
 // --------------------------------------
 // ---------------------------- SAVE/LOAD
 
 let projects;
-
-// TODO add import/export
-// projects = [
-  // {"name" : "Project 1", "data" : ""}
-// ];
 
 function checkProjectIndex(index, caller) {
   if (index < 0 || index >= projects.length)
