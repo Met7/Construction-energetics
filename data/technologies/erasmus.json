@@ -3,27 +3,290 @@
     "Extraction": [
       {
         "author": "Erasmus",
-        "year": "1965",
-        "material_category": "Stone",
-        "material": "Limestone",
-        "approach": "Collecting",
-        "tool": "Wooden pole",
-        "unit": "ton",
-        "speed": 0.3
+        "year": 1965,
+        "pages": "285",
+        "material_category": "Earth",
+        "material": "Dirt",
+        "approach": "Digging",
+        "tool": "Shovel",
+        "unit": "m3",
+        "rate": 0.694,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "conversions": {
+          "ton": 1.31
+        }
       },
       {
         "author": "Erasmus",
-        "year": "1965",
+        "year": 1965,
+        "pages": "285",
+        "material_category": "Earth",
+        "material": "Dirt",
+        "approach": "Digging",
+        "tool": "Wooden stick",
+        "unit": "m3",
+        "rate": 1.923,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "conversions": {
+          "ton": 1.31
+        }
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "285-6",
         "material_category": "Stone",
         "material": "Limestone",
-        "approach": "Collecting",
+        "approach": "Digging",
+        "tool": "Wooden pole",
+        "unit": "ton",
+        "rate": 2.94,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "conversions": {
+          "m3": 0.67
+        }
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "285-6",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Digging",
         "tool": "Iron crowbar",
         "unit": "ton",
+        "rate": 1,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
         "conversions": {
-          "m3": 20,
-          "m2": 100
-        },
-        "speed": 1
+          "m3": 0.67
+        }
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "290",
+        "material_category": "Earth",
+        "material": "Sascab",
+        "approach": "Digging",
+        "tool": "?",
+        "unit": "ton",
+        "rate": 8.33,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "conversions": {}
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "291",
+        "material_category": "Wood",
+        "material": "?",
+        "approach": "Cutting",
+        "tool": "Steel tools",
+        "unit": "ton",
+        "rate": 50,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "conversions": {}
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "291",
+        "material_category": "Wood",
+        "material": "?",
+        "approach": "Cutting",
+        "tool": "Stone tools",
+        "unit": "ton",
+        "rate": 166.7,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "conversions": {}
+      }
+    ],
+    "Transportation": [
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "284-5",
+        "material_category": "Earth",
+        "material": "Dirt",
+        "approach": "Carrying",
+        "tool": "Bucket on shoulder",
+        "unit": "m3",
+        "rate": 0.03,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "note": "Average of two carriers, 5h workday",
+        "conversions": {
+          "ton": 1.31
+        }
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "287",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Carrying",
+        "tool": "On head",
+        "unit": "ton",
+        "rate": 0.2,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "1 km distance",
+        "conversions": {
+          "m3": 0.67
+        }
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "287",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Carrying",
+        "tool": "Tumpline",
+        "unit": "ton",
+        "rate": 0.018,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "Avg over 250/500/750m",
+        "conversions": {
+          "m3": 0.67
+        }
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "291",
+        "material_category": "Earth",
+        "material": "Lime",
+        "approach": "Carrying",
+        "tool": "?",
+        "unit": "ton",
+        "rate": 0.0125,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "conversions": {}
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "291",
+        "material_category": "Wood",
+        "material": "?",
+        "approach": "Carrying",
+        "tool": "?",
+        "unit": "ton",
+        "rate": 0.019,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "",
+        "conversions": {}
+      }
+    ],
+    "Placement": [
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "292",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Masonry construction",
+        "tool": "Manual",
+        "unit": "m3",
+        "rate": 20,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "W/ lime and sascab",
+        "conversions": {}
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "291",
+        "material_category": "Wood",
+        "material": "?",
+        "approach": "Stacking",
+        "tool": "Manual",
+        "unit": "ton",
+        "rate": 22.2,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "For lime burning",
+        "conversions": {}
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "291",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Stacking",
+        "tool": "Manual",
+        "unit": "ton",
+        "rate": 12,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "For lime burning",
+        "conversions": {}
+      }
+    ],
+    "Finishing": [
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "293",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Cutting",
+        "tool": "Steel tools",
+        "unit": "m2",
+        "rate": 80,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "Plain blocks",
+        "conversions": {}
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "293",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Cutting",
+        "tool": "Steel tools",
+        "unit": "m2",
+        "rate": 160,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "Maya designs",
+        "conversions": {}
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "293",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Cutting",
+        "tool": "Stone tools",
+        "unit": "m2",
+        "rate": 240,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "Plain blocks",
+        "conversions": {}
+      },
+      {
+        "author": "Erasmus",
+        "year": 1965,
+        "pages": "293",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Cutting",
+        "tool": "Stone tools",
+        "unit": "m2",
+        "rate": 480,
+        "locality": "Uxmal, Mexico",
+        "tech-note": "Maya designs",
+        "conversions": {}
       }
     ]
   }

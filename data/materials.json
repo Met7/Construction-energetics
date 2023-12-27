@@ -15,11 +15,29 @@
           },
           "base_energy": 120000
         },
+        "Dirt": {
+          "conversions": {
+            "ton": 1.3
+          },
+          "base_energy": 100000
+        },
+        "Lime": {
+          "conversions": {
+            "ton": 3.34
+          },
+          "base_energy": 100000
+        },
         "Rammed Earth": {
           "conversions": {
             "ton": 1.9
           },
           "base_energy": 110000
+        },
+        "Sascab": {
+          "conversions": {
+            "ton": 1.4
+          },
+          "base_energy": 100000
         }
       },
       "conversions": {

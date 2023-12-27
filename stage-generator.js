@@ -179,7 +179,7 @@ function createStage(stageData) {
   // output fields
   const defaultText = "N/A";
   stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement("p", "citation", defaultText)], columnCount, [1, 3]));
-  stageTable.appendChild(htmlHelpers.createTableRow("Study work speed: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 3]));
+  stageTable.appendChild(htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 3]));
   const conversionFactorInput = htmlHelpers.createElement("input", "unit-conversion");
   conversionFactorInput.addEventListener("change", () => {
     console.log("Conversion input changed");
@@ -187,7 +187,7 @@ function createStage(stageData) {
   });
   stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [
     conversionFactorInput, 
-    htmlHelpers.createElement("label", "", "Converted speed:"), 
+    htmlHelpers.createElement("label", "", "Converted rate:"), 
     htmlHelpers.createElement("p", "total-speed", defaultText)
   ], columnCount));
     
@@ -289,8 +289,8 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
   let options = [];
   for (const tech of technologies) {
     let optionsData = {
-      "text": tech.author + " " + tech.year,
-      "value": tech.speed,
+      "text": tech.author + " " + tech.year + " " + tech["tech-note"],
+      "value": tech.rate,
       "author": tech.author,
       "year": tech.year,
       "unit": tech.unit
@@ -325,7 +325,7 @@ function chooseStageStudy(stageElement, approach, author, year, techUnit, speed,
   const studySpeedP = stageElement.querySelector(".study-speed");
   
   citationP.innerHTML = studiesHelpers.getStudyCitation(author, year);
-  studySpeedP.innerHTML = helpers.formatNumber(speed) + " " + helpers.formatUnit(techUnit) + "/h"; // TODO update unit by stage (extra input)
+  studySpeedP.innerHTML = helpers.formatNumber(speed) + " h/" + helpers.formatUnit(techUnit); // TODO update unit by stage (extra input)
   
   setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit, conversions, speed);
 }
@@ -389,7 +389,7 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
     speed = htmlHelpers.getSelectValue(stageElement.querySelector(".study-select"));
   
   const convertedSpeed = speed * conversionFactor;
-  convertedSpeedP.innerHTML = helpers.formatNumber(convertedSpeed, false) + " " + helpers.formatUnit(jobUnit) + "/h"; // TODO update unit by stage (extra input)
+  convertedSpeedP.innerHTML = helpers.formatNumber(convertedSpeed, false) + " h/" + helpers.formatUnit(jobUnit); // TODO update unit by stage (extra input)
   
   // stage specific param, such as distance
   for (const extraParam of getExtraParameters(stageElement)) {
