@@ -61,6 +61,15 @@ function setExtraParameters(stageElement, values) {
   }
 }
 
+// button with a tooltip
+function createInfoButton() {
+  const button = htmlHelpers.createElement("div", "tooltip", "o");
+  button.classList.add("study-info-button");
+  const text = htmlHelpers.createElement("span", "tooltip-text", "Ahoj jak se mas ja jsem dlouha citace z roku 200 neco.");
+  text.classList.add("tooltip-left");
+  button.appendChild(text);
+  return button;
+}
 
 // --------------------------------------
 // ---------------------- TECHNOLOGY DATA
@@ -142,7 +151,7 @@ function createStage(stageData) {
   // Stage body
   const stageBody = htmlHelpers.createElement("div", ["stage-list", "collapsible-content"]);  
   
-  const columnCount = 4;
+  const columnCount = 5;
   // create the table
   let stageTable = htmlHelpers.createElement('table', 'stage-table');
   stageTable.classList.add(`stage-${stageData.stageName}`);
@@ -173,18 +182,18 @@ function createStage(stageData) {
     });
     
     
-    let row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 3]);
+    let row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 4]);
     stageTable.appendChild(row);
   }
   
   // Approach select
   let approachSelect = htmlHelpers.createSelect('approach-select');
-  let row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount, [1, 3]);
+  let row = htmlHelpers.createTableRow("Approach: ", [approachSelect], columnCount, [1, 4]);
   stageTable.appendChild(row);
   
   // Tool select
   let toolSelect = htmlHelpers.createSelect('tool-select');
-  row = htmlHelpers.createTableRow("Tool: ", [toolSelect], columnCount, [1, 3]);
+  row = htmlHelpers.createTableRow("Tool: ", [toolSelect], columnCount, [1, 4]);
   stageTable.appendChild(row);
   
   // Study select
@@ -200,7 +209,8 @@ function createStage(stageData) {
       extractConversions(studySelect)
     );
   });
-  row = htmlHelpers.createTableRow("Study: ", [studySelect], columnCount, [1, 3]);
+  let infoButton = createInfoButton();
+  row = htmlHelpers.createTableRow("Study: ", [studySelect, infoButton], columnCount, [1, 3]);
   stageTable.appendChild(row);
   
   // Approach and tool select events
@@ -214,8 +224,8 @@ function createStage(stageData) {
   
   // output fields
   const defaultText = "N/A";
-  stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement("p", "citation", defaultText)], columnCount, [1, 3]));
-  stageTable.appendChild(htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 3]));
+  stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement("p", "citation", defaultText)], columnCount, [1, 4]));
+  stageTable.appendChild(htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 4]));
   conversionFactorInput.addEventListener("change", () => {
     //console.log("Conversion input changed");
     updateMh(stageTable, conversionFactorInput.value);
