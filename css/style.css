@@ -32,6 +32,52 @@ button {
   cursor: pointer;
 }
 
+/* ------------------------------- COLLAPSIBLE ---- */
+/* Modified from https://www.w3schools.com/howto/howto_js_collapsible.asp */
+.collapsible {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS),
+and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+.collapsible-content {
+  /*padding: 0 18px;*/
+  /* background-color: white;*/
+  /*max-height: 0;*/
+  max-height: 100%;
+  /*display: flex;
+  flex-direction: column;*/
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+
+.collapsible:after {
+  /*
+  content: '\02795';
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;*/
+}
+
+.active:after {
+  /*
+  content: "\2796"; */
+}
+
+
 /* ------------------------------ PROJECT LIST ---- */
 
 #project-menu {
@@ -76,26 +122,30 @@ tr.project-list-row {
 /* ------------------------------ ICONS ----------- */
 
 #project-table button.icon-button {
-    float: left;
-    width: 20px;
-    height: 20px;
-    padding: 8px;
+  float: left;
+  width: 20px;
+  height: 20px;
+  padding: 8px;
 }
 
 #project-table button.icon-button-save {
-    background: url(../image/save-16.ico) no-repeat center;
+  background: url(../image/save-16.ico) no-repeat center;
 }
 
 #project-table button.icon-button-download {
-    background: url(../image/download-16.ico) no-repeat center;
+  background: url(../image/download-16.ico) no-repeat center;
 }
 
 #project-table button.icon-button-upload {
-    background: url(../image/upload-16.ico) no-repeat center;
+  background: url(../image/upload-16.ico) no-repeat center;
 }
 
 #project-table button.icon-button-delete {
-    background: url(../image/delete-16.ico) no-repeat center;
+  background: url(../image/delete-16.ico) no-repeat center;
+}
+
+#project-table button.icon-button-info {
+  background: url(../image/info-16.ico) no-repeat center;
 }
 
 /* ------------------------------ JOB ------------  */
@@ -236,58 +286,20 @@ input.job-name-input {
   margin-left: 10px;
 }
 
-p.citation {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 300px;
-}
-
-
-/* ------------------------------- COLLAPSIBLE ---- */
-/* Modified from https://www.w3schools.com/howto/howto_js_collapsible.asp */
-.collapsible {
-  background-color: #eee;
-  color: #444;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
+.study-info-button {
+  padding: 2px 7px;
+  margin-top: 2px;
+  margin-left: 2px;
   border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-}
-
-/* Add a background color to the button if it is clicked on (add the .active class with JS),
-and when you move the mouse over it (hover) */
-.active, .collapsible:hover {
-  background-color: #ccc;
-}
-
-.collapsible-content {
-  /*padding: 0 18px;*/
-  /* background-color: white;*/
-  /*max-height: 0;*/
-  max-height: 100%;
-  /*display: flex;
-  flex-direction: column;*/
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-}
-
-.collapsible:after {
-  /*
-  content: '\02795';
-  font-size: 13px;
+  background-color: #008CBA;
   color: white;
-  float: right;
-  margin-left: 5px;*/
+  font-size: 12px;
+  font-weight: bold;
+  font-style: italic;
+  border-radius: 12px;
+  cursor: pointer;
 }
 
-.active:after {
-  /*
-  content: "\2796"; */
-}
 
 /* ----------------------------------- TOOLTIP ---- */
 /* Modified from https://www.w3schools.com/howto/howto_css_tooltip.asp */
@@ -301,9 +313,13 @@ and when you move the mouse over it (hover) */
 /* Tooltip text */
 .tooltip .tooltip-text {
   visibility: hidden;
-  width: 240px;
-  background-color: #555;
+  width: 440px;
+  min-height: 80px;
+  background-color: #7cbacf;/*#555;*/
   color: #fff;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
@@ -312,6 +328,7 @@ and when you move the mouse over it (hover) */
   /*bottom: 125%;*/
   /*left: 50%;*/
   /*margin-left: -60px;*/
+  margin-top: -50px;
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -344,11 +361,11 @@ and when you move the mouse over it (hover) */
 .tooltip-left::after {
   content: "";
   position: absolute;
-  top: 16px;
+  top: 66px;
   left: 100%;
   margin-top: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent transparent #555;
+  border-color: transparent transparent transparent #7cbacf/*#555;*/
 }
 

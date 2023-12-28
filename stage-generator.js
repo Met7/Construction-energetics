@@ -62,13 +62,55 @@ function setExtraParameters(stageElement, values) {
 }
 
 // button with a tooltip
-function createInfoButton() {
-  const button = htmlHelpers.createElement("div", "tooltip", "o");
-  button.classList.add("study-info-button");
-  const text = htmlHelpers.createElement("span", "tooltip-text", "Ahoj jak se mas ja jsem dlouha citace z roku 200 neco.");
+function createTooltip(cssClass, defaultText) {
+  const button = htmlHelpers.createElement("div", "tooltip", "i");
+  //const button = htmlHelpers.createElement("button", ["icon-button", "icon-button-info"], "");
+  button.classList.add(cssClass);
+  const text = htmlHelpers.createElement("span", "tooltip-text");
   text.classList.add("tooltip-left");
+  text.innerHTML = defaultText;
   button.appendChild(text);
   return button;
+}
+
+
+const defaultTechTooltip = "No study selected";
+function createTechTooltip() {
+  const tooltip = createTooltip("study-info-button", defaultTechTooltip);
+  tooltip.addEventListener("click", () => {
+    const citationElement = tooltip.querySelector(".citation");
+    if (citationElement) {
+      // some hack to support html in the clipboard
+      // const clipboardItem = new ClipboardItem({
+        // "text/plain": new Blob([richTextDiv.innerText], { type: "text/plain" }),
+        // "text/html": new Blob([richTextDiv.outerHTML], { type: "text/html" }),
+      // });
+      // navigator.clipboard.write([clipboardItem]);
+      navigator.clipboard.writeText(citationElement.innerHTML);
+    }
+  });
+  return tooltip;
+}
+
+function updateTechTooltip(tooltip, author, year, pages, note) {
+  console.log("Updating tooltip for " + author + ", " + year + ", " + pages + ", " + note + ".");
+  let text;
+  if (!author)
+    text = defaultTechTooltip;
+  else {
+    let citation = studiesHelpers.getStudyCitation(author, year);
+    if (!citation)
+      citation = author + " " + year + ": no citation";
+    text = "<span class=\"citation\">" + citation + "</span>";
+    text += "<br />Pages: " + pages;
+    if (note && note != "undefined")
+      text += "<br />" + "Note: " + note;
+    text += "<br />(Click to copy citation)";
+  }
+  console.log(text);
+  const textElement = tooltip.childNodes[1];
+  console.log(textElement.nodeName);
+  textElement.innerHTML = text;
 }
 
 // --------------------------------------
@@ -181,7 +223,6 @@ function createStage(stageData) {
       updateMh(stageTable, conversionFactorInput.value);
     });
     
-    
     let row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 4]);
     stageTable.appendChild(row);
   }
@@ -197,19 +238,24 @@ function createStage(stageData) {
   stageTable.appendChild(row);
   
   // Study select
+  let infoButton = createTechTooltip();
   let studySelect = htmlHelpers.createSelect('study-select');
   studySelect.addEventListener("change", () => {
     chooseStageStudy(
       stageTable,
       htmlHelpers.getSelectText(studySelect),
-      htmlHelpers.getSelectData(studySelect, "author"),
-      htmlHelpers.getSelectData(studySelect, "year"),
       htmlHelpers.getSelectData(studySelect, "unit"),
       htmlHelpers.getSelectValue(studySelect),
       extractConversions(studySelect)
     );
+    updateTechTooltip(
+      infoButton,
+      htmlHelpers.getSelectData(studySelect, "author"),
+      htmlHelpers.getSelectData(studySelect, "year"),
+      htmlHelpers.getSelectData(studySelect, "pages"),
+      htmlHelpers.getSelectData(studySelect, "note")
+    );
   });
-  let infoButton = createInfoButton();
   row = htmlHelpers.createTableRow("Study: ", [studySelect, infoButton], columnCount, [1, 3]);
   stageTable.appendChild(row);
   
@@ -223,8 +269,7 @@ function createStage(stageData) {
   });
   
   // output fields
-  const defaultText = "N/A";
-  stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement("p", "citation", defaultText)], columnCount, [1, 4]));
+  const defaultText = "N/A"; // TODO moct to a better spot
   stageTable.appendChild(htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 4]));
   conversionFactorInput.addEventListener("change", () => {
     //console.log("Conversion input changed");
@@ -240,7 +285,6 @@ function createStage(stageData) {
   stageDiv.appendChild(stageBody);
   
   htmlHelpers.makeCollapsible(stageHeader, 200); // must be done after the content (stageBody) exists
- 
  
   return stageDiv;
 }
@@ -311,8 +355,9 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
       "value": tech.rate,
       "author": tech.author,
       "year": tech.year,
+      "pages": tech.pages,
+      "note": tech.note,
       "unit": tech.unit
-      // TODO conversion factor
     };
     //console.log("Checking conversions for select entry. Job unit> " + unit + ", tech unit:" + tech.unit);
     //if (tech.unit != unit && ("conversions" in tech)) {
@@ -327,8 +372,8 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
 
 
 // stageElement is some ancestor of the affected elements in the stage.
-function chooseStageStudy(stageElement, approach, author, year, techUnit, speed, conversions) {
-  console.log("chooseStageStudy for " + approach + ", " + author + ", " + year + ", " + techUnit + ", " + speed + ".");
+function chooseStageStudy(stageElement, approach, techUnit, speed, conversions) {
+  console.log("chooseStageStudy for " + approach + ", " + techUnit + ", " + speed + ".");
 
   clearStage(stageElement, stageElement.querySelector(".study-select"));
   
@@ -339,10 +384,8 @@ function chooseStageStudy(stageElement, approach, author, year, techUnit, speed,
 
   let [materialCategory, material, jobUnit, jobAmount] = getJobProperties(stageElement);
   
-  const citationP = stageElement.querySelector(".citation");
   const studySpeedP = stageElement.querySelector(".study-speed");
   
-  citationP.innerHTML = studiesHelpers.getStudyCitation(author, year);
   studySpeedP.innerHTML = helpers.formatNumber(speed) + " h/" + helpers.formatUnit(techUnit); // TODO update unit by stage (extra input)
   
   setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit, conversions, speed);
@@ -412,10 +455,10 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
   // stage specific param, such as distance
   for (const extraParam of getExtraParameters(stageElement)) {
     if (!extraParam) {
-      console.log("chooseStageStudy: empty extra param");
+      //console.log("updateMh: empty extra param");
       continue;
     }
-    console.log("chooseStageTool: multiplying jobAmount(" + jobAmount + ") by an extra param " + extraParam.value + " by " + extraParam.formula);
+    //console.log("updateMh: multiplying jobAmount(" + jobAmount + ") by an extra param " + extraParam.value + " by " + extraParam.formula);
     if (extraParam.formula == "multiply")
       jobAmount *= extraParam.value;
     else if (extraParam.formula == "divide")
@@ -511,7 +554,6 @@ function loadStage(ancestorElement, saveData, stageData) {
 
 // --------------------------------------
 // ---------------------------------- JOB
-
 
 function getJobProperties(element) {
   //console.log(element);
