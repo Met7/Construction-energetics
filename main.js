@@ -5,7 +5,11 @@ import { createJob, saveJob, loadJob } from "./job-generator.js";
 var jobId = 1;
 
 const myButton = document.getElementById('add-job-button');
-myButton.addEventListener('click', addJob(document.querySelector("#jobs-container")));
+myButton.addEventListener('click', () => { 
+    //console.log("Clicked");
+    addJob(document.querySelector("#jobs-container"));
+  }
+);
 
 
 // --------------------------------------
@@ -173,6 +177,7 @@ function getJobElements(ancestorElement) {
 }
 
 async function addJob(jobContainer) {
+  //throw("JOB");
   let data = await loadFile("Stages");  
   //console.log(data);
   jobContainer.prepend(createJob(jobId++, data));

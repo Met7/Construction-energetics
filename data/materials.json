@@ -38,6 +38,10 @@
             "ton": 1.4
           },
           "base_energy": 100000
+        },
+        "?": {
+          "conversions": {},
+          "base_energy": 100000
         }
       },
       "conversions": {
@@ -63,6 +67,10 @@
             "ton": 2.2
           },
           "base_energy": 140000
+        },
+        "?": {
+          "conversions": {},
+          "base_energy": 100000
         }
       },
       "conversions": {
@@ -88,6 +96,10 @@
             "ton": 0.6
           },
           "base_energy": 75000
+        },
+        "?": {
+          "conversions": {},
+          "base_energy": 100000
         }
       },
       "conversions": {
@@ -117,7 +129,11 @@
       },
       "conversions": {
         "ton": 8.5
-      }
+      },
+        "?": {
+          "conversions": {},
+          "base_energy": 100000
+        }
     },
     "Other": {
       "data": {

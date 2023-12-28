@@ -24,6 +24,7 @@ var jobCount = 1;
 function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
   //console.log("filling material select for " + materialCategory);
   htmlHelpers.createOptions(materialSelect, Object.keys(materialsData[materialCategory]["data"]));
+  updateStagesMaterial(jobElement, materialCategory, "");
   //console.log("YYY done");
   
   // TODO change event:
@@ -52,12 +53,16 @@ function createMaterialSelect(jobElement, materialCategorySelect) {
   select.addEventListener("change", () => {
     const materialCategory = htmlHelpers.getSelectText(materialCategorySelect);
     const material = htmlHelpers.getSelectText(select);
+    updateStagesMaterial(jobElement, materialCategory, material)
+  });
+  return select;
+}
+
+function updateStagesMaterial(jobElement, materialCategory, material) {
     const stageElements = getStageElements(jobElement);
     for (let stageElement of stageElements) {
       setStageMaterial(stageElement, materialCategory, material);
     }
-  });
-  return select;
 }
 
 
@@ -149,10 +154,10 @@ function saveJob(jobElement) {
   for (let stageElement of stageElements) {
     jobSave["stages"].push(saveStage(stageElement));
   }
+  jobSave["collapsed"] = jobElement.querySelector(".collapsible-content").getAttribute("data-open") == 1 ? 0 : 1
   
-  return jobSave;
-  //localStorage.setItem("save", JSON.stringify(jobSave));
   //console.log("Saved job to local storage.");
+  return jobSave;
 }
 
 function loadJob(jobElement, jobSave) {
@@ -183,7 +188,11 @@ function loadJob(jobElement, jobSave) {
     loadStage(jobElement, stageData, jobData[stageData["stage"]]);
   }
   
-  console.log("Loaded job from local storage.");
+  if (jobSave["collapsed"]) {
+    //console.log("closing");
+    htmlHelpers.collapseContent(jobElement.querySelector(".collapsible-content"));
+  }
+  //console.log("Loaded job from local storage.");
 }
 
 // --------------------------------------
@@ -210,9 +219,10 @@ function createJob(jobId) {
   
   // Job header row
   const jobHeader = htmlHelpers.createElement("div", ["job-header", "collapsible"]);
-  const jobNameLabel = htmlHelpers.createElement("h2", "job-name", "Job #" + jobId);
+  const jobNameLabel = htmlHelpers.createElement("h2", "job-name", "Task");
   const input = htmlHelpers.createElement("input", "job-name-input");
-  input.value = "Postav treba zed";
+  input.placeholder = "Task name ..."
+  input.value = "";
   const mhLabel = htmlHelpers.createElement("p", "job-mh-label", "0 MH");
   jobHeader.appendChild(jobNameLabel);
   jobHeader.appendChild(input);

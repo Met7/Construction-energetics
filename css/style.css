@@ -15,6 +15,13 @@ body {
   margin-right:auto;
 }
 
+#left-part {
+  width: 30%;
+  max-width:350px;
+  float: left;
+  margin-right: 10px;
+}
+
 button {
   padding: 2px 4px 2px 4px;
   border: none;
@@ -78,10 +85,7 @@ and when you move the mouse over it (hover) */
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
-  width: 30%;
-  max-width:350px;
-  float: left;
-  margin-right: 10px;
+  width: 100%;
 }
 
 #project-menu h2 {

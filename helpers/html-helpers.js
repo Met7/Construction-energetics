@@ -1,5 +1,6 @@
 
-const emptySelectText = "Choose...";
+const defaultSelectText = "Choose...";
+const emptySelectText = "N/A";
 
 // --------------------------------------
 // ------------------------------ GENERIC
@@ -18,6 +19,21 @@ function createElement(tag, cssClass = '', text = '') {
   return element;
 }
 
+function collapseContent(contentElement, instant = false) {
+  //console.log("closing");
+  //const savedStyle = contentElement.style.transition;
+  //contentElement.style.transition = "";
+  contentElement.style.maxHeight = 0;
+  contentElement.setAttribute("data-open", 0);
+  //contentElement.classList.add("collapsible-content");
+  //contentElement.style.transition = savedStyle;
+}
+
+function unCollapseContent(contentElement, instant = false) {
+  contentElement.style.maxHeight = contentElement.scrollHeight + "px";
+  contentElement.setAttribute("data-open", 1);
+}
+
 function makeCollapsible(element, initHeight = 2000, startOpen = true) {
   const content = element.nextElementSibling;
   if (startOpen) {
@@ -34,15 +50,10 @@ function makeCollapsible(element, initHeight = 2000, startOpen = true) {
 
   element.addEventListener("click", function() {
     element.classList.toggle("active");
-    if (content.getAttribute("data-open") == 0) {
-      //console.log("opening");
-      content.style.maxHeight = content.scrollHeight + "px";
-      content.setAttribute("data-open", 1);
-    } else {
-      //console.log("closing");
-      content.style.maxHeight = 0;
-      content.setAttribute("data-open", 0);
-    }
+    if (content.getAttribute("data-open") == 0)
+      unCollapseContent(content);
+    else
+      collapseContent(content);
   });
   
 }
@@ -73,7 +84,7 @@ function emptyInput(input, defaultValue = "") {
   input.innerHTML = defaultValue;
   input.value = defaultValue;
   if (initSelect = true)
-    createSelectEmptyOption(input);
+    createSelectDefaultOption(input);
 }
 
 function resetInput(input, defaultValue = "") {
@@ -97,19 +108,23 @@ function createSelect(cssClass = '', useEmptyOption = true) {
   if (typeof(cssClass) != 'undefined' && cssClass != '')
     select.classList.add(cssClass);
   if (useEmptyOption)
-    createSelectEmptyOption(select);
+    createSelectDefaultOption(select);
   return select;
 }
 
-function createSelectEmptyOption(select, defaultText = emptySelectText) {
+function createSelectDefaultOption(select, isEmpty = true, defaultText = [defaultSelectText, emptySelectText]) {
     const selectOption = document.createElement("option");
-    selectOption.textContent = defaultText;
+    if (isEmpty)
+      selectOption.textContent = defaultText[1];
+    else
+      selectOption.textContent = defaultText[0];
     selectOption.value = -1;
     select.appendChild(selectOption);
 }
 
+// only works if the text is the default
 function isEmptyOption(optionText) {
-  return optionText == emptySelectText;
+  return optionText == "" || optionText == emptySelectText || optionText == defaultSelectText;
 }
 
 // takes an array and fills the select.
@@ -117,7 +132,7 @@ function isEmptyOption(optionText) {
 // plain - fill the select with the values as text
 // array - 0 is text, 1 is value
 // object - "text" key for text, "value" is optional. Other keys will be stored as "data", key prepended by "data-".
-function createOptions(selectElement, options, useDefaultEmpty = true, defaultText = emptySelectText) {
+function createOptions(selectElement, options, useDefaultEmpty = true, defaultText = [defaultSelectText, emptySelectText]) {
   //console.log("Options: ");
   //console.log(options);
 
@@ -125,12 +140,12 @@ function createOptions(selectElement, options, useDefaultEmpty = true, defaultTe
     throw("createOptions: passed options not an array");
   
   selectElement.innerHTML = "";
+    
+  if (useDefaultEmpty)
+    createSelectDefaultOption(selectElement, (options.length == 0), defaultText);
   
   if (options.length == 0)
-    return;
-  
-  if (useDefaultEmpty)
-    createSelectEmptyOption(selectElement, defaultText);
+    return;  
   
   options.forEach((option) => {
     const selectOption = document.createElement("option");
@@ -281,6 +296,8 @@ function createLink(text, ref, cssClass = '') {
 export {
   createElement,
   makeCollapsible,
+  collapseContent,
+  unCollapseContent,
   getAncestorElement,
   emptyInput,
   resetInput,

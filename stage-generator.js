@@ -68,6 +68,38 @@ function setExtraParameters(stageElement, values) {
 const technologyData = await technologiesHelpers.loadTechnologies();
 //console.log(technologyData);
 
+function getApplicableTechnologies(stageName, materialCategory, material, approach = "", tool = "") {
+  //console.log("Get applicable tech for: " + stageName + ", " + materialCategory + ", " + material + ", " + approach + ", " + tool);
+  //console.log(technologyData);
+  if (!(stageName in technologyData)) {
+    //console.log("getApplicableTechnologies: Stage not found - quitting");
+    return [];
+  }
+  
+  const technologiesForStage = technologyData[stageName];
+  
+  //console.log("Tech for stage: ");
+  //console.log(technologiesForStage);
+  let technologies = technologiesForStage.filter(
+    (tech) => helpers.strEq(tech.material_category, materialCategory) 
+              && (tech.material == "*" || tech.material == "?" || helpers.strEq(tech.material, material))
+  ) // TODO support lists
+  //console.log("Tech before approach: ");
+  //console.log(technologies);
+  
+  // TODO support * and lists
+  if (approach)
+    technologies = technologies.filter((tech) => 
+      helpers.strEq(tech.approach, approach) || tech.approach == "*" || tech.approach == "*"
+    );
+  if (tool)
+    technologies = technologies.filter((tech) => 
+      helpers.strEq(tech.tool, tool) || tech.tool == "*" || tech.tool == "*"
+    );
+  
+  return technologies;
+}
+
 // --------------------------------------
 // ------------------------------- ENERGY
 
@@ -99,7 +131,6 @@ function createStage(stageData) {
   stageDiv.setAttribute("data-stage", stageData.stageName);
   
   
-  
   // Stage header
   const stageHeader = htmlHelpers.createElement("div", ["stage-header", "collapsible"]);
   const stageNameLabel = htmlHelpers.createElement("label", "stage-name", "STAGE: " + stageData.stageName);
@@ -116,10 +147,8 @@ function createStage(stageData) {
   let stageTable = htmlHelpers.createElement('table', 'stage-table');
   stageTable.classList.add(`stage-${stageData.stageName}`);
 	
-  // header row
-  // let columns = [htmlHelpers.createElement("p", 'stage-mh-label', helpers.formatEnergy(0))];
-  // let row = htmlHelpers.createTableRow("STAGE: " + stageData.stageName, columns, columnCount, [1, 3], true);
-  // stageTable.appendChild(row);
+  // creating this early to pass to the custom imput event
+  const conversionFactorInput = htmlHelpers.createElement("input", "unit-conversion");
   
   // Stage-specific inputs
   for (const input of Object.values(stageData.inputs)) {
@@ -137,6 +166,12 @@ function createStage(stageData) {
       inputElement.setAttribute("data-formula", input.formula);
     } else
       throw('stage-generator::createStage: Unknown input type - ' + input.type);
+    
+    inputElement.addEventListener("change", () => {
+      console.log("Custom input changed");
+      updateMh(stageTable, conversionFactorInput.value);
+    });
+    
     
     let row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 3]);
     stageTable.appendChild(row);
@@ -170,6 +205,7 @@ function createStage(stageData) {
   
   // Approach and tool select events
   approachSelect.addEventListener("change", () => {
+    //clearStage(stageTable, approachSelect);
     chooseStageApproach(stageData.stageName, toolSelect, htmlHelpers.getSelectText(approachSelect));
   });
   toolSelect.addEventListener("change", () => {
@@ -180,9 +216,8 @@ function createStage(stageData) {
   const defaultText = "N/A";
   stageTable.appendChild(htmlHelpers.createTableRow("Citation: ", [htmlHelpers.createElement("p", "citation", defaultText)], columnCount, [1, 3]));
   stageTable.appendChild(htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 3]));
-  const conversionFactorInput = htmlHelpers.createElement("input", "unit-conversion");
   conversionFactorInput.addEventListener("change", () => {
-    console.log("Conversion input changed");
+    //console.log("Conversion input changed");
     updateMh(stageTable, conversionFactorInput.value);
   });
   stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [
@@ -203,38 +238,9 @@ function createStage(stageData) {
 // --------------------------------------
 // ------------------------------- EVENTS
 
-function getApplicableTechnologies(stageName, materialCategory, material, approach = "", tool = "") {
-  console.log("Get applicable tech for: " + stageName + ", " + materialCategory + ", " + material + ", " + approach + ", " + tool);
-  //console.log(technologyData);
-  if (!(stageName in technologyData)) {
-    console.log("getApplicableTechnologies: Stage not found - quitting");
-    return [];
-  }
-  
-  const technologiesForStage = technologyData[stageName];
-  
-  //console.log("Tech for stage: ");
-  //console.log(technologiesForStage);
-  let technologies = technologiesForStage.filter(
-    (tech) => helpers.strEq(tech.material_category, materialCategory) 
-              && (tech.material == "*" || helpers.strEq(tech.material, material))
-  ) // TODO support lists
-  //console.log("Tech before approach: ");
-  //console.log(technologies);
-  
-  // TODO support * and lists
-  if (approach)
-    technologies = technologies.filter((tech) => helpers.strEq(tech.approach, approach));
-  if (tool)
-    technologies = technologies.filter((tech) => helpers.strEq(tech.tool, tool));
-  
-  return technologies;
-}
-
-
 function setStageMaterial(stageElement, materialCategory, material) {
   const stageName = getStageName(stageElement);
-  console.log("Set material for: " + stageName);
+  //console.log("Set material for: " + stageName);
   const technologies = getApplicableTechnologies(stageName, materialCategory, material);
   
   const approachSelect = stageElement.querySelector(".approach-select");
@@ -245,11 +251,10 @@ function setStageMaterial(stageElement, materialCategory, material) {
   }
   options = [...new Set(options)];
   htmlHelpers.createOptions(approachSelect, options);
+  approachSelect.dispatchEvent(new Event('change'));
   
-  htmlHelpers.emptyInput(stageElement.querySelector(".tool-select"));
-  htmlHelpers.emptyInput(stageElement.querySelector(".study-select"));
-  //const toolSelect = stageElement.querySelector(".tool-select");
-  //htmlHelpers.createOptions(toolSelect, []);
+  //htmlHelpers.emptyInput(stageElement.querySelector(".tool-select"));
+  //htmlHelpers.emptyInput(stageElement.querySelector(".study-select"));
 }
 
 
@@ -288,8 +293,11 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
   
   let options = [];
   for (const tech of technologies) {
+    let optionText = tech.author + " " + tech.year;
+    if (tech["tech-note"] && tech["tech-note"] != "")
+      optionText += " (note: " + tech["tech-note"] + ")";
     let optionsData = {
-      "text": tech.author + " " + tech.year + " " + tech["tech-note"],
+      "text": optionText,
       "value": tech.rate,
       "author": tech.author,
       "year": tech.year,
@@ -312,11 +320,11 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
 function chooseStageStudy(stageElement, approach, author, year, techUnit, speed, conversions) {
   console.log("chooseStageStudy for " + approach + ", " + author + ", " + year + ", " + techUnit + ", " + speed + ".");
 
-  clearStage(stageElement, true);
+  clearStage(stageElement, stageElement.querySelector(".study-select"));
   
   if (speed == -1) { // unsetting the study
     setStageMh(stageElement, 0);
-    return;
+    return; 
   }
 
   let [materialCategory, material, jobUnit, jobAmount] = getJobProperties(stageElement);
@@ -413,13 +421,18 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
 // --------------------------------------
 // -------------------------- CLEAR STATE
 
-function clearStage(stageElement, leaveCustom = false) {
-  console.log("clearing stage");
-  const inputs = stageElement.querySelectorAll("input");
+// after - only clear inputs after that one
+function clearStage(stageElement, after = null) {
+  //console.log("clearing stage, in " + stageElement.classList[0] + " after " + (after ? after.classList[0] : "start"));
+  const inputs = stageElement.querySelectorAll("input, select");
   for (const input of inputs) {
-    if (leaveCustom && input.classList.contains("custom-input"))
+    if (after != null) {
+      if (input == after)
+        after = null;
       continue;
+    }
     htmlHelpers.emptyInput(input);
+    console.log("Clearing, skipping " + input.classList[0]);
   }
   
   const outputs = stageElement.querySelectorAll("p");
@@ -430,6 +443,7 @@ function clearStage(stageElement, leaveCustom = false) {
 // --------------------------------------
 // ---------------------------- SAVE/LOAD
 
+// TODO save by value, not text
 function saveStage(stageElement) {
   const extra = getExtraParameters(stageElement, true);
   let saveData = {
@@ -438,7 +452,8 @@ function saveStage(stageElement) {
     "approach": htmlHelpers.getSelectText(stageElement.querySelector(".approach-select")),
     "tool": htmlHelpers.getSelectText(stageElement.querySelector(".tool-select")),
     "study": htmlHelpers.getSelectText(stageElement.querySelector(".study-select")),
-    "conversion factor": stageElement.querySelector(".unit-conversion").value
+    "conversion factor": stageElement.querySelector(".unit-conversion").value,
+    "collapsed": stageElement.querySelector(".collapsible-content").getAttribute("data-open") == 1 ? 0 : 1
   };
   //console.log(saveData);
   return saveData;
@@ -448,26 +463,40 @@ function saveStage(stageElement) {
 function loadStage(ancestorElement, saveData, stageData) {
   //console.log("Fetching stage " + ".stage-" + saveData["stage"]);
   //console.log(saveData);
+  // stageElement is the stage table
   const stageElement = ancestorElement.querySelector(".stage-" + saveData["stage"]);
-  clearStage(stageElement);
-  
+  //clearStage(stageElement);
   setExtraParameters(stageElement, saveData["custom-inputs"])
   
-  let select = stageElement.querySelector(".approach-select");
-  htmlHelpers.setSelectedByText(select, saveData["approach"]);
-  select.dispatchEvent(new Event('change'));
+  // Only do the next if the previous is not empty
+  if (!htmlHelpers.isEmptyOption(saveData["approach"])) {
+    let select = stageElement.querySelector(".approach-select");
+    htmlHelpers.setSelectedByText(select, saveData["approach"]);
+    select.dispatchEvent(new Event('change'));
+    
+    if (!htmlHelpers.isEmptyOption(saveData["tool"])) {
+      select = stageElement.querySelector(".tool-select");
+      htmlHelpers.setSelectedByText(select, saveData["tool"]);
+      select.dispatchEvent(new Event('change'));
+      
+      if (!htmlHelpers.isEmptyOption(saveData["study"])) {
+        select = stageElement.querySelector(".study-select");
+        htmlHelpers.setSelectedByText(select, saveData["study"]);
+        select.dispatchEvent(new Event('change'));
+        
+        if (!htmlHelpers.isEmptyOption(saveData["conversion factor"])) {
+          let input = stageElement.querySelector(".unit-conversion");
+          input.value = saveData["conversion factor"];
+          input.dispatchEvent(new Event('change'));
+        }
+      }
+    }
+  }
   
-  select = stageElement.querySelector(".tool-select");
-  htmlHelpers.setSelectedByText(select, saveData["tool"]);
-  select.dispatchEvent(new Event('change'));
-  
-  select = stageElement.querySelector(".study-select");
-  htmlHelpers.setSelectedByText(select, saveData["study"]);
-  select.dispatchEvent(new Event('change'));
-  
-  let input = stageElement.querySelector(".unit-conversion");
-  input.value = saveData["conversion factor"];
-  input.dispatchEvent(new Event('change'));
+  if (saveData["collapsed"]) {
+    //console.log("closing");
+    htmlHelpers.collapseContent(stageElement.parentElement);
+  }
 }
 
 // --------------------------------------
