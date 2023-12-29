@@ -123,7 +123,10 @@ function recalculateJobEnergy(jobElement) {
   const stageElements = getStageElements(jobElement);
   for (let stageElement of stageElements) {
     const mhLabel = stageElement.querySelector(".stage-mh-label");
-    const energy = Number(mhLabel.innerText.split(" ")[0]);
+    let textNumber = mhLabel.innerText.split(" ")[0];
+    textNumber = textNumber.replace(/\,/g, "");
+    //console.log("XXX " + textNumber);
+    const energy = Number(textNumber);
     totalJobEnergy += energy;
   }
   
@@ -223,6 +226,7 @@ function createJob(jobId) {
   const input = htmlHelpers.createElement("input", "job-name-input");
   input.placeholder = "Task name ..."
   input.value = "";
+  input.addEventListener('click', (e) => { e.stopPropagation(); }); // prevent collapsing of the parent div
   const mhLabel = htmlHelpers.createElement("p", "job-mh-label", "0 MH");
   jobHeader.appendChild(jobNameLabel);
   jobHeader.appendChild(input);

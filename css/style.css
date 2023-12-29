@@ -190,6 +190,7 @@ h2.job-name {
 }
 
 input.job-name-input {
+  width: 300px;
   font-size: 20px;
   padding: 2px;
 }

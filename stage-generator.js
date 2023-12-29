@@ -73,6 +73,10 @@ function createTooltip(cssClass, defaultText) {
   return button;
 }
 
+// TODO
+// duplicate entries in approach
+// project management div, total energy
+
 
 const defaultTechTooltip = "No study selected";
 function createTechTooltip() {

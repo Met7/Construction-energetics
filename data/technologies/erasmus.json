@@ -74,7 +74,7 @@
         "approach": "Digging",
         "tool": "?",
         "unit": "ton",
-        "rate": 8.33,
+        "rate": 8.33333,
         "locality": "Uxmal, Mexico",
         "tech-note": "",
         "conversions": {}
@@ -211,7 +211,7 @@
         "approach": "Stacking",
         "tool": "Manual",
         "unit": "ton",
-        "rate": 22.2,
+        "rate": 22.2222,
         "locality": "Uxmal, Mexico",
         "tech-note": "For lime burning",
         "conversions": {}
@@ -225,13 +225,13 @@
         "approach": "Stacking",
         "tool": "Manual",
         "unit": "ton",
-        "rate": 12,
+        "rate": 4,
         "locality": "Uxmal, Mexico",
         "tech-note": "For lime burning",
         "conversions": {}
       }
     ],
-    "Finishing": [
+    "Processing": [
       {
         "author": "Erasmus",
         "year": 1965,

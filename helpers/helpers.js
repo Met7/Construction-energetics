@@ -1,5 +1,10 @@
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function formatNumber(number) {
-  return Number(Number(number).toFixed(2));
+  return numberWithCommas(Number(Number(number).toFixed(2)));
 }
 
 function formatEnergy(energy) {

@@ -71,12 +71,20 @@ function deleteProject(index) {
 }
 
 function downloadProject(index) {
+  console.log("attempting download id " + index);
   checkProjectIndex(index, "downloadProject");
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projects[index]));
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ "ahoj" : 3 }));
+  //const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projects[index]));
   const dlAnchorElem = document.getElementById("dl-project-" + index);
   dlAnchorElem.setAttribute("href", dataStr);
   dlAnchorElem.setAttribute("download", projects[index].name + ".json");
-  //dlAnchorElem.click();
+  dlAnchorElem.click();
+  
+  // var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ "ahoj" : 3 }));
+  // var dlAnchorElem = document.getElementById('downloadAnchorElem');
+  // dlAnchorElem.setAttribute("href",     dataStr     );
+  // dlAnchorElem.setAttribute("download", "scene.json");
+  // dlAnchorElem.click();
 }
 
 function uploadProject(uploadProjectInput) {
