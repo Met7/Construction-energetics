@@ -1,6 +1,7 @@
-import * as htmlHelpers from "./helpers/html-helpers.js"; 
+import * as htmlHelpers from "./helpers/html-helpers.js";
+import * as helpers from "./helpers/helpers.js";
 import { loadFile } from "./data-handler.js";
-import { createJob, saveJob, loadJob } from "./job-generator.js";
+import { createJob, saveJob, loadJob, setJobEnergyChangeFunction } from "./job-generator.js";
 
 var jobId = 1;
 
@@ -10,6 +11,22 @@ myButton.addEventListener('click', () => {
     addJob(document.querySelector("#jobs-container"));
   }
 );
+
+// --------------------------------------
+// ------------------------------- ENERGY
+
+function recalculateTotalEnergy() {
+  let totalEnergy = 0;
+  const jobList = document.getElementById("jobs-container");
+  const jobElements = jobList.getElementsByClassName("job");
+  for (let jobElement of jobElements) {
+    const mhLabel = jobElement.querySelector(".job-mh-label");
+    const energy = helpers.unformatEnergy(mhLabel.innerText);
+    totalEnergy += energy;
+  }
+  
+  document.getElementById("total-mh-label").innerText = helpers.formatEnergy(totalEnergy);
+}
 
 
 // --------------------------------------
@@ -60,6 +77,9 @@ function openProject(index) {
 
   console.log("Loaded project from local storage.");
 }
+
+// --------------------------------------
+// ------------------------- PROJECT LIST
 
 function deleteProject(index) {
   checkProjectIndex(index, "deleteProject");
@@ -221,6 +241,7 @@ async function main() {
   printProjects();
   const jobsContainer = document.querySelector("#jobs-container");
   await addJob(jobsContainer);
+  setJobEnergyChangeFunction(recalculateTotalEnergy);
 }
 
 await main();

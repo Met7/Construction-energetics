@@ -1,5 +1,5 @@
 import * as htmlHelpers from "./helpers/html-helpers.js"; 
-import * as helpers from "./helpers/helpers.js"; 
+import * as helpers from "./helpers/helpers.js";
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import { loadFile } from "./data-handler.js";
 import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit, setStageAmount, saveStage, loadStage } from "./stage-generator.js";
@@ -123,19 +123,21 @@ function recalculateJobEnergy(jobElement) {
   const stageElements = getStageElements(jobElement);
   for (let stageElement of stageElements) {
     const mhLabel = stageElement.querySelector(".stage-mh-label");
-    let textNumber = mhLabel.innerText.split(" ")[0];
-    textNumber = textNumber.replace(/\,/g, "");
-    //console.log("XXX " + textNumber);
-    const energy = Number(textNumber);
+    const energy = helpers.unformatEnergy(mhLabel.innerText);
     totalJobEnergy += energy;
   }
   
   jobElement.querySelector(".job-mh-label").innerText = helpers.formatEnergy(totalJobEnergy);
-  //return totalJobEnergy;
+  onEnergyChange();
 }
 
 function onStageEnergyChanged(stageElement) {
   recalculateJobEnergy(htmlHelpers.getAncestorElement(stageElement, "job"));
+}
+
+let onEnergyChange;
+function setJobEnergyChangeFunction(energyChangeFunction) {
+  onEnergyChange = energyChangeFunction;
 }
 
 // --------------------------------------
@@ -217,7 +219,8 @@ function createStages(jobTable, jobData, columnCount) {
 
 function createJob(jobId) {
   // Element structure
-  let jobDiv = htmlHelpers.createElement("div", "job"); 
+  let jobDiv = htmlHelpers.createElement("div", "job");
+  jobDiv.classList.add("panel");
   jobDiv.id = `job-${jobId}`;
   
   // Job header row
@@ -280,5 +283,6 @@ setup();
 export { 
   createJob,
   saveJob,
-  loadJob
+  loadJob,
+  setJobEnergyChangeFunction
 };

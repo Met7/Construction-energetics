@@ -74,8 +74,9 @@ function createTooltip(cssClass, defaultText) {
 }
 
 // TODO
-// duplicate entries in approach
-// project management div, total energy
+// Keep order of tasks / allow changing
+// Clear jobs button
+
 
 
 const defaultTechTooltip = "No study selected";
@@ -330,6 +331,7 @@ function chooseStageApproach(stageName, toolSelect, approach) {
   let options = [];
   for (const tech of technologies)
     options.push(tech.tool);
+  options = [...new Set(options)];
   
   htmlHelpers.createOptions(toolSelect, options);
 }

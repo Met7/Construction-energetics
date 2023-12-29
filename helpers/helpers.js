@@ -8,9 +8,17 @@ function formatNumber(number) {
 }
 
 function formatEnergy(energy) {
-  if (typeof(energy) != 'number') // energy.isNaN()
+  if (typeof(energy) != "number") // energy.isNaN()
     return energy;
+  if (energy > 1000)
+    energy = Math.round(energy);
   return formatNumber(energy) + " MH";
+}
+
+function unformatEnergy(energyStr) {
+  energyStr = energyStr.split(" ")[0];
+  energyStr = energyStr.replace(/\,/g, "");
+  return Number(energyStr);
 }
 
 function formatUnit(unit) {
@@ -30,6 +38,7 @@ function strEq(str1, str2) {
 export {
   formatNumber,
   formatEnergy,
+  unformatEnergy,
   formatUnit,
   strEq
 };
