@@ -1,16 +1,8 @@
 import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as helpers from "./helpers/helpers.js";
-import { loadFile } from "./data-handler.js";
 import { createJob, saveJob, loadJob, setJobEnergyChangeFunction, setSortFunctions } from "./job-generator.js";
 
 var jobId = 1;
-
-const myButton = document.getElementById('add-job-button');
-myButton.addEventListener('click', () => { 
-    //console.log("Clicked");
-    addJob(document.querySelector("#jobs-container"));
-  }
-);
 
 // --------------------------------------
 // ------------------------------- ENERGY
@@ -27,7 +19,6 @@ function recalculateTotalEnergy() {
   
   document.getElementById("total-mh-label").innerText = helpers.formatEnergy(totalEnergy);
 }
-
 
 // --------------------------------------
 // ---------------------------- SAVE/LOAD
@@ -71,7 +62,7 @@ function openProject(index) {
   checkProjectIndex(index, "openProject");
   let projectData = projects[index].data;
   const jobsContainer = document.querySelector("#jobs-container");
-  jobsContainer.innerHTML = "";
+  clearAllJobs(jobsContainer);
   jobId = 1;
   projectData.jobs.sort((job1, job2) => job1.sortIndex < job2.sortIndex);
   for (const jobData of projectData.jobs) {
@@ -203,11 +194,8 @@ function getJobElements(ancestorElement) {
   return ancestorElement.getElementsByClassName("job");
 }
 
-async function addJob(jobContainer) {
-  //throw("JOB");
-  let data = await loadFile("Stages");  
-  //console.log(data);
-  jobContainer.prepend(createJob(jobId++, data));
+function addJob(jobContainer) {
+  jobContainer.prepend(createJob(jobId++));
 
   // perform some actions to not do them manually on every refresh
   if (0) {
@@ -232,6 +220,10 @@ async function addJob(jobContainer) {
     select.value = "1";
     select.dispatchEvent(new Event('change'));
   }
+}
+
+function clearAllJobs(jobsContainer) {
+  jobsContainer.innerHTML = "";
 }
 
 // --------------------------------------
@@ -279,17 +271,28 @@ function sortJobDown(oldJobDiv) {
 // --------------------------------------
 // --------------------------------- MAIN
 
-async function main() {
+function main() {
+  // init project list data structure
   if (localStorage.projects)
     projects = JSON.parse(localStorage.getItem("projects"));
   else {
     projects = [];
   }
   printProjects();
+  
   const jobsContainer = document.querySelector("#jobs-container");
-  await addJob(jobsContainer);
+  addJob(jobsContainer);
+  
   setJobEnergyChangeFunction(recalculateTotalEnergy);
   setSortFunctions(sortJobUp, sortJobDown);
+  
+  document.getElementById('add-job-button').addEventListener('click', () => {
+    addJob(document.querySelector("#jobs-container"));
+  });
+  document.getElementById('clear-all-button').addEventListener('click', () => {
+    clearAllJobs(jobsContainer);
+    addJob(jobsContainer);
+  });
 }
 
-await main();
+main();

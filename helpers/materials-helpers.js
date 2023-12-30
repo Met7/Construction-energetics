@@ -1,6 +1,6 @@
 import { loadFile } from "../data-handler.js";
 
-const materialsData = await loadFile('materials', "../data/");
+const materialsData = await loadFile('materials');
 
 const supportedUnits = ["ton", "m3", "m2", "units"];
 const defaultUnit = "m3";

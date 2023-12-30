@@ -3,7 +3,6 @@ import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import * as studiesHelpers from "./helpers/studies-helpers.js";
 import * as technologiesHelpers from "./helpers/technologies-helpers.js"; 
-import { loadFile } from "./data-handler.js";
 
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "Material manual trigger" });
@@ -72,10 +71,6 @@ function createTooltip(cssClass, defaultText) {
   button.appendChild(text);
   return button;
 }
-
-// TODO
-// Clear jobs button
-
 
 const defaultTechTooltip = "No study selected";
 function createTechTooltip() {

@@ -12,7 +12,7 @@
         "unit": "m3",
         "rate": 11.236,
         "locality": "Egypt",
-        "note": "1 block - 0.37m^3",
+        "tech-note": "1 block - 0.37m^3",
         "conversions": {}
       },
       {
@@ -26,9 +26,10 @@
         "unit": "m3",
         "rate": 3846.154,
         "locality": "Various",
-        "note": "Derived from multiple tiny experiments",
+        "tech-note": "Derived from multiple tiny experiments",
         "conversions": {}
       }
     ]
   }
 }
+ 

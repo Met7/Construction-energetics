@@ -1,6 +1,6 @@
 import { loadFile } from "../data-handler.js";
 
-const studiesData = await loadFile('studies', "../data/");
+const studiesData = await loadFile('studies');
 
 function getStudyCitation(author, year) {
   if (!(author in studiesData) || !(year in studiesData[author])) {

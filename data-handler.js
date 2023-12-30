@@ -1,4 +1,5 @@
-const defaultFolder = "./data/"
+let defaultFolder = "data/";
+let root = "./";
 
 // TODO add browser caching
 
@@ -6,14 +7,15 @@ const defaultFolder = "./data/"
 // filename - without .json.
 // first key in the json file should be the filename. Can be overriden by key.
 async function loadFile(filename, folder = defaultFolder, key = '') {
-  const filePath = folder + filename + '.json';
+  const filePath = root + folder + filename + '.json';
   console.log("Loading JSON data from: " + filePath);
 
   try {
+    //console.log(location.hostname);
     const response = await fetch(filePath);
-    if (!response.ok) {
+    if (!response.ok)
       throw new Error('Error loading JSON: ' + response.status);
-    }
+
     const data = await response.json();
 
     if (!key)

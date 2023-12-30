@@ -18,7 +18,7 @@ function mergeTechnologies(tech1, tech2) {
 }
 
 async function loadTechnologies() {
-  const folder = "../data/technologies/";
+  const folder = "data/technologies/";
   const fileList = await loadFile("file-list", folder);
   //console.log(fileList);
   if (!Array.isArray(fileList) || fileList.length == 0)
