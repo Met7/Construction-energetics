@@ -37,7 +37,7 @@ button {
   background-color: #f1f1f1;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
+  padding: 6px;
   margin-bottom: 10px;
   width: 100%;
 }
@@ -129,32 +129,50 @@ tr.project-list-row {
 
 /* ------------------------------ ICONS ----------- */
 
-#project-table button.icon-button {
+button.icon-button {
   float: left;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   padding: 8px;
+  margin: 2px;
 }
 
-#project-table button.icon-button-save {
+button.icon-button-small-arrow-up {
+  background: url(../image/small-arrow-up-16.ico) no-repeat center;
+}
+
+button.icon-button-small-arrow-down {
+  background: url(../image/small-arrow-down-16.ico) no-repeat center;
+}
+
+button.icon-button-save {
   background: url(../image/save-16.ico) no-repeat center;
 }
 
-#project-table button.icon-button-download {
+button.icon-button-download {
   background: url(../image/download-16.ico) no-repeat center;
 }
 
-#project-table button.icon-button-upload {
+button.icon-button-upload {
   background: url(../image/upload-16.ico) no-repeat center;
 }
 
-#project-table button.icon-button-delete {
+button.icon-button-delete {
   background: url(../image/delete-16.ico) no-repeat center;
 }
 
-#project-table button.icon-button-info {
+button.icon-button-info {
   background: url(../image/info-16.ico) no-repeat center;
 }
+
+button.icon-button-small-arrow-up-white {
+  background: url(../image/small-arrow-up-white-16.ico) no-repeat center;
+}
+
+button.icon-button-small-arrow-down-white {
+  background: url(../image/small-arrow-down-white-16.ico) no-repeat center;
+}
+
 
 /* ------------------------------ JOB ------------  */
 
@@ -169,14 +187,14 @@ tr.project-list-row {
 }
 
 .job {
-  padding-bottom: 0px;
+  /*padding-bottom: 0px;*/
 }
 
 .job-header {
   width: 100%;
   font-size: 20px;
   color: white;
-  padding: 8px;
+  padding: 6px 6px 6px 6px;
   background-color: #0099cc;
   border-radius: 5px;
   display: flex;
@@ -190,20 +208,28 @@ tr.project-list-row {
 }
 
 h2.job-name {
+  font-size: 20px;
 }
 
 input.job-name-input {
   width: 300px;
-  font-size: 20px;
-  padding: 2px;
+  font-size: 16px;
+  padding-left: 4px;
+  margin: 0px 0px 0px 0px;
+}
+
+.job-header-right-side {
+  display: flex;
+  flex-direction: row;
 }
 
 .job-mh-label {
   text-align: right;
   float: right;
   font-weight: bold;
-  font-size: 20px;
-  min-width: 100px;
+  font-size: 18px;
+  min-width: 200px;
+  margin-right:4px;
 }
 
 .job table {
@@ -216,7 +242,7 @@ input.job-name-input {
 }
 
 .job div {
-  margin-bottom: 5px;
+  /*margin-bottom: 5px;*/
 }
 
 .job label {
@@ -258,6 +284,10 @@ input.job-name-input {
 }
 
 /* ------------------------------ STAGE -----------  */
+
+.stage {
+  padding-top: 4px;
+}
 
 .stage table {
   border: 0px solid red;

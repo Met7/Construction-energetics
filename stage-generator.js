@@ -74,9 +74,7 @@ function createTooltip(cssClass, defaultText) {
 }
 
 // TODO
-// Keep order of tasks / allow changing
 // Clear jobs button
-
 
 
 const defaultTechTooltip = "No study selected";
@@ -98,7 +96,7 @@ function createTechTooltip() {
 }
 
 function updateTechTooltip(tooltip, author, year, pages, note) {
-  console.log("Updating tooltip for " + author + ", " + year + ", " + pages + ", " + note + ".");
+  //console.log("Updating tooltip for " + author + ", " + year + ", " + pages + ", " + note + ".");
   let text;
   if (!author)
     text = defaultTechTooltip;
@@ -112,9 +110,7 @@ function updateTechTooltip(tooltip, author, year, pages, note) {
       text += "<br />" + "Note: " + note;
     text += "<br />(Click to copy citation)";
   }
-  console.log(text);
   const textElement = tooltip.childNodes[1];
-  console.log(textElement.nodeName);
   textElement.innerHTML = text;
 }
 
@@ -274,7 +270,7 @@ function createStage(stageData) {
   });
   
   // output fields
-  const defaultText = "N/A"; // TODO moct to a better spot
+  const defaultText = "N/A"; // TODO move to a better spot
   stageTable.appendChild(htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 4]));
   conversionFactorInput.addEventListener("change", () => {
     //console.log("Conversion input changed");
@@ -406,7 +402,7 @@ function extractConversions(selectElement) {
   let conversions = {};
   for (const unit of allUnits) {
     const conversionFactor = htmlHelpers.getSelectData(selectElement, "conversion-" + unit);
-    if (conversionFactor) // TODO what does it return if it is not found?
+    if (conversionFactor)
       conversions[unit] = Number(conversionFactor);
   }
   return conversions;

@@ -1,7 +1,7 @@
 import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as helpers from "./helpers/helpers.js";
 import { loadFile } from "./data-handler.js";
-import { createJob, saveJob, loadJob, setJobEnergyChangeFunction } from "./job-generator.js";
+import { createJob, saveJob, loadJob, setJobEnergyChangeFunction, setSortFunctions } from "./job-generator.js";
 
 var jobId = 1;
 
@@ -48,8 +48,12 @@ function saveProject(index = -1, name = "") {
   let projectSave = {};
   projectSave["jobs"] = [];
   const jobElements = getJobElements(document.querySelector("#jobs-container"));
+  let sortIndex = 0;
   for (let jobElement of jobElements) {
-    projectSave["jobs"].push(saveJob(jobElement));
+    let jobData = saveJob(jobElement);
+    jobData["sortIndex"] = sortIndex++;
+    projectSave["jobs"].push(jobData);
+    console.log(jobData);
   }
   
   if (index == -1) { // new save
@@ -69,6 +73,7 @@ function openProject(index) {
   const jobsContainer = document.querySelector("#jobs-container");
   jobsContainer.innerHTML = "";
   jobId = 1;
+  projectData.jobs.sort((job1, job2) => job1.sortIndex < job2.sortIndex);
   for (const jobData of projectData.jobs) {
     const jobElement = createJob(jobId++);
     jobsContainer.prepend(jobElement);
@@ -230,6 +235,48 @@ async function addJob(jobContainer) {
 }
 
 // --------------------------------------
+// -------------------------- JOB SORTING
+
+function getJobId(jobDiv) {
+  return jobDiv.id.split("-")[1];
+}
+
+function swapElements(elem1, elem2) {
+  const afterElem2 = elem2.nextElementSibling;
+  //console.log(elem2);
+  const parent = elem2.parentNode;
+  //console.log(parent);
+  if (elem1 === afterElem2)
+  	parent.insertBefore(elem1, elem2);
+  else {
+  	elem1.replaceWith(elem2);
+  	parent.insertBefore(elem1, afterElem2);
+  }
+}
+
+function swapJobs(oldJobDiv, otherJobDiv) {
+  if (!otherJobDiv) {
+    console.log("No sibling to swap with");
+    return;
+  }
+  let oldId = getJobId(oldJobDiv);
+  let otherId = getJobId(otherJobDiv);
+  console.log("swapping #" + oldId + " with #" + otherId);
+  swapElements(oldJobDiv, otherJobDiv);
+  // TODO swap the data structure ids
+}
+
+function sortJobUp(oldJobDiv) {
+  let otherJobDiv = oldJobDiv.previousElementSibling;
+  swapJobs(oldJobDiv, otherJobDiv);
+}
+
+function sortJobDown(oldJobDiv) {
+  let otherJobDiv = oldJobDiv.nextElementSibling;
+  swapJobs(oldJobDiv, otherJobDiv);
+}
+
+// --------------------------------------
 // --------------------------------- MAIN
 
 async function main() {
@@ -242,6 +289,7 @@ async function main() {
   const jobsContainer = document.querySelector("#jobs-container");
   await addJob(jobsContainer);
   setJobEnergyChangeFunction(recalculateTotalEnergy);
+  setSortFunctions(sortJobUp, sortJobDown);
 }
 
 await main();

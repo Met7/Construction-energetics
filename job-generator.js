@@ -4,12 +4,6 @@ import * as materialsHelpers from "./helpers/materials-helpers.js";
 import { loadFile } from "./data-handler.js";
 import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit, setStageAmount, saveStage, loadStage } from "./stage-generator.js";
 
-// 1m limestone 30.3mh/m -> 8.2MJ
-// 1MD = 2.160kJ
-// 1MH = 270kJ
-// Dressing 57mh / m -> 15.4kJ
-// Carry: 20kg*5km/h = 10t/m/270kJ = 27kJ/1t/m
-
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "MaterialCategory manual trigger" });
 
@@ -64,7 +58,6 @@ function updateStagesMaterial(jobElement, materialCategory, material) {
       setStageMaterial(stageElement, materialCategory, material);
     }
 }
-
 
 // --------------------------------------
 // -------------------------------- UNITS
@@ -230,10 +223,32 @@ function createJob(jobId) {
   input.placeholder = "Task name ..."
   input.value = "";
   input.addEventListener('click', (e) => { e.stopPropagation(); }); // prevent collapsing of the parent div
-  const mhLabel = htmlHelpers.createElement("p", "job-mh-label", "0 MH");
   jobHeader.appendChild(jobNameLabel);
   jobHeader.appendChild(input);
-  jobHeader.appendChild(mhLabel);
+  
+  const headerRightSide = htmlHelpers.createElement("div", "job-header-right-side");
+  
+  const mhLabel = htmlHelpers.createElement("p", "job-mh-label", "0 MH");
+  headerRightSide.appendChild(mhLabel);
+  
+  let buttonUp = htmlHelpers.createElement("button", ["icon-button", "icon-button-small-arrow-up-white"], "");
+  buttonUp.title = "Move up";
+  buttonUp.addEventListener("click", (e) => {
+    e.stopPropagation();
+    sortUpFunction(jobDiv);
+  });
+  let buttonDown = htmlHelpers.createElement("button", ["icon-button", "icon-button-small-arrow-down-white"], "");
+  buttonDown.title = "Move down";
+  buttonDown.addEventListener("click", (e) => {
+    e.stopPropagation();
+    sortDownFunction(jobDiv);
+  });
+  headerRightSide.appendChild(buttonUp);
+  headerRightSide.appendChild(buttonDown);
+  
+  jobHeader.appendChild(headerRightSide);
+  
+  
   jobDiv.appendChild(jobHeader);
   
   // Job body
@@ -280,9 +295,16 @@ function setup() {
 }
 setup();
 
+let sortUpFunction, sortDownFunction;
+function setSortFunctions(up, down) {
+  sortUpFunction = up;
+  sortDownFunction = down;
+}
+
 export { 
   createJob,
   saveJob,
   loadJob,
-  setJobEnergyChangeFunction
+  setJobEnergyChangeFunction,
+  setSortFunctions
 };
