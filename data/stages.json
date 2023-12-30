@@ -17,8 +17,8 @@
         }
       ]
     },
-    "Processing": { 
-      "stageName": "Processing",
+    "Refinement": { 
+      "stageName": "Refinement",
       "unit": "energy",
       "inputs": {}
     },

@@ -90,7 +90,7 @@
         "unit": "ton",
         "rate": 50,
         "locality": "Uxmal, Mexico",
-        "tech-note": "",
+        "tech-note": "Modern tools",
         "conversions": {}
       },
       {
@@ -104,7 +104,7 @@
         "unit": "ton",
         "rate": 166.7,
         "locality": "Uxmal, Mexico",
-        "tech-note": "",
+        "tech-note": "Guesstimate",
         "conversions": {}
       }
     ],
@@ -120,8 +120,8 @@
         "unit": "m3",
         "rate": 0.03,
         "locality": "Uxmal, Mexico",
-        "tech-note": "",
-        "note": "Average of two carriers, 5h workday",
+        "tech-note": "Average of two carriers, 5h workday",
+        "note": "",
         "conversions": {
           "ton": 1.31
         }
@@ -135,7 +135,7 @@
         "approach": "Carrying",
         "tool": "On head",
         "unit": "ton",
-        "rate": 0.2,
+        "rate": 0.02,
         "locality": "Uxmal, Mexico",
         "tech-note": "1 km distance",
         "conversions": {
@@ -193,7 +193,7 @@
         "year": 1965,
         "pages": "292",
         "material_category": "Stone",
-        "material": "Limestone",
+        "material": "*",
         "approach": "Masonry construction",
         "tool": "Manual",
         "unit": "m3",
@@ -231,7 +231,7 @@
         "conversions": {}
       }
     ],
-    "Processing": [
+    "Refinement": [
       {
         "author": "Erasmus",
         "year": 1965,
@@ -255,7 +255,7 @@
         "approach": "Cutting",
         "tool": "Steel tools",
         "unit": "m2",
-        "rate": 160,
+        "rate": 240,
         "locality": "Uxmal, Mexico",
         "tech-note": "Maya designs",
         "conversions": {}

@@ -10,9 +10,9 @@
         "approach": "Channeling",
         "tool": "Iron pick",
         "unit": "m3",
-        "rate": 0.089,
+        "rate": 11.236,
         "locality": "Egypt",
-        "note": "",
+        "note": "1 block - 0.37m^3",
         "conversions": {}
       },
       {
@@ -24,9 +24,9 @@
         "approach": "Channeling",
         "tool": "Stone hammer",
         "unit": "m3",
-        "rate": 0.00026,
+        "rate": 3846.154,
         "locality": "Various",
-        "note": "Derived from multiple works",
+        "note": "Derived from multiple tiny experiments",
         "conversions": {}
       }
     ]
