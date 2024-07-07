@@ -1,0 +1,22 @@
+{
+  "technologies": {
+    "Extraction": [
+      {
+        "id": "McCurdy 2016 100",
+        "material_category": "Wood",
+        "material": "*",
+        "approach": "?",
+        "tool": "",
+        "description": "For straight blocks; 3m x 1m x 0.2m",
+        "unit": "?",
+        "rate": "",
+        "locality": "",
+        "tech_note": "",
+        "conversions": {},
+        "author": "McCurdy",
+        "year": "2016",
+        "pages": ""
+      }
+    ]
+  }
+}

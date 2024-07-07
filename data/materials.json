@@ -50,21 +50,45 @@
     },
     "Stone": {
       "data": {
-        "Limestone": {
-          "conversions": {
-            "ton": 2.3
-          },
-          "base_energy": 150000
-        },
         "Granite": {
           "conversions": {
             "ton": 2.7
           },
           "base_energy": 180000
         },
+        "Limestone": {
+          "conversions": {
+            "ton": 2.3
+          },
+          "base_energy": 150000
+        },
+        "Pozzolana": {
+          "conversions": {
+            "ton": 3
+          },
+          "base_energy": 120000
+        },
+        "Pumice": {
+          "conversions": {
+            "ton": 0.64
+          },
+          "base_energy": 120000
+        },
         "Sandstone": {
           "conversions": {
             "ton": 2.2
+          },
+          "base_energy": 140000
+        },
+        "Selce": {
+          "conversions": {
+            "ton": 2.6
+          },
+          "base_energy": 160000
+        },
+        "Tuff": {
+          "conversions": {
+            "ton": 1.4
           },
           "base_energy": 140000
         },
@@ -79,19 +103,19 @@
     },
     "Wood": {
       "data": {
-        "Oak": {
+        "Hardwood": {
           "conversions": {
             "ton": 0.7
           },
           "base_energy": 80000
         },
-        "Cedar": {
+        "Softwood": {
           "conversions": {
             "ton": 0.5
           },
           "base_energy": 70000
         },
-        "Pine": {
+        "Any": {
           "conversions": {
             "ton": 0.6
           },
@@ -135,6 +159,39 @@
           "base_energy": 100000
         }
     },
+    "Intermediary": {
+      "data": {
+        "Brick": {
+          "conversions": {
+            "ton": 1.5
+          },
+          "base_energy": 100000
+        },
+        "Lime": {
+          "conversions": {
+            "ton": 3.34
+          },
+          "base_energy": 100000
+        },
+        "Mortar": {
+          "conversions": {
+            "ton": 1.6
+          },
+          "base_energy": 100000
+        },
+        "Tile": {
+          "conversions": {
+            "ton": 1.8
+          },
+          "base_energy": 100000
+        },
+        "?": {
+          "conversions": {},
+          "base_energy": 100000
+        }
+      },
+      "conversions": {}
+    },
     "Other": {
       "data": {
         "Bamboo": {
@@ -158,6 +215,24 @@
       },
       "conversions": {
       }
+    },
+    "Any": {
+      "data": {
+        "Any": {
+          "conversions": {},
+          "base_energy": 0
+        }
+      },
+      "conversions": {}
+    },
+    "None": {
+      "data": {
+        "None": {
+          "conversions": {},
+          "base_energy": 0
+        }
+      },
+      "conversions": {}
     }
   }
 }

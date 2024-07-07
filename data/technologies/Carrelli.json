@@ -1,0 +1,22 @@
+{
+  "technologies": {
+    "Placement": [
+      {
+        "id": "Carrelli 2004 100",
+        "material_category": "None",
+        "material": "None",
+        "approach": "Construction",
+        "tool": "",
+        "description": "Construction of cell floors",
+        "unit": "m3",
+        "rate": "2",
+        "locality": "Honduras",
+        "tech_note": "",
+        "conversions": {},
+        "author": "Carrelli",
+        "year": "2004",
+        "pages": ""
+      }
+    ]
+  }
+}

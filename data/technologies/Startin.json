@@ -1,0 +1,22 @@
+{
+  "technologies": {
+    "Extraction": [
+      {
+        "id": "Startin 1982 100",
+        "material_category": "Earth",
+        "material": "Chalk",
+        "approach": "Digging",
+        "tool": "",
+        "description": "",
+        "unit": "m3",
+        "rate": "1.960784314",
+        "locality": "southern England",
+        "tech_note": "",
+        "conversions": {},
+        "author": "Startin",
+        "year": "1982",
+        "pages": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "technologies": {
+    "Extraction": [
+      {
+        "id": "Gillette 1903 100",
+        "material_category": "Earth",
+        "material": "Silt loam",
+        "approach": "Digging",
+        "tool": "",
+        "description": "",
+        "unit": "m3",
+        "rate": "2.380952381",
+        "locality": "North America",
+        "tech_note": "",
+        "conversions": {},
+        "author": "Gillette",
+        "year": "1903",
+        "pages": ""
+      }
+    ]
+  }
+}

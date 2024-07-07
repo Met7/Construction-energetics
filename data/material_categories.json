@@ -4,6 +4,9 @@
     "Stone",
     "Wood",
     "Metal",
-    "Other"
+    "Intermediary",
+    "Other",
+    "Any",
+    "None"
   ]
 }

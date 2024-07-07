@@ -1,0 +1,22 @@
+{
+  "technologies": {
+    "Extraction": [
+      {
+        "id": "Skafida 1994 100",
+        "material_category": "Intermediary",
+        "material": "Mudbrick",
+        "approach": "Manufacture",
+        "tool": "",
+        "description": "Complete process",
+        "unit": "unit",
+        "rate": "15",
+        "locality": "Greece",
+        "tech_note": "",
+        "conversions": {},
+        "author": "Skafida",
+        "year": "1994",
+        "pages": "184"
+      }
+    ]
+  }
+}

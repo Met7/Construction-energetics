@@ -1,0 +1,22 @@
+{
+  "technologies": {
+    "Extraction": [
+      {
+        "id": "De Haan 2009 100",
+        "material_category": "Stone",
+        "material": "Granite",
+        "approach": "Channeling",
+        "tool": "Stone hammer",
+        "description": "",
+        "unit": "m3",
+        "rate": "3846.154",
+        "locality": "Various",
+        "tech_note": "",
+        "conversions": {},
+        "author": "De Haan",
+        "year": "2009",
+        "pages": "3"
+      }
+    ]
+  }
+}

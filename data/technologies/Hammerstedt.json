@@ -1,0 +1,38 @@
+{
+  "technologies": {
+    "Extraction": [
+      {
+        "id": "Hammerstedt 2005 100",
+        "material_category": "Earth",
+        "material": "Silt loam",
+        "approach": "Digging",
+        "tool": "Flint hoe",
+        "description": "",
+        "unit": "m3",
+        "rate": "3.448275862",
+        "locality": "Ohio Valley",
+        "tech_note": "",
+        "conversions": {},
+        "author": "Hammerstedt",
+        "year": "2005",
+        "pages": "46"
+      },
+      {
+        "id": "Hammerstedt 2005 200",
+        "material_category": "Wood",
+        "material": "*",
+        "approach": "",
+        "tool": "",
+        "description": "20cm diameter",
+        "unit": "unit",
+        "rate": "0.4166666667",
+        "locality": "",
+        "tech_note": "",
+        "conversions": {},
+        "author": "Hammerstedt",
+        "year": "2005",
+        "pages": "59"
+      }
+    ]
+  }
+}

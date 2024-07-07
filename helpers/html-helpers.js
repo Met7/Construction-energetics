@@ -209,6 +209,15 @@ function setSelectedByText(select, text) {
     }
 }
 
+function setSelectedByData(select, dataKey, value) {
+  for (let index = 0; index < select.options.length; index++) {
+    if (select.options[index].getAttribute("data-" + dataKey) == value) {
+      select.selectedIndex = index;
+      return;
+    }
+  }
+}
+
 // --------------------------------------
 // -------------------------------- TABLE
 
@@ -310,6 +319,7 @@ export {
   getSelectValue,
   getSelectData,
   setSelectedByText,
+  setSelectedByData,
   createTd,
   createTr,
   createLabelTd,

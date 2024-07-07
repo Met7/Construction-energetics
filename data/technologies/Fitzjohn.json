@@ -1,0 +1,40 @@
+{
+  "technologies": {
+    "Extraction": [
+      {
+        "id": "Fitzjohn 2013 100",
+        "material_category": "Stone",
+        "material": "Tuff",
+        "approach": "?",
+        "tool": "Iron tools",
+        "description": "Rough cut",
+        "unit": "m3",
+        "rate": "5.2",
+        "locality": "Greece",
+        "tech_note": "",
+        "conversions": {},
+        "author": "Fitzjohn",
+        "year": "2013",
+        "pages": "632"
+      }
+    ],
+    "Placement": [
+      {
+        "id": "Fitzjohn 2013 200",
+        "material_category": "Stone",
+        "material": "Tuff",
+        "approach": "?",
+        "tool": "?",
+        "description": "House construction",
+        "unit": "m3",
+        "rate": "40",
+        "locality": "Greece",
+        "tech_note": "",
+        "conversions": {},
+        "author": "Fitzjohn",
+        "year": "2013",
+        "pages": "632"
+      }
+    ]
+  }
+}

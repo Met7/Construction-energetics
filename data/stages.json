@@ -5,6 +5,11 @@
       "unit": "mass",
       "inputs": {}
     },
+    "Processing": { 
+      "stageName": "Processing",
+      "unit": "mass",
+      "inputs": {}
+    },
     "Transportation": { 
       "stageName": "Transportation",
       "inputs": [
