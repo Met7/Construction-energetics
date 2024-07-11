@@ -1,6 +1,7 @@
 
 const defaultSelectText = "Choose...";
 const emptySelectText = "N/A";
+const noFilterText = "Show all";
 
 // --------------------------------------
 // ------------------------------ GENERIC
@@ -175,7 +176,7 @@ function createOptions(selectElement, options, useDefaultEmpty = true, defaultTe
 }
 
 function getSelected(input) {
-  if (input.type != 'select-one') throw ('getSelected: Input not a select');
+  if (input.type != 'select-one') throw new Error('getSelected: Input not a select'); 
   return input.options[input.selectedIndex];
 }
 
@@ -303,6 +304,9 @@ function createLink(text, ref, cssClass = '') {
 
 
 export {
+  defaultSelectText,
+  emptySelectText,
+  noFilterText,
   createElement,
   makeCollapsible,
   collapseContent,

@@ -233,6 +233,15 @@
         }
       },
       "conversions": {}
+    },
+    "Show all": {
+      "data": {
+        "None": {
+          "conversions": {},
+          "base_energy": 0
+        }
+      },
+      "conversions": {}
     }
   }
 }

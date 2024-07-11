@@ -4,6 +4,9 @@ import * as materialsHelpers from "./helpers/materials-helpers.js";
 import * as studiesHelpers from "./helpers/studies-helpers.js";
 import * as technologiesHelpers from "./helpers/technologies-helpers.js"; 
 
+const worksForAllText = "Any";
+const usesNothingText = "None";
+
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "Material manual trigger" });
 
@@ -25,29 +28,51 @@ function getStageElement(element) {
   return htmlHelpers.getAncestorElement(element, "stage");
 }
 
+function createExtraParameterInput(stageElement, name) {
+  //console.log("Creating custom input, name: " + name);
+  let inputElement;
+  inputElement = htmlHelpers.createElement("input", 'custom-input');
+  inputElement.type = 'number';
+  inputElement.min = 0;
+  inputElement.value = 0;
+  inputElement.setAttribute("data-name", name);
+  
+  inputElement.addEventListener("change", () => {
+    //console.log("Custom input changed");
+    updateMh(stageElement);
+  });
+  
+  const columnCount = stageElement.getAttribute("data-column-count");
+  let row = htmlHelpers.createTableRow(name + ":", [inputElement], columnCount, [1, 4]);
+  row.classList.add("custom-input-row");
+  stageElement.insertBefore(row, stageElement.getElementsByClassName("work-rate-row")[0]);
+}
+
 // collect custom stage parameters
 function getExtraParameters(stageElement, valuesOnly = false) {
   let params = [];
   const inputElements = stageElement.getElementsByClassName("custom-input");
   for (let inputElement of inputElements) {
     let value;
-    if (inputElement.nodeName  == "INPUT")
+    if (inputElement.nodeName == "INPUT")
       value = inputElement.value;
-    else if (inputElement.nodeName  == "SELECT")
+    else if (inputElement.nodeName == "SELECT") // not used atm
       value = htmlHelpers.getSelectValue(inputElement);
     if (value) {
       if (valuesOnly)
         params.push(value)
       else
-        params.push({"formula": inputElement.getAttribute("data-formula"), "value": value});
+        params.push({"name": inputElement.getAttribute("data-name"), "value": value});
     }
   }
   return params;
 }
 
-// collect custom stage parameters
+// set custom stage parameter input values
 function setExtraParameters(stageElement, values) {
   const inputElements = stageElement.getElementsByClassName("custom-input");
+  if (inputElements.length != values.length)
+    console.log("setExtraParameters: number of values " + values.length + " != number of inputs " + inputElements.length);
   let i = 0;
   for (const inputElement of inputElements) {
     if (i == inputElements.length)
@@ -58,6 +83,25 @@ function setExtraParameters(stageElement, values) {
       htmlHelpers.setSelectedByText(inputElement, values[i]);
     i++;
   }
+}
+
+// withValues - include values of custom inputs. Requires stageElement.
+function getFormulaData(studySelect, withValues = false, stageElement = null) {
+  const formula = htmlHelpers.getSelectData(studySelect, "formula");
+  if (!formula)
+    return {};
+  
+  let data = {};
+  data.formula = formula;
+  const input1Name = htmlHelpers.getSelectData("input1_name");
+  if (input1Name)
+    data.inputNames[0] = input1Name
+  const param1 = htmlHelpers.getSelectData("param1");
+  if (param1)
+    data.params[0] = param1
+  if (withValues)
+    data.values = getExtraParameters(stageElement, true)
+  return data;
 }
 
 // button with a tooltip
@@ -117,6 +161,10 @@ const technologyData = await technologiesHelpers.loadTechnologies();
 
 function getApplicableTechnologies(stageName, materialCategory, material, approach = "", tool = "") {
   //console.log("Get applicable tech for: " + stageName + ", " + materialCategory + ", " + material + ", " + approach + ", " + tool);
+  
+  // if (tool == "" || tool == htmlHelpers.emptySelectText)
+    // return [];
+  
   //console.log(technologyData);
   if (!(stageName in technologyData)) {
     //console.log("getApplicableTechnologies: Stage not found - quitting");
@@ -127,23 +175,25 @@ function getApplicableTechnologies(stageName, materialCategory, material, approa
   
   //console.log("Tech for stage: ");
   //console.log(technologiesForStage);
+  // Filter by material category and material
   let technologies = technologiesForStage.filter(
-    (tech) => helpers.strEq(tech.material_category, materialCategory) 
-              && (tech.material == "*" || tech.material == "?" || helpers.strEq(tech.material, material))
+    (tech) => (materialCategory == htmlHelpers.noFilterText || (tech.material_category == worksForAllText || helpers.strEq(tech.material_category, materialCategory)))
+              && 
+              (materialCategory == htmlHelpers.noFilterText || (tech.material == worksForAllText || helpers.strEq(tech.material, material)))
   ) // TODO support lists
   //console.log("Tech before approach: ");
-  //console.log(technologies);
   
   // TODO support * and lists
   if (approach)
     technologies = technologies.filter((tech) => 
-      helpers.strEq(tech.approach, approach) || tech.approach == "*" || tech.approach == "*"
+      helpers.strEq(tech.approach, approach) || tech.approach == worksForAllText || tech.approach == "?"
     );
   if (tool)
     technologies = technologies.filter((tech) => 
-      helpers.strEq(tech.tool, tool) || tech.tool == "*" || tech.tool == "*"
+      helpers.strEq(tech.tool, tool) || tech.tool == worksForAllText || tech.tool == "?"
     );
   
+  //console.log(technologies);
   return technologies;
 }
 
@@ -177,7 +227,6 @@ function createStage(stageData) {
   let stageDiv = htmlHelpers.createElement('div', 'stage');
   stageDiv.setAttribute("data-stage", stageData.stageName);
   
-  
   // Stage header
   const stageHeader = htmlHelpers.createElement("div", ["stage-header", "collapsible"]);
   const stageNameLabel = htmlHelpers.createElement("label", "stage-name", "STAGE: " + stageData.stageName);
@@ -193,35 +242,10 @@ function createStage(stageData) {
   // create the table
   let stageTable = htmlHelpers.createElement('table', 'stage-table');
   stageTable.classList.add(`stage-${stageData.stageName}`);
+  stageTable.setAttribute("data-column-count", columnCount);
 	
   // creating this early to pass to the custom imput event
   const conversionFactorInput = htmlHelpers.createElement("input", "unit-conversion");
-  
-  // Stage-specific inputs
-  for (const input of Object.values(stageData.inputs)) {
-    let inputElement;
-    if (input.type == 'select') {
-      const inputElement = htmlHelpers.createSelect('custom-input');
-      htmlHelpers.createOptions(inputElement, input.options); 
-      inputElement.selectedIndex = stageData.selectedIndex;
-    }
-    else if (input.type == 'number') {
-      inputElement = htmlHelpers.createElement("input", 'custom-input');
-      inputElement.type = 'number';
-      inputElement.min = 0;
-      inputElement.value = input.defaultValue;
-      inputElement.setAttribute("data-formula", input.formula);
-    } else
-      throw('stage-generator::createStage: Unknown input type - ' + input.type);
-    
-    inputElement.addEventListener("change", () => {
-      //console.log("Custom input changed");
-      updateMh(stageTable, conversionFactorInput.value);
-    });
-    
-    let row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 4]);
-    stageTable.appendChild(row);
-  }
   
   // Approach select
   let approachSelect = htmlHelpers.createSelect('approach-select');
@@ -236,12 +260,19 @@ function createStage(stageData) {
   // Study select
   let infoButton = createTechTooltip();
   let studySelect = htmlHelpers.createSelect('study-select');
-  studySelect.addEventListener("change", () => {
+  
+  studySelect.addEventListener("change", () => { // TODO optimize - get data from the selected option
+    let extraInputNames = [];
+    const extraName = htmlHelpers.getSelectData(studySelect, "input1_name");
+    if (extraName)
+      extraInputNames[0] = extraName;
+    
     chooseStageStudy(
       stageTable,
       htmlHelpers.getSelectText(studySelect),
       htmlHelpers.getSelectData(studySelect, "unit"),
       htmlHelpers.getSelectValue(studySelect),
+      extraInputNames,
       extractConversions(studySelect)
     );
     updateTechTooltip(
@@ -252,7 +283,9 @@ function createStage(stageData) {
       "XXX" //htmlHelpers.getSelectData(studySelect, "note")
     );
   });
+  
   row = htmlHelpers.createTableRow("Study: ", [studySelect, infoButton], columnCount, [1, 3]);
+  row.classList.add("stage-study-row");
   stageTable.appendChild(row);
   
   // Approach and tool select events
@@ -266,7 +299,9 @@ function createStage(stageData) {
   
   // output fields
   const defaultText = "N/A"; // TODO move to a better spot
-  stageTable.appendChild(htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 4]));
+  row = htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 4]);
+  row.classList.add("work-rate-row");
+  stageTable.appendChild(row);
   conversionFactorInput.addEventListener("change", () => {
     //console.log("Conversion input changed");
     updateMh(stageTable, conversionFactorInput.value);
@@ -287,6 +322,37 @@ function createStage(stageData) {
 
 // --------------------------------------
 // ------------------------------- EVENTS
+
+// specific inputs for some formulas (default has none)
+function createFormulaInputs(stageTable, inputs) {
+  for (const input of inputs) {
+    let inputElement;
+    if (input.type == 'select') {
+      const inputElement = htmlHelpers.createSelect('custom-input');
+      htmlHelpers.createOptions(inputElement, input.options); 
+      inputElement.selectedIndex = stageData.selectedIndex;
+    }
+    else if (input.type == 'number') {
+      inputElement = htmlHelpers.createElement("input", 'custom-input');
+      inputElement.type = 'number';
+      inputElement.min = 0;
+      inputElement.value = input.defaultValue;
+      inputElement.setAttribute("data-formula", input.formula);
+    } else
+      throw('stage-generator::createStage: Unknown input type - ' + input.type);
+    
+    inputElement.setAttribute("data-name", input.name);
+    
+    inputElement.addEventListener("change", () => {
+      //console.log("Custom input changed");
+      updateMh(stageTable, conversionFactorInput.value);
+    });
+    
+    let row = htmlHelpers.createTableRow(input.label + ":", [inputElement], columnCount, [1, 4]);
+    row.classList.add("custom-input-row");
+    stageTable.insertBefore(row, stageTable.getElementsByClassName(insertBefore)[0]);
+  }
+}
 
 function setStageMaterial(stageElement, materialCategory, material) {
   const stageName = getStageName(stageElement);
@@ -359,6 +425,16 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
       "note": tech.note,
       "unit": tech.unit
     };
+    if (tech.formula) {
+      //console.log(tech);
+      optionsData["formula"] = tech.formula;
+      if (tech.input1_name)
+        optionsData["input1_name"] = tech.input1_name;
+      if (tech.param1)
+        optionsData["param1"] = tech.param1;
+      //console.log(optionsData);
+    }
+    
     //console.log("Checking conversions for select entry. Job unit> " + unit + ", tech unit:" + tech.unit);
     //if (tech.unit != unit && ("conversions" in tech)) {
     if ("conversions" in tech) {
@@ -372,8 +448,8 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
 
 
 // stageElement is some ancestor of the affected elements in the stage.
-function chooseStageStudy(stageElement, techName, techUnit, speed, conversions) {
-  //console.log("chooseStageStudy for " + techName + ", " + techUnit + ", " + speed + ".");
+function chooseStageStudy(stageElement, techName, techUnit, speed, extraInputNames, conversions) {
+  //console.log("chooseStageStudy for " + techName + ", " + techUnit + ", " + speed + ", " + formula + ".");
 
   clearStage(stageElement, stageElement.querySelector(".study-select"));
   
@@ -388,6 +464,12 @@ function chooseStageStudy(stageElement, techName, techUnit, speed, conversions) 
   
   studySpeedP.innerHTML = helpers.formatNumber(speed) + " h/" + helpers.formatUnit(techUnit); // TODO update unit by stage (extra input)
   
+  // special formulas. They are hardcoded here.
+  for(const extraInputName of extraInputNames)
+    createExtraParameterInput(stageElement, extraInputName);
+  
+  //console.log("Setting stage unit. material: " + material + ", jobUnit: " + jobUnit + ", jobAmount: " + jobAmount + ", techUnit: " + techUnit + ", speed: " + speed + ", conversion: ");
+  //console.log(conversions);
   setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit, conversions, speed);
 }
 
@@ -418,8 +500,10 @@ function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmou
     techUnit = htmlHelpers.getSelectData(studySelect, "unit");
   if (!techUnit) // no tech selected, so nothing else to do
     return;
+  techUnit = techUnit.split("*")[0]; // in case of units such as t*m - we only care about the first.
   if (!techConversions)
     techConversions = htmlHelpers.getSelectData(extractConversions(studySelect), "unit");
+  
   let conversionFactor = materialsHelpers.getConversionFactor(materialCategory, material, techUnit, jobUnit, techUnit, techConversions);
   if (conversionFactor == -1) {
     conversionFactor = 0;
@@ -440,8 +524,10 @@ function setStageAmount(stageElement, materialCategory, material, jobUnit, jobAm
 // Does the MH calculation and prints it.
 // Expects that conversion factor is already correct. Receives or fetches job params, reads any extra stage params.
 // stageElement is a parent
-function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, speed = -1) {
+function updateMh(stageElement, conversionFactor = -1, jobUnit = '', jobAmount = -1, speed = -1) {
   const convertedSpeedP = stageElement.querySelector(".total-speed");
+  if (conversionFactor == -1)
+    conversionFactor = stageElement.querySelector(".unit-conversion").value;
   if (!jobUnit)
     jobUnit = getJobUnit(stageElement);
   if (jobAmount == -1)
@@ -452,22 +538,40 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
   const convertedSpeed = speed * conversionFactor;
   convertedSpeedP.innerHTML = helpers.formatNumber(convertedSpeed, false) + " h/" + helpers.formatUnit(jobUnit);
   
-  // stage specific param, such as distance
-  for (const extraParam of getExtraParameters(stageElement)) {
-    if (!extraParam) {
-      //console.log("updateMh: empty extra param");
-      continue;
+  let extraModifier = 1; // more params, such as distance
+  // Special formulas, i.e. for speed in some studies
+  let formula = htmlHelpers.getSelectData(stageElement.querySelector(".study-select"), "formula");
+  if (formula) {
+    if (formula == "Multiply") {
+      //console.log("Evaluating Multiply");
+      const params = getExtraParameters(stageElement);
+       
+      if (params.length != 1) throw new Error("Wrong number of parameters for Multiply. Expected 1, got " + params.length);
+      if (params[0].name != "Distance") throw new Error("Wrong parameter for Multiply. Expected Distance, got " + params.name);
+      //console.log("Modifier params");
+      //console.log("params[name]: " + params[0].name + ", params[value]: " + params[0].value );
+      extraModifier = params[0].value;
     }
-    //console.log("updateMh: multiplying jobAmount(" + jobAmount + ") by an extra param " + extraParam.value + " by " + extraParam.formula);
-    if (extraParam.formula == "multiply")
-      jobAmount *= extraParam.value;
-    else if (extraParam.formula == "divide")
-      jobAmount /= extraParam.value;
+    else if (formula == "H-1") {
+      //console.log("Evaluating H-1");
+      const params = getExtraParameters(stageElement);
+      if (params.length != 1) new Error("Wrong number of parameters for H-1");
+      if (params.name != "Height") new Error("Wrong parameter for H-1");
+      
+      extraModifier = params[0].value > 1 ? params[0].value - 1 : 0; // the formula uses height-1
+    }
     else
-      throw("stage-generator::updateMh: missing formula for extra param");
+      new Error("Unknown formula");
+    // for (const extraParam of getExtraParameters(stageElement)) {
+      // if (!extraParam) {
+        // //console.log("updateMh: empty extra param");
+        // continue;
+      // }
+    // }
   }
   
-  const totalMh = helpers.formatEnergy(jobAmount * convertedSpeed);
+  const totalMh = helpers.formatEnergy(jobAmount * convertedSpeed * extraModifier);
+  //console.log("Amount: "+ jobAmount + ", convertedSpeed: " + convertedSpeed + ", extraModifier: " + extraModifier + ", Mh: " + totalMh);
   setStageMh(stageElement, totalMh);
 }
 
@@ -477,6 +581,12 @@ function updateMh(stageElement, conversionFactor, jobUnit = '', jobAmount = -1, 
 // after - only clear inputs after that one
 function clearStage(stageElement, after = null) {
   //console.log("clearing stage, in " + stageElement.classList[0] + " after " + (after ? after.classList[0] : "start"));
+  //remove custom elements from formulas
+  const rows = stageElement.getElementsByClassName("custom-input-row");
+  for (const row of rows)
+    row.remove();
+  
+  // reset inputs to default state
   const inputs = stageElement.querySelectorAll("input, select");
   for (const input of inputs) {
     if (after != null) {
@@ -515,11 +625,10 @@ function saveStage(stageElement) {
 
 function loadStage(ancestorElement, saveData, stageData) {
   //console.log("Fetching stage " + ".stage-" + saveData["stage"]);
-  console.log(saveData);
+  //console.log(saveData);
   // stageElement is the stage table
   const stageElement = ancestorElement.querySelector(".stage-" + saveData["stage"]);
   //clearStage(stageElement);
-  setExtraParameters(stageElement, saveData["custom-inputs"])
   
   // Only do the next if the previous is not empty
   if (!htmlHelpers.isEmptyOption(saveData["approach"])) {
@@ -536,6 +645,8 @@ function loadStage(ancestorElement, saveData, stageData) {
         select = stageElement.querySelector(".study-select");
         htmlHelpers.setSelectedByData(select, "id", saveData["study"]);
         select.dispatchEvent(new Event('change'));
+        
+        setExtraParameters(stageElement, saveData["custom-inputs"]);
         
         if (!htmlHelpers.isEmptyOption(saveData["conversion factor"])) {
           let input = stageElement.querySelector(".unit-conversion");

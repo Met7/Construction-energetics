@@ -184,7 +184,7 @@
       {
         "id": "Murakami 2015 1500",
         "material_category": "Stone",
-        "material": "*",
+        "material": "Any",
         "approach": "?",
         "tool": "Manual",
         "description": "Rocks or bricks or tuff blocks",
@@ -200,7 +200,7 @@
       {
         "id": "Murakami 2015 1600",
         "material_category": "Stone",
-        "material": "*",
+        "material": "Any",
         "approach": "?",
         "tool": "Manual",
         "description": "Rocks or bricks or tuff blocks",
@@ -216,7 +216,7 @@
       {
         "id": "Murakami 2015 1700",
         "material_category": "Stone",
-        "material": "*",
+        "material": "Any",
         "approach": "?",
         "tool": "Manual",
         "description": "Cut or rough stones",
@@ -232,7 +232,7 @@
       {
         "id": "Murakami 2015 1800",
         "material_category": "Stone",
-        "material": "*",
+        "material": "Any",
         "approach": "?",
         "tool": "Manual",
         "description": "Cut or rough stones",
@@ -248,7 +248,7 @@
       {
         "id": "Murakami 2015 1900",
         "material_category": "Stone",
-        "material": "*",
+        "material": "Any",
         "approach": "?",
         "tool": "Manual",
         "description": "Cut or rough stones",

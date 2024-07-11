@@ -141,7 +141,9 @@
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "284-5"
+        "pages": "284-5",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 200",
@@ -159,7 +161,9 @@
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "284-5"
+        "pages": "284-5",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 300",
@@ -177,7 +181,9 @@
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "284-5"
+        "pages": "284-5",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 400",
@@ -195,7 +201,9 @@
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "284-5"
+        "pages": "284-5",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 500",
@@ -213,7 +221,9 @@
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "284-5"
+        "pages": "284-5",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 1000",
@@ -221,18 +231,20 @@
         "material": "Limestone",
         "approach": "Carrying",
         "tool": "Tumpline",
-        "description": "",
+        "description": "250m/trip",
         "unit": "t*m",
-        "rate": "0.02",
+        "rate": "0.02105263158",
         "locality": "Uxmal, Mexico",
-        "tech_note": "1 km distance",
+        "tech_note": "",
         "conversions": {
           "units": 33.0,
           "m3": 0.67
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "287"
+        "pages": "287",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 1100",
@@ -240,18 +252,20 @@
         "material": "Limestone",
         "approach": "Carrying",
         "tool": "Tumpline",
-        "description": "",
+        "description": "500m/trip",
         "unit": "t*m",
         "rate": "0.02",
         "locality": "Uxmal, Mexico",
-        "tech_note": "1 km distance",
+        "tech_note": "",
         "conversions": {
           "units": 33.0,
           "m3": 0.67
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "287"
+        "pages": "287",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 1200",
@@ -259,18 +273,41 @@
         "material": "Limestone",
         "approach": "Carrying",
         "tool": "Tumpline",
-        "description": "",
+        "description": "750m/trip",
         "unit": "t*m",
-        "rate": "0.02",
+        "rate": "0.01289490651",
         "locality": "Uxmal, Mexico",
-        "tech_note": "1 km distance",
+        "tech_note": "",
         "conversions": {
           "units": 33.0,
           "m3": 0.67
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "287"
+        "pages": "287",
+        "formula": "Multiply",
+        "input1_name": "Distance"
+      },
+      {
+        "id": "Erasmus 1965 1400",
+        "material_category": "Stone",
+        "material": "Limestone",
+        "approach": "Carrying",
+        "tool": "Tumpline",
+        "description": "Average",
+        "unit": "t*m",
+        "rate": "0.01713796058",
+        "locality": "Uxmal, Mexico",
+        "tech_note": "Avg over 250/500/750m",
+        "conversions": {
+          "units": 33.0,
+          "m3": 0.67
+        },
+        "author": "Erasmus",
+        "year": "1965",
+        "pages": "287",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 1300",
@@ -278,18 +315,20 @@
         "material": "Limestone",
         "approach": "Carrying",
         "tool": "On the head",
-        "description": "",
+        "description": "1km/trip",
         "unit": "t*m",
         "rate": "0.02",
         "locality": "Uxmal, Mexico",
-        "tech_note": "1 km distance",
+        "tech_note": "",
         "conversions": {
           "units": 33.0,
           "m3": 0.67
         },
         "author": "Erasmus",
         "year": "1965",
-        "pages": "287"
+        "pages": "287",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 2300",
@@ -305,7 +344,9 @@
         "conversions": {},
         "author": "Erasmus",
         "year": "1965",
-        "pages": "291"
+        "pages": "291",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       },
       {
         "id": "Erasmus 1965 2400",
@@ -321,7 +362,9 @@
         "conversions": {},
         "author": "Erasmus",
         "year": "1965",
-        "pages": "291"
+        "pages": "291",
+        "formula": "Multiply",
+        "input1_name": "Distance"
       }
     ],
     "Refinement": [
@@ -394,7 +437,7 @@
       {
         "id": "Erasmus 1965 1700",
         "material_category": "Stone",
-        "material": "*",
+        "material": "Any",
         "approach": "Masonry construction",
         "tool": "Manual",
         "description": "W/ lime and sascab",

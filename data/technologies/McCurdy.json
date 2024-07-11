@@ -4,7 +4,7 @@
       {
         "id": "McCurdy 2016 100",
         "material_category": "Wood",
-        "material": "*",
+        "material": "Any",
         "approach": "?",
         "tool": "",
         "description": "For straight blocks; 3m x 1m x 0.2m",

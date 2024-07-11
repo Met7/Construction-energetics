@@ -20,7 +20,7 @@
       {
         "id": "Hammerstedt 2005 200",
         "material_category": "Wood",
-        "material": "*",
+        "material": "Any",
         "approach": "",
         "tool": "",
         "description": "20cm diameter",
