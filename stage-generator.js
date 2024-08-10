@@ -196,7 +196,7 @@ function getApplicableTechnologies(stageName, materialCategory, material, approa
 // ------------------------------- ENERGY
 
 // called by job to pass callback function
-let onEnergyChange;
+let onEnergyChange; // takes 1 param - any descendant element of the parent job works.
 function setEnergyChangeFunction(energyChangeFunction) {
   onEnergyChange = energyChangeFunction;
 }
@@ -208,12 +208,11 @@ function getStageMhElement(element) {
 // Stage MH total - value in the header
 function setStageMh(stageElement, mhAmount) {
   getStageMhElement(stageElement).innerHTML = helpers.formatEnergy(mhAmount);
-  onEnergyChange(stageElement);
+  onEnergyChange(stageElement); // in job-generator
 }
 
 // --------------------------------------
 // ------------------------- CREATE STAGE
-
 
 function createStage(stageData) {
   //console.log("Creating a stage - " + stageData.stageName);
@@ -225,9 +224,26 @@ function createStage(stageData) {
   // Stage header
   const stageHeader = htmlHelpers.createElement("div", ["stage-header", "collapsible"]);
   const stageNameLabel = htmlHelpers.createElement("label", "stage-name", "STAGE: " + stageData.stageName);
+  let delButton = htmlHelpers.createElement("button", ["icon-button", "icon-button-delete"], "");
+  delButton.title = "Remove";
+  delButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    removeStage(stageDiv);
+  });
+  let addButton = htmlHelpers.createElement("button", ["icon-button", "icon-button-plus"], "");
+  addButton.title = "Add stage";
+  addButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    addStage(stageDiv);
+  });
   const mhLabel = htmlHelpers.createElement("p", "stage-mh-label", helpers.formatEnergy(0));
+  
   stageHeader.appendChild(stageNameLabel);
-  stageHeader.appendChild(mhLabel);
+  const headerRightSide = htmlHelpers.createElement("div", "stage-header-right-side");
+  headerRightSide.appendChild(mhLabel);
+  headerRightSide.appendChild(addButton);
+  headerRightSide.appendChild(delButton);
+  stageHeader.appendChild(headerRightSide);
   stageDiv.appendChild(stageHeader);
   
   // Stage body
@@ -467,6 +483,16 @@ function chooseStageStudy(stageElement, techName, techUnit, speed, extraInputNam
   setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit, conversions, speed);
 }
 
+function removeStage(stageElement) {
+  const parentElement = stageElement.parentElement;
+  stageElement.remove();
+  onEnergyChange(parentElement);
+}
+
+function addStage(stageElement) {
+  const stageName = stageElement.getAttribute("data-stage");
+  cloneStageFunction(stageElement, stageName); // this is in job-generator
+}
 
 // --------------------------------------
 // ------------------------------ OUTPUTS
@@ -627,11 +653,11 @@ function saveStage(stageElement) {
 }
 
 
-function loadStage(ancestorElement, saveData, stageData) {
+function loadStage(stageElement, saveData/*, stageData*/) {
   //console.log("Fetching stage " + ".stage-" + saveData["stage"]);
   //console.log(saveData);
   // stageElement is the stage table
-  const stageElement = ancestorElement.querySelector(".stage-" + saveData["stage"]);
+  //const stageElement = ancestorElement.querySelector(".stage-" + saveData["stage"]);
   //clearStage(stageElement);
   
   // Only do the next if the previous is not empty
@@ -708,8 +734,14 @@ function getJobAmount(element) {
   return amountInput.value;
 }
 
+var cloneStageFunction; // Takes 2 params - the cloned stage element and stage type name
+// called by job
+function setCloneStageFunction(newCloneStageFunction) {
+  cloneStageFunction = newCloneStageFunction;
+}
 
 export {
+  setCloneStageFunction,
   setEnergyChangeFunction,
   createStage,
   setStageMaterial,

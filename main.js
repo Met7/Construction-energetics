@@ -67,7 +67,7 @@ function openProject(index) {
   // reverse sort, prepending will put it back in order
   projectData.jobs.sort((job1, job2) => job1.sortIndex < job2.sortIndex ? 1 : -1);
   for (const jobData of projectData.jobs) {
-    const jobElement = createJob(jobId++);
+    const jobElement = createJob(jobId++, true);
     jobsContainer.prepend(jobElement);
     loadJob(jobElement, jobData);
   }

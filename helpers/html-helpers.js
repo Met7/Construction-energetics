@@ -55,8 +55,7 @@ function makeCollapsible(element, initHeight = 2000, startOpen = true) {
       unCollapseContent(content);
     else
       collapseContent(content);
-  });
-  
+  }); 
 }
 
 // --------------------------------------

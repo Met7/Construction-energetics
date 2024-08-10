@@ -161,8 +161,16 @@ button.icon-button-delete {
   background: url(../image/delete-16.ico) no-repeat center;
 }
 
+button.icon-button-delete-white {
+  background: url(../image/delete-white-16.ico) no-repeat center;
+}
+
 button.icon-button-info {
   background: url(../image/info-16.ico) no-repeat center;
+}
+
+button.icon-button-plus {
+  background: url(../image/plus-8-16.ico) no-repeat center;
 }
 
 button.icon-button-small-arrow-up-white {
@@ -305,8 +313,18 @@ input.job-name-input {
   justify-content: space-between;
 }
 
+label.stage-name {
+  margin-top:2px;
+}
+
+.stage-header-right-side {
+  display: flex;
+  flex-direction: row;
+}
+
 .stage-mh-label {
-  /*text-align: right;*/
+  margin-top:2px;
+  margin-right:4px;
 }
 
 button.project-menu-button {

@@ -2,7 +2,7 @@ import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as helpers from "./helpers/helpers.js";
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import { loadFile } from "./data-handler.js";
-import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit, setStageAmount, saveStage, loadStage } from "./stage-generator.js";
+import { createStage, setCloneStageFunction, setEnergyChangeFunction, setStageMaterial, setStageUnit, setStageAmount, saveStage, loadStage } from "./stage-generator.js";
 
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "MaterialCategory manual trigger" });
@@ -11,6 +11,7 @@ const materialsData = await loadFile('materials');
 //console.log(materialsData);
 
 var jobCount = 1;
+const columnCount = 3;
 
 // --------------------------------------
 // ---------------------------- MATERIALS
@@ -103,8 +104,8 @@ function createAmountInput() {
 // --------------------------------------
 // ------------------------------- STAGES
 
-let jobData = await loadFile('stages');
-//console.log(jobData);
+let stageTemplates = await loadFile('stages');
+//console.log(stageTemplates);
 
 function getStageElements(ancestorElement) {
   return ancestorElement.getElementsByClassName("stage");
@@ -183,10 +184,12 @@ function loadJob(jobElement, jobSave) {
   input.value = jobSave["amount"];
   select.dispatchEvent(new Event('change'));
   
+  const jobTable = jobElement.querySelector(".job-table");
   // load stages
   for (let stageData of jobSave["stages"]) {
     //console.log(stageData);
-    loadStage(jobElement, stageData, jobData[stageData["stage"]]);
+    const stageElement = addStage(jobTable, stageTemplates[stageData["stage"]])
+	loadStage(stageElement, stageData/*, stageTemplates[stageData["stage"]]*/);
   }
   
   if (jobSave["collapsed"]) {
@@ -197,23 +200,38 @@ function loadJob(jobElement, jobSave) {
 }
 
 // --------------------------------------
-// --------------------------------- JOBS
+// ------------------------------- STAGES
 
-function createStages(jobTable, jobData, columnCount) {
-  let i = 0;
-  for (const stageData of Object.values(jobData)) {
-    i++;
+function addStage(jobTable, stageTemplate) {
+  const stage = createStage(stageTemplate);
+  const td = htmlHelpers.createTd(stage);
+  td.colSpan = columnCount;
+  jobTable.appendChild(htmlHelpers.createTr(td));
+	return stage;
+}
+
+function cloneStage(originalStageElement, stageName) {
+  const stage = createStage(stageTemplates[stageName]);
+  const td = htmlHelpers.createTd(stage);
+  td.colSpan = columnCount;
+  const stageTr = originalStageElement.parentElement.parentElement;
+  stageTr.after(htmlHelpers.createTr(td));
+}
+
+function createDefaultStages(jobTable, stageTemplates) {
+  //let i = 0;
+  for (const stageTemplate of Object.values(stageTemplates)) {
+    //i++;
     //if (i == 1) continue; // skip first
     //if (i == 3) break; // skip 2+
-    let stage = createStage(stageData);
-    //setStageMaterial(stage, "stone", "limestone"); // TODO Read from selected materia1
-    let td = htmlHelpers.createTd(stage);
-    td.colSpan = columnCount;
-    jobTable.appendChild(htmlHelpers.createTr(td));
+    addStage(jobTable, stageTemplate)
   }
 }
 
-function createJob(jobId) {
+// --------------------------------------
+// --------------------------------- JOBS
+
+function createJob(jobId, loading = false) {
   // Element structure
   let jobDiv = htmlHelpers.createElement("div", "job");
   jobDiv.classList.add("panel");
@@ -251,13 +269,11 @@ function createJob(jobId) {
   
   jobHeader.appendChild(headerRightSide);
   
-  
   jobDiv.appendChild(jobHeader);
   
   // Job body
   const jobBody = htmlHelpers.createElement("div", ["stage-list", "collapsible-content"]);
   const jobTable = htmlHelpers.createElement("table", ["job-table"]);
-  const columnCount = 3;
 
   // Material(Category) selects
   const materialCategorySelect = createMaterialCategorySelect();
@@ -280,7 +296,8 @@ function createJob(jobId) {
   setJobQuantityInputEvent(amountInput, jobDiv, unitSelect, materialSelect, materialCategorySelect, amountInput);
   
   // Stages
-  createStages(jobTable, jobData, columnCount);
+  if (!loading)
+	createDefaultStages(jobTable, stageTemplates);
   
   jobBody.appendChild(jobTable);
   jobDiv.appendChild(jobBody);
@@ -294,6 +311,7 @@ function createJob(jobId) {
 // -------------------------------- SETUP
 
 function setup() {
+    setCloneStageFunction(cloneStage);
     setEnergyChangeFunction(onStageEnergyChanged);
 }
 setup();
