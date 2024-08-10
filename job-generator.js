@@ -16,6 +16,9 @@ var jobCount = 1;
 // ---------------------------- MATERIALS
 
 function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
+ if (materialCategory == htmlHelpers.defaultSelectText)
+   return;
+
   //console.log("filling material select for " + materialCategory);
   htmlHelpers.createOptions(materialSelect, Object.keys(materialsData[materialCategory]["data"]));
   updateStagesMaterial(jobElement, materialCategory, "");
@@ -78,7 +81,7 @@ function setJobQuantityInputEvent(eventInput, jobElement, unitSelect, materialSe
     const stageElements = getStageElements(jobElement);
     //console.log("stageElements:");
     //console.log(stageElements);
-    let isUnitInput= eventInput.classList.contains("unit-select"); // unit or amount input
+    let isUnitInput = eventInput.classList.contains("unit-select"); // unit or amount input
     for (let stageElement of stageElements) {
       if (isUnitInput)
         setStageUnit(stageElement, materialCategory, material, unit, jobAmount);

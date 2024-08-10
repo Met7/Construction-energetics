@@ -1,38 +1,36 @@
 {
-  "technologies": {
-    "Extraction": [
-      {
-        "id": "ECAFE 1957 100",
-        "material_category": "Earth",
-        "material": "?",
-        "approach": "Digging",
-        "tool": "",
-        "description": "",
-        "unit": "m3",
-        "rate": "2.34741784",
-        "locality": "India",
-        "tech_note": "",
-        "conversions": {},
-        "author": "ECAFE",
-        "year": "1957",
-        "pages": ""
-      },
-      {
-        "id": "ECAFE 1957 200",
-        "material_category": "Earth",
-        "material": "?",
-        "approach": "Digging",
-        "tool": "",
-        "description": "",
-        "unit": "m3",
-        "rate": "1.176470588",
-        "locality": "India",
-        "tech_note": "",
-        "conversions": {},
-        "author": "ECAFE",
-        "year": "1957",
-        "pages": ""
-      }
-    ]
-  }
+    "technologies": {
+        "Extraction": [
+            {
+                "id": "ECAFE 1957 100",
+                "material_category": "Earth",
+                "material": "Unspecified",
+                "approach": "Digging",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "m3",
+                "rate": "2.34741784",
+                "locality": "India",
+                "tech_note": "",
+                "author": "ECAFE",
+                "year": "1957",
+                "pages": ""
+            },
+            {
+                "id": "ECAFE 1957 200",
+                "material_category": "Earth",
+                "material": "Unspecified",
+                "approach": "Digging",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "m3",
+                "rate": "1.176470588",
+                "locality": "India",
+                "tech_note": "",
+                "author": "ECAFE",
+                "year": "1957",
+                "pages": ""
+            }
+        ]
+    }
 }

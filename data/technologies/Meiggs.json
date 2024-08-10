@@ -1,22 +1,21 @@
 {
-  "technologies": {
-    "Refinement": [
-      {
-        "id": "Meiggs 1982 100",
-        "material_category": "Wood",
-        "material": "Squaring",
-        "approach": "Sawing",
-        "tool": "Iron saw",
-        "description": "",
-        "unit": "m2",
-        "rate": "3.5",
-        "locality": "Greece",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Meiggs",
-        "year": "1982",
-        "pages": "368-9"
-      }
-    ]
-  }
+    "technologies": {
+        "Refinement": [
+            {
+                "id": "Meiggs 1982 100",
+                "material_category": "Wood",
+                "material": "Squaring",
+                "approach": "Sawing",
+                "tool": "Iron saw",
+                "description": "Squaring logs",
+                "unit": "m2",
+                "rate": "3.5",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Meiggs",
+                "year": "1982",
+                "pages": "368-9"
+            }
+        ]
+    }
 }

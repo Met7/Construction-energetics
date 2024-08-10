@@ -1,22 +1,21 @@
 {
-  "technologies": {
-    "Placement": [
-      {
-        "id": "Devolver 2005 100",
-        "material_category": "Intermediary",
-        "material": "Mudbrick",
-        "approach": "?",
-        "tool": "?",
-        "description": "House construction",
-        "unit": "m3",
-        "rate": "4",
-        "locality": "Greece",
-        "tech_note": "House construction",
-        "conversions": {},
-        "author": "Devolver",
-        "year": "2005",
-        "pages": "169"
-      }
-    ]
-  }
+    "technologies": {
+        "Placement": [
+            {
+                "id": "Devolver 2005 100",
+                "material_category": "Intermediary",
+                "material": "Mudbrick",
+                "approach": "Unspecified",
+                "tool": "Unspecified",
+                "description": "House construction",
+                "unit": "m3",
+                "rate": "4",
+                "locality": "Greece",
+                "tech_note": "House construction",
+                "author": "Devolver",
+                "year": "2005",
+                "pages": "169"
+            }
+        ]
+    }
 }

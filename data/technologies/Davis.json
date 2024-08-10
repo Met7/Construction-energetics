@@ -1,22 +1,21 @@
 {
-  "technologies": {
-    "Extraction": [
-      {
-        "id": "Davis  100",
-        "material_category": "Earth",
-        "material": "Silt loam",
-        "approach": "Digging",
-        "tool": "?",
-        "description": "",
-        "unit": "m3",
-        "rate": "2.941176471",
-        "locality": "Ohio Valley",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Davis",
-        "year": "",
-        "pages": ""
-      }
-    ]
-  }
+    "technologies": {
+        "Extraction": [
+            {
+                "id": "Davis  100",
+                "material_category": "Earth",
+                "material": "Silt loam",
+                "approach": "Digging",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "m3",
+                "rate": "2.941176471",
+                "locality": "Ohio Valley",
+                "tech_note": "",
+                "author": "Davis",
+                "year": "",
+                "pages": ""
+            }
+        ]
+    }
 }

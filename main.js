@@ -44,7 +44,7 @@ function saveProject(index = -1, name = "") {
     let jobData = saveJob(jobElement);
     jobData["sortIndex"] = sortIndex++;
     projectSave["jobs"].push(jobData);
-    console.log(jobData);
+    //console.log(jobData);
   }
   
   if (index == -1) { // new save
@@ -64,7 +64,8 @@ function openProject(index) {
   const jobsContainer = document.querySelector("#jobs-container");
   clearAllJobs(jobsContainer);
   jobId = 1;
-  projectData.jobs.sort((job1, job2) => job1.sortIndex < job2.sortIndex);
+  // reverse sort, prepending will put it back in order
+  projectData.jobs.sort((job1, job2) => job1.sortIndex < job2.sortIndex ? 1 : -1);
   for (const jobData of projectData.jobs) {
     const jobElement = createJob(jobId++);
     jobsContainer.prepend(jobElement);

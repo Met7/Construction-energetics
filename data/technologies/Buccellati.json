@@ -1,22 +1,21 @@
 {
-  "technologies": {
-    "Extraction": [
-      {
-        "id": "Buccellati 2016 100",
-        "material_category": "Intermediary",
-        "material": "Mudbrick",
-        "approach": "Manufacture",
-        "tool": "",
-        "description": "Complete process",
-        "unit": "unit",
-        "rate": "2.5",
-        "locality": "Greece",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Buccellati",
-        "year": "2016",
-        "pages": ""
-      }
-    ]
-  }
+    "technologies": {
+        "Extraction": [
+            {
+                "id": "Buccellati 2016 100",
+                "material_category": "Intermediary",
+                "material": "Mudbrick",
+                "approach": "Manufacture",
+                "tool": "Unspecified",
+                "description": "Complete process",
+                "unit": "unit",
+                "rate": "2.5",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Buccellati",
+                "year": "2016",
+                "pages": ""
+            }
+        ]
+    }
 }

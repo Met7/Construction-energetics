@@ -1,22 +1,61 @@
 {
-  "technologies": {
-    "Extraction": [
-      {
-        "id": "De Haan 2009 100",
-        "material_category": "Stone",
-        "material": "Granite",
-        "approach": "Channeling",
-        "tool": "Stone hammer",
-        "description": "",
-        "unit": "m3",
-        "rate": "3846.154",
-        "locality": "Various",
-        "tech_note": "",
-        "conversions": {},
-        "author": "De Haan",
-        "year": "2009",
-        "pages": "3"
-      }
-    ]
-  }
+    "technologies": {
+        "Extraction": [
+            {
+                "id": "De Haan 2009 100",
+                "material_category": "Stone",
+                "material": "Granite",
+                "approach": "Channeling",
+                "tool": "Stone hammer",
+                "description": "",
+                "unit": "m3",
+                "rate": "3846.154",
+                "locality": "Various",
+                "tech_note": "",
+                "author": "De Haan",
+                "year": "2009",
+                "pages": "3"
+            }
+        ],
+        "Transportation": [
+            {
+                "id": "De Haan 2009 200",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Un/loading",
+                "tool": "Manual",
+                "description": "2.5 ton block; both directions",
+                "unit": "unit",
+                "rate": "5.333",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "De Haan",
+                "year": "2009",
+                "pages": "7",
+                "conversions": {
+                    "t": 0.4,
+                    "m3": 0.93
+                }
+            },
+            {
+                "id": "De Haan 2009 300",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Un/loading",
+                "tool": "Manual",
+                "description": "smaller blocks, per 1t; both directions",
+                "unit": "unit",
+                "rate": "2.667",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "De Haan",
+                "year": "2009",
+                "pages": "7",
+                "conversions": {
+                    "t": 1.0,
+                    "m3": 2.7
+                }
+            }
+        ]
+    }
 }

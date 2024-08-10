@@ -3,9 +3,12 @@ import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import * as studiesHelpers from "./helpers/studies-helpers.js";
 import * as technologiesHelpers from "./helpers/technologies-helpers.js"; 
-
+                   
+const defaultTechTooltip = "No study selected";                   
 const worksForAllText = "Any";
 const usesNothingText = "None";
+const manualTechText = "Set Manually";
+const unspecifiedText = "Unspecified";
 
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "Material manual trigger" });
@@ -85,22 +88,11 @@ function setExtraParameters(stageElement, values) {
   }
 }
 
-// withValues - include values of custom inputs. Requires stageElement.
-function getFormulaData(studySelect, withValues = false, stageElement = null) {
-  const formula = htmlHelpers.getSelectData(studySelect, "formula");
-  if (!formula)
-    return {};
-  
-  let data = {};
-  data.formula = formula;
-  const input1Name = htmlHelpers.getSelectData("input1_name");
-  if (input1Name)
-    data.inputNames[0] = input1Name
-  const param1 = htmlHelpers.getSelectData("param1");
+function getAdditionalFormulaParameters(studySelect) {
+  let data = [];
+  const param1 = htmlHelpers.getSelectData(studySelect, "param1");
   if (param1)
-    data.params[0] = param1
-  if (withValues)
-    data.values = getExtraParameters(stageElement, true)
+    data[0] = param1;
   return data;
 }
 
@@ -116,7 +108,6 @@ function createTooltip(cssClass, defaultText) {
   return button;
 }
 
-const defaultTechTooltip = "No study selected";
 function createTechTooltip() {
   const tooltip = createTooltip("study-info-button", defaultTechTooltip);
   tooltip.addEventListener("click", () => {
@@ -161,17 +152,19 @@ const technologyData = await technologiesHelpers.loadTechnologies();
 
 function getApplicableTechnologies(stageName, materialCategory, material, approach = "", tool = "") {
   //console.log("Get applicable tech for: " + stageName + ", " + materialCategory + ", " + material + ", " + approach + ", " + tool);
+  //console.log(" ------- TODO find out why the manual value is there 3x");
   
-  // if (tool == "" || tool == htmlHelpers.emptySelectText)
-    // return [];
-  
-  //console.log(technologyData);
-  if (!(stageName in technologyData)) {
-    //console.log("getApplicableTechnologies: Stage not found - quitting");
+  if (material == "")
+    return [];
+
+  if (!(stageName in technologyData) && stageName != worksForAllText) {
+    console.log("getApplicableTechnologies: Stage not found - quitting");
     return [];
   }
-  
-  const technologiesForStage = technologyData[stageName];
+
+  let technologiesForStage = [...technologyData[stageName]];
+  if (worksForAllText in technologyData && stageName != worksForAllText) // techs that work for all stages
+    technologiesForStage.push(...technologyData[worksForAllText]);
   
   //console.log("Tech for stage: ");
   //console.log(technologiesForStage);
@@ -181,16 +174,18 @@ function getApplicableTechnologies(stageName, materialCategory, material, approa
               && 
               (materialCategory == htmlHelpers.noFilterText || (tech.material == worksForAllText || helpers.strEq(tech.material, material)))
   ) // TODO support lists
-  //console.log("Tech before approach: ");
   
-  // TODO support * and lists
+  //console.log("Tech before approach: ");
+  //console.log(technologies);
+  
+  // TODO support lists
   if (approach)
     technologies = technologies.filter((tech) => 
-      helpers.strEq(tech.approach, approach) || tech.approach == worksForAllText || tech.approach == "?"
+      helpers.strEq(tech.approach, approach) || tech.approach == worksForAllText || tech.approach == unspecifiedText
     );
   if (tool)
     technologies = technologies.filter((tech) => 
-      helpers.strEq(tech.tool, tool) || tech.tool == worksForAllText || tech.tool == "?"
+      helpers.strEq(tech.tool, tool) || tech.tool == worksForAllText || tech.tool == unspecifiedText
     );
   
   //console.log(technologies);
@@ -298,8 +293,7 @@ function createStage(stageData) {
   });
   
   // output fields
-  const defaultText = "N/A"; // TODO move to a better spot
-  row = htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", defaultText)], columnCount, [1, 4]);
+  row = htmlHelpers.createTableRow("Study work rate: ", [htmlHelpers.createElement("p", "study-speed", htmlHelpers.emptySelectText)], columnCount, [1, 4]);
   row.classList.add("work-rate-row");
   stageTable.appendChild(row);
   conversionFactorInput.addEventListener("change", () => {
@@ -309,7 +303,7 @@ function createStage(stageData) {
   stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [
     conversionFactorInput, 
     htmlHelpers.createElement("label", "", "Converted rate:"), 
-    htmlHelpers.createElement("p", "total-speed", defaultText)
+    htmlHelpers.createElement("p", "total-speed", htmlHelpers.emptySelectText)
   ], columnCount));
     
   stageBody.appendChild(stageTable);
@@ -525,6 +519,8 @@ function setStageAmount(stageElement, materialCategory, material, jobUnit, jobAm
 // Expects that conversion factor is already correct. Receives or fetches job params, reads any extra stage params.
 // stageElement is a parent
 function updateMh(stageElement, conversionFactor = -1, jobUnit = '', jobAmount = -1, speed = -1) {
+  const studySelect = stageElement.querySelector(".study-select");
+  
   const convertedSpeedP = stageElement.querySelector(".total-speed");
   if (conversionFactor == -1)
     conversionFactor = stageElement.querySelector(".unit-conversion").value;
@@ -533,32 +529,40 @@ function updateMh(stageElement, conversionFactor = -1, jobUnit = '', jobAmount =
   if (jobAmount == -1)
     jobAmount = getJobAmount(stageElement);
   if (speed == -1)
-    speed = htmlHelpers.getSelectValue(stageElement.querySelector(".study-select"));
+    speed = htmlHelpers.getSelectValue(studySelect);
   
   const convertedSpeed = speed * conversionFactor;
   convertedSpeedP.innerHTML = helpers.formatNumber(convertedSpeed, false) + " h/" + helpers.formatUnit(jobUnit);
   
-  let extraModifier = 1; // more params, such as distance
+  let extraModifier = 1; // modifier of the base value, such as distance
+  let extraValue = 0; // additional value independent of the base
+  
   // Special formulas, i.e. for speed in some studies
-  let formula = htmlHelpers.getSelectData(stageElement.querySelector(".study-select"), "formula");
+  let formula = htmlHelpers.getSelectData(studySelect, "formula");
   if (formula) {
+    const params = getExtraParameters(stageElement);
     if (formula == "Multiply") {
       //console.log("Evaluating Multiply");
-      const params = getExtraParameters(stageElement);
-       
       if (params.length != 1) throw new Error("Wrong number of parameters for Multiply. Expected 1, got " + params.length);
-      if (params[0].name != "Distance") throw new Error("Wrong parameter for Multiply. Expected Distance, got " + params.name);
       //console.log("Modifier params");
       //console.log("params[name]: " + params[0].name + ", params[value]: " + params[0].value );
       extraModifier = params[0].value;
     }
     else if (formula == "H-1") {
-      //console.log("Evaluating H-1");
-      const params = getExtraParameters(stageElement);
+      console.log("Evaluating H-1");
       if (params.length != 1) new Error("Wrong number of parameters for H-1");
-      if (params.name != "Height") new Error("Wrong parameter for H-1");
+      if (params[0].name != "Height") new Error("Wrong parameter for H-1");
       
       extraModifier = params[0].value > 1 ? params[0].value - 1 : 0; // the formula uses height-1
+    }
+    else if (formula == "Trips and weight") {
+      console.log("Evaluating Trips and weight");
+	  //console.log(params);
+      if (params.length != 1) new Error("Wrong number of parameters for Trips and weight");
+      if (params.name != "# of trips") new Error("Wrong parameter for Trips and weight");
+	  const extraParams = getAdditionalFormulaParameters(studySelect);
+      console.log("extraParam: "+ extraParams[0]);
+      extraValue = params[0].value * extraParams[0];
     }
     else
       new Error("Unknown formula");
@@ -570,8 +574,8 @@ function updateMh(stageElement, conversionFactor = -1, jobUnit = '', jobAmount =
     // }
   }
   
-  const totalMh = helpers.formatEnergy(jobAmount * convertedSpeed * extraModifier);
-  //console.log("Amount: "+ jobAmount + ", convertedSpeed: " + convertedSpeed + ", extraModifier: " + extraModifier + ", Mh: " + totalMh);
+  const totalMh = helpers.formatEnergy(jobAmount * convertedSpeed * extraModifier + extraValue);
+  console.log("Amount: "+ jobAmount + ", convertedSpeed: " + convertedSpeed + ", extraModifier: " + extraModifier + ", extraValue: " + extraValue + ", Mh: " + totalMh);
   setStageMh(stageElement, totalMh);
 }
 

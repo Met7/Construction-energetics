@@ -1,22 +1,21 @@
 {
-  "technologies": {
-    "Extraction": [
-      {
-        "id": "Lehner 1997 100",
-        "material_category": "Stone",
-        "material": "Limestone",
-        "approach": "Channeling",
-        "tool": "Iron pick",
-        "description": "1 block - 0.37m^3",
-        "unit": "m3",
-        "rate": "11.236",
-        "locality": "Egypt",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Lehner",
-        "year": "1997",
-        "pages": "206\u20137"
-      }
-    ]
-  }
+    "technologies": {
+        "Extraction": [
+            {
+                "id": "Lehner 1997 100",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Channeling",
+                "tool": "Iron pick",
+                "description": "1 block - 0.37m^3",
+                "unit": "m3",
+                "rate": "11.236",
+                "locality": "Egypt",
+                "tech_note": "",
+                "author": "Lehner",
+                "year": "1997",
+                "pages": "206\u20137"
+            }
+        ]
+    }
 }

@@ -1,88 +1,83 @@
 {
-  "technologies": {
-    "Refinement": [
-      {
-        "id": "Smailes 2011 400",
-        "material_category": "Intermediary",
-        "material": "Roof panel",
-        "approach": "Manufacture",
-        "tool": "",
-        "description": "",
-        "unit": "unit",
-        "rate": "238.4",
-        "locality": "Andean region",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Smailes",
-        "year": "2011",
-        "pages": ""
-      }
-    ],
-    "Placement": [
-      {
-        "id": "Smailes 2011 500",
-        "material_category": "Earth",
-        "material": "Adobe",
-        "approach": "Construction",
-        "tool": "Manual",
-        "description": "Adobe walls, low est.",
-        "unit": "m3",
-        "rate": "8.7",
-        "locality": "Andean region",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Smailes",
-        "year": "2011",
-        "pages": ""
-      },
-      {
-        "id": "Smailes 2011 500",
-        "material_category": "Earth",
-        "material": "Adobe",
-        "approach": "Construction",
-        "tool": "Manual",
-        "description": "Adobe walls, high est.",
-        "unit": "m3",
-        "rate": "11",
-        "locality": "Andean region",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Smailes",
-        "year": "2011",
-        "pages": ""
-      },
-      {
-        "id": "Smailes 2011 500",
-        "material_category": "Earth",
-        "material": "Adobe",
-        "approach": "Construction",
-        "tool": "Manual",
-        "description": "Adobe walls, average",
-        "unit": "m3",
-        "rate": "9.9",
-        "locality": "Andean region",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Smailes",
-        "year": "2011",
-        "pages": ""
-      },
-      {
-        "id": "Smailes 2011 600",
-        "material_category": "Intermediary",
-        "material": "Roof panel",
-        "approach": "Construction",
-        "tool": "",
-        "description": "Erect roof panels",
-        "unit": "unit",
-        "rate": "4",
-        "locality": "Andean region",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Smailes",
-        "year": "2011",
-        "pages": ""
-      }
-    ]
-  }
+    "technologies": {
+        "Refinement": [
+            {
+                "id": "Smailes 2011 400",
+                "material_category": "Intermediary",
+                "material": "Roof panel",
+                "approach": "Manufacture",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "unit",
+                "rate": "238.4",
+                "locality": "Andean region",
+                "tech_note": "",
+                "author": "Smailes",
+                "year": "2011",
+                "pages": ""
+            }
+        ],
+        "Placement": [
+            {
+                "id": "Smailes 2011 500",
+                "material_category": "Earth",
+                "material": "Adobe",
+                "approach": "Construction",
+                "tool": "Manual",
+                "description": "Adobe walls, low est.",
+                "unit": "m3",
+                "rate": "8.7",
+                "locality": "Andean region",
+                "tech_note": "",
+                "author": "Smailes",
+                "year": "2011",
+                "pages": ""
+            },
+            {
+                "id": "Smailes 2011 500",
+                "material_category": "Earth",
+                "material": "Adobe",
+                "approach": "Construction",
+                "tool": "Manual",
+                "description": "Adobe walls, high est.",
+                "unit": "m3",
+                "rate": "11",
+                "locality": "Andean region",
+                "tech_note": "",
+                "author": "Smailes",
+                "year": "2011",
+                "pages": ""
+            },
+            {
+                "id": "Smailes 2011 500",
+                "material_category": "Earth",
+                "material": "Adobe",
+                "approach": "Construction",
+                "tool": "Manual",
+                "description": "Adobe walls, average",
+                "unit": "m3",
+                "rate": "9.9",
+                "locality": "Andean region",
+                "tech_note": "",
+                "author": "Smailes",
+                "year": "2011",
+                "pages": ""
+            },
+            {
+                "id": "Smailes 2011 600",
+                "material_category": "Intermediary",
+                "material": "Roof panel",
+                "approach": "Construction",
+                "tool": "Unspecified",
+                "description": "Erect roof panels",
+                "unit": "unit",
+                "rate": "4",
+                "locality": "Andean region",
+                "tech_note": "",
+                "author": "Smailes",
+                "year": "2011",
+                "pages": ""
+            }
+        ]
+    }
 }

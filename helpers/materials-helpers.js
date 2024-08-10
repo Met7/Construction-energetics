@@ -2,7 +2,7 @@ import { loadFile } from "../data-handler.js";
 
 const materialsData = await loadFile('materials');
 
-const supportedUnits = ["ton", "m3", "m2", "units"];
+const supportedUnits = ["t", "m3", "m2", "unit"];
 const defaultUnit = "m3";
 
 function reverseConversionRatio(ratio) {
@@ -15,6 +15,7 @@ function getSupportedUnits() {
   return supportedUnits;
 }
 
+/*
 function getAllConversions(sourceUnit, conversions) {
   const newConversions = [];
   for (const conversionUnit of Object.keys(conversions)) {
@@ -30,7 +31,7 @@ function getAllConversions(sourceUnit, conversions) {
       "ratio": reverseConversionRatio(conversions[conversionUnit])
     });
   }
-}
+}*/
 
 
 function getConversionFactorFromConversions(sourceUnit, targetUnit, converionsSourceUnit, conversions) {
@@ -43,6 +44,8 @@ function getConversionFactorFromConversions(sourceUnit, targetUnit, converionsSo
 
 
 function getConversionFactor(materialCategory, material, sourceUnit, targetUnit, customSourceUnit, customConversions) {
+  //console.log("getConversionFactor: sourceUnit: " + sourceUnit + "; targetUnit: " + targetUnit + "; customSourceUnit: " + customSourceUnit + "; customConverions: >");
+  //console.log(customConversions);
   let conversionFactor;
 
   if (targetUnit == sourceUnit) { // nothing to do

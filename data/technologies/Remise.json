@@ -1,54 +1,51 @@
 {
-  "technologies": {
-    "Refinement": [
-      {
-        "id": "Remise 2019 100",
-        "material_category": "Earth",
-        "material": "Adobe",
-        "approach": "",
-        "tool": "",
-        "description": "",
-        "unit": "m3",
-        "rate": "6.153846154",
-        "locality": "Germany",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Remise",
-        "year": "2019",
-        "pages": ""
-      },
-      {
-        "id": "Remise 2019 100",
-        "material_category": "Earth",
-        "material": "Adobe",
-        "approach": "",
-        "tool": "",
-        "description": "",
-        "unit": "m3",
-        "rate": "13.33333333",
-        "locality": "Germany",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Remise",
-        "year": "2019",
-        "pages": ""
-      },
-      {
-        "id": "Remise 2019 100",
-        "material_category": "Earth",
-        "material": "Adobe",
-        "approach": "",
-        "tool": "",
-        "description": "",
-        "unit": "m3",
-        "rate": "8.421052632",
-        "locality": "Germany",
-        "tech_note": "",
-        "conversions": {},
-        "author": "Remise",
-        "year": "2019",
-        "pages": ""
-      }
-    ]
-  }
+    "technologies": {
+        "Refinement": [
+            {
+                "id": "Remise 2019 100",
+                "material_category": "Earth",
+                "material": "Adobe",
+                "approach": "Unspecified",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "m3",
+                "rate": "6.153846154",
+                "locality": "Germany",
+                "tech_note": "",
+                "author": "Remise",
+                "year": "2019",
+                "pages": ""
+            },
+            {
+                "id": "Remise 2019 100",
+                "material_category": "Earth",
+                "material": "Adobe",
+                "approach": "Unspecified",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "m3",
+                "rate": "13.33333333",
+                "locality": "Germany",
+                "tech_note": "",
+                "author": "Remise",
+                "year": "2019",
+                "pages": ""
+            },
+            {
+                "id": "Remise 2019 100",
+                "material_category": "Earth",
+                "material": "Adobe",
+                "approach": "Unspecified",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "m3",
+                "rate": "8.421052632",
+                "locality": "Germany",
+                "tech_note": "",
+                "author": "Remise",
+                "year": "2019",
+                "pages": ""
+            }
+        ]
+    }
 }
