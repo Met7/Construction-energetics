@@ -156,7 +156,7 @@ function saveJob(jobElement) {
   for (let stageElement of stageElements) {
     jobSave["stages"].push(saveStage(stageElement));
   }
-  jobSave["collapsed"] = jobElement.querySelector(".collapsible-content").classList.contains('open') ? 0 : 1
+  jobSave["collapsed"] = jobElement.querySelector(".collapsible-content").classList.contains('open') ? 0 : 1;
   
   //console.log("Saved job to local storage.");
   return jobSave;
@@ -198,9 +198,6 @@ function loadJob(jobElement, jobSave) {
   // load the stage data
   let stageElement = firstStageElement;
   for (let stageData of jobSave["stages"]) {
-    console.log("loading stage");
-    console.log(stageData);
-    console.log(stageElement.getAttribute("data-stage"));
     loadStage(stageElement, stageData/*, stageTemplates[stageData["stage"]]*/); // in stage-generator
     const tr = stageElement.parentElement.parentElement;
     const nextTr = tr.nextSibling;
@@ -208,11 +205,12 @@ function loadJob(jobElement, jobSave) {
       stageElement = nextTr.childNodes[0].childNodes[0];
   }
   
-  if (!jobSave["collapsed"]) {
-    //console.log("closing");
-    jobElement.querySelector(".collapsible-content").classList.add("open");
-  }
-  //console.log("Loaded job from local storage.");
+  
+  const content = jobElement.querySelector(".collapsible-content");
+  if (jobSave["collapsed"])
+    content.classList.remove("open");
+  else
+    content.classList.add("open");
 }
 
 // --------------------------------------
@@ -232,6 +230,11 @@ function cloneStage(originalStageElement, stageName) {
   td.colSpan = columnCount;
   const stageTr = originalStageElement.parentElement.parentElement;
   stageTr.after(htmlHelpers.createTr(td));
+  
+  const jobElement = htmlHelpers.getAncestorElement(stage, "job-table");
+  const materialCategory = htmlHelpers.getSelectText(jobElement.querySelector(".material-category-select"));
+  const material = htmlHelpers.getSelectText(jobElement.querySelector(".material-select"));
+  setStageMaterial(stage, materialCategory, material);
 }
 
 function createDefaultStages(jobTable, stageTemplates) {

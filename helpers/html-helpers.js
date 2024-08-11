@@ -20,21 +20,6 @@ function createElement(tag, cssClass = '', text = '') {
   return element;
 }
 
-function collapseContent(contentElement, instant = false) {
-  //console.log("closing");
-  //const savedStyle = contentElement.style.transition;
-  //contentElement.style.transition = "";
-  contentElement.style.maxHeight = 0;
-  contentElement.setAttribute("data-open", 0);
-  //contentElement.classList.add("collapsible-content");
-  //contentElement.style.transition = savedStyle;
-}
-
-function unCollapseContent(contentElement, instant = false) {
-  contentElement.style.maxHeight = contentElement.scrollHeight + "px";
-  contentElement.setAttribute("data-open", 1);
-}
-
 function makeCollapsible(element, startOpen = true) {
   const content = element.nextElementSibling;
   element.addEventListener("click", function() {
@@ -298,8 +283,6 @@ export {
   noFilterText,
   createElement,
   makeCollapsible,
-  collapseContent,
-  unCollapseContent,
   getAncestorElement,
   emptyInput,
   resetInput,

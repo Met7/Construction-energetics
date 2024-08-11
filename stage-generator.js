@@ -378,9 +378,6 @@ function setStageMaterial(stageElement, materialCategory, material) {
   options = [...new Set(options)];
   htmlHelpers.createOptions(approachSelect, options);
   approachSelect.dispatchEvent(new Event('change'));
-  
-  //htmlHelpers.emptyInput(stageElement.querySelector(".tool-select"));
-  //htmlHelpers.emptyInput(stageElement.querySelector(".study-select"));
 }
 
 
@@ -646,7 +643,7 @@ function saveStage(stageElement) {
     "tool": htmlHelpers.getSelectText(stageElement.querySelector(".tool-select")),
     "study": htmlHelpers.getSelectData(stageElement.querySelector(".study-select"), "id"),
     "conversion factor": stageElement.querySelector(".unit-conversion").value,
-    "collapsed": stageElement.querySelector(".collapsible-content").getAttribute("data-open") == 1 ? 0 : 1
+    "collapsed": stageElement.querySelector(".collapsible-content").classList.contains('open') ? 0 : 1
   };
   //console.log(saveData);
   return saveData;
@@ -687,10 +684,11 @@ function loadStage(stageElement, saveData/*, stageData*/) {
     }
   }
   
-  if (saveData["collapsed"]) {
-    //console.log("closing");
-    htmlHelpers.collapseContent(stageElement.parentElement);
-  }
+  const content = stageElement.querySelector(".collapsible-content");
+  if (saveData["collapsed"])
+    content.classList.remove("open");
+  else
+    content.classList.add("open");
 }
 
 // --------------------------------------
