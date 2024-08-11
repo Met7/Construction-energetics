@@ -32,36 +32,6 @@
                 "pages": "64-5"
             },
             {
-                "id": "Pakkanen 2013 300",
-                "material_category": "Earth",
-                "material": "Loose fill",
-                "approach": "Unspecified",
-                "tool": "Unspecified",
-                "description": "Stone and dirt; low est.",
-                "unit": "m3",
-                "rate": "0.7",
-                "locality": "Italy",
-                "tech_note": "Stone and dirt; low est.",
-                "author": "Pakkanen",
-                "year": "2013",
-                "pages": "66"
-            },
-            {
-                "id": "Pakkanen 2013 400",
-                "material_category": "Earth",
-                "material": "Loose fill",
-                "approach": "Unspecified",
-                "tool": "Unspecified",
-                "description": "Stone and dirt; high est.",
-                "unit": "m3",
-                "rate": "1.1",
-                "locality": "Italy",
-                "tech_note": "Stone and dirt; high est.",
-                "author": "Pakkanen",
-                "year": "2013",
-                "pages": "66"
-            },
-            {
                 "id": "Pakkanen 2013 500",
                 "material_category": "Wood",
                 "material": "Softwood",
@@ -111,7 +81,7 @@
             {
                 "id": "Pakkanen 2013 800",
                 "material_category": "Wood",
-                "material": "Squaring",
+                "material": "Softwood",
                 "approach": "Sawing",
                 "tool": "Iron saw",
                 "description": "Squaring logs",
@@ -125,6 +95,36 @@
             }
         ],
         "Placement": [
+            {
+                "id": "Pakkanen 2013 300",
+                "material_category": "Earth",
+                "material": "Fill",
+                "approach": "Unspecified",
+                "tool": "Unspecified",
+                "description": "Stone and dirt; low est.",
+                "unit": "m3",
+                "rate": "0.7",
+                "locality": "Italy",
+                "tech_note": "Stone and dirt; low est.",
+                "author": "Pakkanen",
+                "year": "2013",
+                "pages": "66"
+            },
+            {
+                "id": "Pakkanen 2013 400",
+                "material_category": "Earth",
+                "material": "Fill",
+                "approach": "Unspecified",
+                "tool": "Unspecified",
+                "description": "Stone and dirt; high est.",
+                "unit": "m3",
+                "rate": "1.1",
+                "locality": "Italy",
+                "tech_note": "Stone and dirt; high est.",
+                "author": "Pakkanen",
+                "year": "2013",
+                "pages": "66"
+            },
             {
                 "id": "Pakkanen 2013 900",
                 "material_category": "Stone",

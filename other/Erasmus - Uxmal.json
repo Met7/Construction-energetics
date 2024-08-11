@@ -1,0 +1,517 @@
+{
+	"name": "Erasmus - Uxmal",
+	"data": {
+		"jobs": [
+			{
+				"name": "Carving face rocks - decorated",
+				"material-category": "Stone",
+				"material": "Limestone",
+				"unit": "m2",
+				"amount": "10000",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "Cutting",
+						"tool": "Stone tools",
+						"study": "Erasmus 1965 2200",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 9
+			},
+			{
+				"name": "Carving face rocks - plain",
+				"material-category": "Stone",
+				"material": "Limestone",
+				"unit": "m2",
+				"amount": "65000",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "Cutting",
+						"tool": "Stone tools",
+						"study": "Erasmus 1965 2100",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 8
+			},
+			{
+				"name": "Masonry construction",
+				"material-category": "Stone",
+				"material": "Limestone",
+				"unit": "m3",
+				"amount": "40000",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"1"
+						],
+						"approach": "Masonry construction",
+						"tool": "Manual",
+						"study": "Erasmus 1965 1700",
+						"conversion factor": "1",
+						"collapsed": 0
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 7
+			},
+			{
+				"name": "Rocks for masonry",
+				"material-category": "Stone",
+				"material": "Limestone",
+				"unit": "ton",
+				"amount": "57600",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Digging",
+						"tool": "Wooden pole",
+						"study": "Erasmus 1965 800",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"750"
+						],
+						"approach": "Carrying",
+						"tool": "Tumpline",
+						"study": "Erasmus 1965 1400",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 6
+			},
+			{
+				"name": "Sascab for masonry (mined at location)",
+				"material-category": "Earth",
+				"material": "Sascab",
+				"unit": "ton",
+				"amount": "12000",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Digging",
+						"tool": "Unspecified",
+						"study": "Erasmus 1965 1800",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 5
+			},
+			{
+				"name": "Carry lime for masonry",
+				"material-category": "Earth",
+				"material": "Lime",
+				"unit": "ton",
+				"amount": "4000",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"1000"
+						],
+						"approach": "Carrying",
+						"tool": "Unspecified",
+						"study": "Erasmus 1965 2300",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 4
+			},
+			{
+				"name": "Rocks for lime burning",
+				"material-category": "Stone",
+				"material": "Limestone",
+				"unit": "ton",
+				"amount": "6080",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Digging",
+						"tool": "Wooden pole",
+						"study": "Erasmus 1965 800",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "Carrying",
+						"tool": "On head",
+						"study": "Erasmus 1965 1300",
+						"conversion factor": "1",
+						"collapsed": 1
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"1"
+						],
+						"approach": "Stacking",
+						"tool": "Manual",
+						"study": "Erasmus 1965 2600",
+						"conversion factor": "1",
+						"collapsed": 0
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 3
+			},
+			{
+				"name": "Wood for lime burning",
+				"material-category": "Wood",
+				"material": "Unspecified",
+				"unit": "ton",
+				"amount": "3280",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Cutting",
+						"tool": "Stone tools",
+						"study": "Erasmus 1965 1600",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"500"
+						],
+						"approach": "Carrying",
+						"tool": "Unspecified",
+						"study": "Erasmus 1965 2400",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"1"
+						],
+						"approach": "Stacking",
+						"tool": "Manual",
+						"study": "Erasmus 1965 2500",
+						"conversion factor": "1",
+						"collapsed": 0
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 2
+			},
+			{
+				"name": "Dirt for fill",
+				"material-category": "Earth",
+				"material": "Dirt",
+				"unit": "ton",
+				"amount": "425000",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Digging",
+						"tool": "Wooden stick",
+						"study": "Erasmus 1965 700",
+						"conversion factor": "1.31",
+						"collapsed": 0
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"250"
+						],
+						"approach": "Carrying",
+						"tool": "Bucket on shoulder",
+						"study": "Erasmus 1965 500",
+						"conversion factor": "1.31",
+						"collapsed": 0
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "N/A",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 1
+			},
+			{
+				"name": "Rocks for fill (850k m3 total fill)",
+				"material-category": "Stone",
+				"material": "Limestone",
+				"unit": "ton",
+				"amount": "1275000",
+				"stages": [
+					{
+						"stage": "Extraction",
+						"custom-inputs": [],
+						"approach": "Digging",
+						"tool": "Wooden pole",
+						"study": "Erasmus 1965 800",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Transportation",
+						"custom-inputs": [
+							"750"
+						],
+						"approach": "Carrying",
+						"tool": "Tumpline",
+						"study": "Erasmus 1965 1400",
+						"conversion factor": "1",
+						"collapsed": 0
+					},
+					{
+						"stage": "Refinement",
+						"custom-inputs": [],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					},
+					{
+						"stage": "Placement",
+						"custom-inputs": [
+							"0"
+						],
+						"approach": "Choose...",
+						"tool": "N/A",
+						"study": "N/A",
+						"conversion factor": "",
+						"collapsed": 1
+					}
+				],
+				"collapsed": 1,
+				"sortIndex": 0
+			}
+		]
+	}
+}

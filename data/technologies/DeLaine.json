@@ -231,21 +231,6 @@
                 "pages": "268"
             },
             {
-                "id": "DeLaine 1997 2000",
-                "material_category": "Stone",
-                "material": "Limestone",
-                "approach": "Loading",
-                "tool": "Basket",
-                "description": "Carry 100m",
-                "unit": "m3",
-                "rate": "3.8",
-                "locality": "Italy",
-                "tech_note": "100m",
-                "author": "DeLaine",
-                "year": "1997",
-                "pages": "113"
-            },
-            {
                 "id": "DeLaine 1997 2400",
                 "material_category": "Stone",
                 "material": "Pozzolana",
@@ -321,7 +306,7 @@
                 "pages": "268",
                 "formula": "Trips and weight",
                 "input1_name": "# of trips",
-                "param1": "0.0045",
+                "param1": "0.045",
                 "conversions": {
                     "t": 0.37
                 }
