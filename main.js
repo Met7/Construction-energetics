@@ -127,7 +127,6 @@ function printProjects() {
     const indexForIteration = projectIndex;
     
     let columns = [];
-    let links = [];
 
     let label = htmlHelpers.createElement("label", "project-name", project.name);
     label.addEventListener("click", () => {
@@ -135,12 +134,13 @@ function printProjects() {
     });
     columns.push(label);
     
+    let buttonHolder = htmlHelpers.createElement("div", "project-list-row-buton-holder", "");
     let button = htmlHelpers.createElement("button", ["icon-button", "icon-button-save"], "");
     button.title = "Save";
     button.addEventListener("click", () => {
       saveProject(indexForIteration);
     });
-    links.push(button);
+    buttonHolder.appendChild(button);
     
     button = htmlHelpers.createElement("button", ["icon-button", "icon-button-download"], "");
     button.title = "Export";
@@ -148,16 +148,16 @@ function printProjects() {
     button.addEventListener("click", () => {
       downloadProject(indexForIteration);
     });
-    links.push(button);
+    buttonHolder.appendChild(button);
     
     button = htmlHelpers.createElement("button", ["icon-button", "icon-button-delete"], "");
     button.title = "Delete";
     button.addEventListener("click", () => {
       deleteProject(indexForIteration);
     });
-    links.push(button);
+    buttonHolder.appendChild(button);
     
-    columns.push(links);
+    columns.push(buttonHolder);
     let row = htmlHelpers.createTableRow("", columns, columnCount);
     row.classList.add("project-list-row");
     projectTable.appendChild(row);

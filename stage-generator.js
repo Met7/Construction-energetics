@@ -247,7 +247,7 @@ function createStage(stageData) {
   stageDiv.appendChild(stageHeader);
   
   // Stage body
-  const stageBody = htmlHelpers.createElement("div", ["stage-list", "collapsible-content"]);  
+  const stageBody = htmlHelpers.createElement("div", ["stage-list", "collapsible-content", "short"]);  
   
   const columnCount = 5;
   // create the table
@@ -325,7 +325,7 @@ function createStage(stageData) {
   stageBody.appendChild(stageTable);
   stageDiv.appendChild(stageBody);
   
-  htmlHelpers.makeCollapsible(stageHeader, 200); // must be done after the content (stageBody) exists
+  htmlHelpers.makeCollapsible(stageHeader); // must be done after the content (stageBody) exists
  
   return stageDiv;
 }

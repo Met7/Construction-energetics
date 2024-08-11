@@ -39,6 +39,8 @@ function getConversionFactorFromConversions(sourceUnit, targetUnit, converionsSo
     return conversions[targetUnit];
   if (targetUnit == converionsSourceUnit && (sourceUnit in conversions))
     return reverseConversionRatio(conversions[sourceUnit]);
+  
+  console.log("Conversion: failed to match conversion");
   return -1;
 }
 

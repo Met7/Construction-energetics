@@ -35,27 +35,17 @@ function unCollapseContent(contentElement, instant = false) {
   contentElement.setAttribute("data-open", 1);
 }
 
-function makeCollapsible(element, initHeight = 2000, startOpen = true) {
+function makeCollapsible(element, startOpen = true) {
   const content = element.nextElementSibling;
-  if (startOpen) {
-    content.setAttribute("data-open", 1);
-    // some reasonable initial maxHeight must be set in order for the first slid in to work.
-    // otherwise maxHeight is zero and slide is instant.
-    content.style.maxHeight = initHeight + "px";
-    //content.classList.add(contentClass);
-  }
-  else {
-    content.setAttribute("data-open", 0);
-    content.style.maxHeight = "0px"; //content.scrollHeight + "px";
-  }
-
   element.addEventListener("click", function() {
-    element.classList.toggle("active");
-    if (content.getAttribute("data-open") == 0)
-      unCollapseContent(content);
+    if (content.classList.contains('open'))
+        content.classList.remove('open');
     else
-      collapseContent(content);
-  }); 
+        content.classList.add('open');
+  });
+  
+  if (startOpen)
+    content.classList.add('open');
 }
 
 // --------------------------------------

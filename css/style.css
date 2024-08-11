@@ -47,18 +47,6 @@ button {
 }
 
 /* ------------------------------- COLLAPSIBLE ---- */
-/* Modified from https://www.w3schools.com/howto/howto_js_collapsible.asp */
-.collapsible {
-  background-color: #eee;
-  color: #444;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-}
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS),
 and when you move the mouse over it (hover) */
@@ -67,30 +55,18 @@ and when you move the mouse over it (hover) */
 }
 
 .collapsible-content {
-  /*padding: 0 18px;*/
-  /* background-color: white;*/
-  /*max-height: 0;*/
-  max-height: 100%;
-  /*display: flex;
-  flex-direction: column;*/
   overflow: hidden;
   transition: max-height 0.2s ease-out;
+  max-height: 0;
 }
 
-.collapsible:after {
-  /*
-  content: '\02795';
-  font-size: 13px;
-  color: white;
-  float: right;
-  margin-left: 5px;*/
+.collapsible-content.short.open {
+    max-height: 200px; /* An arbitrarily large value */
 }
 
-.active:after {
-  /*
-  content: "\2796"; */
+.collapsible-content.open {
+    max-height: 2000px; /* An arbitrarily large value */
 }
-
 
 /* ------------------------------ PROJECT LIST ---- */
 
@@ -181,6 +157,20 @@ button.icon-button-small-arrow-down-white {
   background: url(../image/small-arrow-down-white-16.ico) no-repeat center;
 }
 
+
+/* ---------------------------- PROJECTS ---------  */
+
+
+button.project-menu-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 4px 6px 4px 6px;
+}
+
+.project-list-row-buton-holder {
+  display: flex;
+  flex-direction: row;
+}
 
 /* ------------------------------ JOB ------------  */
 
@@ -325,12 +315,6 @@ label.stage-name {
 .stage-mh-label {
   margin-top:2px;
   margin-right:4px;
-}
-
-button.project-menu-button {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 4px 6px 4px 6px;
 }
 
 #total-energy-label {

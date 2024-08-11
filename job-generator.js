@@ -156,7 +156,7 @@ function saveJob(jobElement) {
   for (let stageElement of stageElements) {
     jobSave["stages"].push(saveStage(stageElement));
   }
-  jobSave["collapsed"] = jobElement.querySelector(".collapsible-content").getAttribute("data-open") == 1 ? 0 : 1
+  jobSave["collapsed"] = jobElement.querySelector(".collapsible-content").classList.contains('open') ? 0 : 1
   
   //console.log("Saved job to local storage.");
   return jobSave;
@@ -165,6 +165,17 @@ function saveJob(jobElement) {
 function loadJob(jobElement, jobSave) {
   //const jobSave = JSON.parse(localStorage.getItem("save"));
   //console.log(jobSave);
+  const jobTable = jobElement.querySelector(".job-table");
+  // create stages, the following events will fill their selects.
+  let firstStageElement = null;
+  for (let stageData of jobSave["stages"]) {
+    //console.log(stageData);
+    const stageElement = addStage(jobTable, stageTemplates[stageData["stage"]])
+    if (!firstStageElement) // store the first stage for later use
+      firstStageElement = stageElement;
+    loadStage(stageElement, stageData/*, stageTemplates[stageData["stage"]]*/); // in stage-generator
+  }
+  
   let input = jobElement.querySelector(".job-name-input");
   input.value = jobSave["name"];
   
@@ -184,17 +195,22 @@ function loadJob(jobElement, jobSave) {
   input.value = jobSave["amount"];
   select.dispatchEvent(new Event('change'));
   
-  const jobTable = jobElement.querySelector(".job-table");
-  // load stages
+  // load the stage data
+  let stageElement = firstStageElement;
   for (let stageData of jobSave["stages"]) {
-    //console.log(stageData);
-    const stageElement = addStage(jobTable, stageTemplates[stageData["stage"]])
-	loadStage(stageElement, stageData/*, stageTemplates[stageData["stage"]]*/);
+    console.log("loading stage");
+    console.log(stageData);
+    console.log(stageElement.getAttribute("data-stage"));
+    loadStage(stageElement, stageData/*, stageTemplates[stageData["stage"]]*/); // in stage-generator
+    const tr = stageElement.parentElement.parentElement;
+    const nextTr = tr.nextSibling;
+    if (nextTr != null) // this will fail for the last; cycle is driven by the corresponding saved stages.
+      stageElement = nextTr.childNodes[0].childNodes[0];
   }
   
-  if (jobSave["collapsed"]) {
+  if (!jobSave["collapsed"]) {
     //console.log("closing");
-    htmlHelpers.collapseContent(jobElement.querySelector(".collapsible-content"));
+    jobElement.querySelector(".collapsible-content").classList.add("open");
   }
   //console.log("Loaded job from local storage.");
 }
@@ -272,7 +288,7 @@ function createJob(jobId, loading = false) {
   jobDiv.appendChild(jobHeader);
   
   // Job body
-  const jobBody = htmlHelpers.createElement("div", ["stage-list", "collapsible-content"]);
+  const jobBody = htmlHelpers.createElement("div", ["stage-list", "collapsible-content", "open"]);
   const jobTable = htmlHelpers.createElement("table", ["job-table"]);
 
   // Material(Category) selects
@@ -302,7 +318,8 @@ function createJob(jobId, loading = false) {
   jobBody.appendChild(jobTable);
   jobDiv.appendChild(jobBody);
   
-  htmlHelpers.makeCollapsible(jobHeader, 1000); // must be done after the content (jobBody) exists
+  // Needs to be done after the content is instantiated
+  htmlHelpers.makeCollapsible(jobHeader);
   
   return jobDiv;
 }
