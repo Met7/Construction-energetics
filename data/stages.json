@@ -2,16 +2,19 @@
   "stages": {
     "Extraction": { 
       "stageName": "Extraction",
+      "order": 10,
       "unit": "mass",
       "inputs": {}
     },
     "Processing": { 
       "stageName": "Processing",
+      "order": 20,
       "unit": "mass",
       "inputs": {}
     },
     "Transportation": { 
       "stageName": "Transportation",
+      "order": 30,
       "inputs": [
         {
           "label": "Distance (meters)", 
@@ -24,11 +27,13 @@
     },
     "Refinement": { 
       "stageName": "Refinement",
+      "order": 40,
       "unit": "energy",
       "inputs": {}
     },
     "Placement": { 
       "stageName": "Placement",
+      "order": 50,
       "inputs": [
         {
           "label": "Height (meters)", 

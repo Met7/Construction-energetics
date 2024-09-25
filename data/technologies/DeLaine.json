@@ -123,7 +123,7 @@
             },
             {
                 "id": "DeLaine 1997 1300",
-                "material_category": "Other",
+                "material_category": "Intermediary",
                 "material": "Lime",
                 "approach": "Firing",
                 "tool": "Unspecified",
@@ -138,7 +138,7 @@
             },
             {
                 "id": "DeLaine 1997 1400",
-                "material_category": "Other",
+                "material_category": "Intermediary",
                 "material": "Lime",
                 "approach": "Firing",
                 "tool": "Unspecified",
@@ -292,8 +292,8 @@
             },
             {
                 "id": "DeLaine 1997 4300",
-                "material_category": "Earth",
-                "material": "Dirt",
+                "material_category": "Any",
+                "material": "Any",
                 "approach": "Carrying",
                 "tool": "Basket",
                 "description": "Carry 105m; combines # of trips and volume",

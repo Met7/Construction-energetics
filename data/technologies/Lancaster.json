@@ -240,6 +240,21 @@
                 "author": "Lancaster",
                 "year": "2017",
                 "pages": "81"
+            },
+            {
+                "id": "Lancaster 2017 2200",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Collecting",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "m3",
+                "rate": "10",
+                "locality": "Sicily",
+                "tech_note": "",
+                "author": "Lancaster",
+                "year": "2017",
+                "pages": "123"
             }
         ],
         "Transportation": [
@@ -334,6 +349,21 @@
                 "author": "Lancaster",
                 "year": "2017",
                 "pages": "81"
+            },
+            {
+                "id": "Lancaster 2017 2300",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Construction",
+                "tool": "Unspecified",
+                "description": "Wall foundations",
+                "unit": "m3",
+                "rate": "20",
+                "locality": "Sicily",
+                "tech_note": "",
+                "author": "Lancaster",
+                "year": "2017",
+                "pages": "124"
             }
         ]
     }

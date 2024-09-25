@@ -90,7 +90,7 @@ function deleteProject(index) {
 function downloadProject(index) {
   console.log("attempting download id " + index);
   checkProjectIndex(index, "downloadProject");
-  const dataContent = encodeURIComponent(JSON.stringify(projects[index]))
+  const dataContent = encodeURIComponent(JSON.stringify(projects[index], null, 2))
   var dataHeader = "data:text/json;charset=utf-8,";
   var dlAnchorElement = document.getElementById('downloadAnchorElem');
   dlAnchorElement.setAttribute("href", dataHeader + dataContent);

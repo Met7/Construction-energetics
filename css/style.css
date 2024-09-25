@@ -281,6 +281,18 @@ input.job-name-input {
   margin-left: 10px;
 }
 
+.job-footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.add-stage-button {
+  margin: 10px 3px 10px 3px;
+  padding: 4px 6px 4px 6px;
+}
+
 /* ------------------------------ STAGE -----------  */
 
 .stage {

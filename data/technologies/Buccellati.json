@@ -8,7 +8,7 @@
                 "approach": "Manufacture",
                 "tool": "Unspecified",
                 "description": "Complete process",
-                "unit": "unit",
+                "unit": "m3",
                 "rate": "2.5",
                 "locality": "Greece",
                 "tech_note": "",

@@ -181,11 +181,11 @@ function getApplicableTechnologies(stageName, materialCategory, material, approa
   // TODO support lists
   if (approach)
     technologies = technologies.filter((tech) => 
-      helpers.strEq(tech.approach, approach) || tech.approach == worksForAllText || tech.approach == unspecifiedText
+      helpers.strEq(tech.approach, approach) || tech.approach == worksForAllText || approach == worksForAllText || tech.approach == unspecifiedText 
     );
   if (tool)
     technologies = technologies.filter((tech) => 
-      helpers.strEq(tech.tool, tool) || tech.tool == worksForAllText || tech.tool == unspecifiedText
+      helpers.strEq(tech.tool, tool) || tech.tool == worksForAllText  || tool == worksForAllText || tech.tool == unspecifiedText
     );
   
   //console.log(technologies);
@@ -230,18 +230,11 @@ function createStage(stageData) {
     e.stopPropagation();
     removeStage(stageDiv);
   });
-  let addButton = htmlHelpers.createElement("button", ["icon-button", "icon-button-plus"], "");
-  addButton.title = "Add stage";
-  addButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    addStage(stageDiv);
-  });
   const mhLabel = htmlHelpers.createElement("p", "stage-mh-label", helpers.formatEnergy(0));
   
   stageHeader.appendChild(stageNameLabel);
   const headerRightSide = htmlHelpers.createElement("div", "stage-header-right-side");
   headerRightSide.appendChild(mhLabel);
-  headerRightSide.appendChild(addButton);
   headerRightSide.appendChild(delButton);
   stageHeader.appendChild(headerRightSide);
   stageDiv.appendChild(stageHeader);
@@ -422,6 +415,7 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
       optionText += ": " + tech.description;
     if (tech["tech-note"] && tech["tech-note"] != "")
       optionText += " (note: " + tech["tech-note"] + ")";
+    optionText += "  [" + tech.approach + " - " + tech.tool + "]";
     let optionsData = {
       "text": optionText,
       "value": tech.rate,
@@ -481,14 +475,9 @@ function chooseStageStudy(stageElement, techName, techUnit, speed, extraInputNam
 }
 
 function removeStage(stageElement) {
-  const parentElement = stageElement.parentElement;
-  stageElement.remove();
+  const parentElement = stageElement.parentElement.parentElement.parentElement;
+  stageElement.parentElement.parentElement.remove();
   onEnergyChange(parentElement);
-}
-
-function addStage(stageElement) {
-  const stageName = stageElement.getAttribute("data-stage");
-  cloneStageFunction(stageElement, stageName); // this is in job-generator
 }
 
 // --------------------------------------
@@ -732,14 +721,7 @@ function getJobAmount(element) {
   return amountInput.value;
 }
 
-var cloneStageFunction; // Takes 2 params - the cloned stage element and stage type name
-// called by job
-function setCloneStageFunction(newCloneStageFunction) {
-  cloneStageFunction = newCloneStageFunction;
-}
-
 export {
-  setCloneStageFunction,
   setEnergyChangeFunction,
   createStage,
   setStageMaterial,

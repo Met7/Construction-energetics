@@ -2,7 +2,7 @@ import * as htmlHelpers from "./helpers/html-helpers.js";
 import * as helpers from "./helpers/helpers.js";
 import * as materialsHelpers from "./helpers/materials-helpers.js"; 
 import { loadFile } from "./data-handler.js";
-import { createStage, setCloneStageFunction, setEnergyChangeFunction, setStageMaterial, setStageUnit, setStageAmount, saveStage, loadStage } from "./stage-generator.js";
+import { createStage, setEnergyChangeFunction, setStageMaterial, setStageUnit, setStageAmount, saveStage, loadStage } from "./stage-generator.js";
 
 // event for manual triggering
 const event = new CustomEvent("change", { "detail": "MaterialCategory manual trigger" });
@@ -205,7 +205,6 @@ function loadJob(jobElement, jobSave) {
       stageElement = nextTr.childNodes[0].childNodes[0];
   }
   
-  
   const content = jobElement.querySelector(".collapsible-content");
   if (jobSave["collapsed"])
     content.classList.remove("open");
@@ -224,17 +223,36 @@ function addStage(jobTable, stageTemplate) {
 	return stage;
 }
 
-function cloneStage(originalStageElement, stageName) {
-  const stage = createStage(stageTemplates[stageName]);
+function insertStage(jobTable, stageName) {
+  const stageTemplate = stageTemplates[stageName];
+  const stage = createStage(stageTemplate);
   const td = htmlHelpers.createTd(stage);
   td.colSpan = columnCount;
-  const stageTr = originalStageElement.parentElement.parentElement;
-  stageTr.after(htmlHelpers.createTr(td));
-  
-  const jobElement = htmlHelpers.getAncestorElement(stage, "job-table");
-  const materialCategory = htmlHelpers.getSelectText(jobElement.querySelector(".material-category-select"));
-  const material = htmlHelpers.getSelectText(jobElement.querySelector(".material-select"));
-  setStageMaterial(stage, materialCategory, material);
+  const stageTr = htmlHelpers.createTr(td);
+  if (jobTable.childNodes.length === 0) {
+    jobTable.appendChild(stagetTr);
+    return;
+  }
+  // sort the stage in from the back
+  const stageOrder = stageTemplate.order;
+  // note that the table contains other things before the stages.
+  for (let i = jobTable.childNodes.length; i--; i >= 0) {
+    const existingStage = jobTable.childNodes[i].childNodes[0].childNodes[0]; // table->tr->td->div
+    if (existingStage.hasAttribute("data-stage")) { // otherwise we have reached start of the stage list
+      const existingStageName = existingStage.getAttribute("data-stage");
+      const existingOrder = stageTemplates[existingStageName].order;
+      if (existingOrder > stageOrder)
+        continue;
+    }
+    
+    jobTable.childNodes[i].after(stageTr);
+    
+    const materialCategory = htmlHelpers.getSelectText(jobTable.querySelector(".material-category-select"));
+    const material = htmlHelpers.getSelectText(jobTable.querySelector(".material-select"));
+    setStageMaterial(stage, materialCategory, material);
+    return;
+  }
+  throw Error("Inserting stage failed impossibly");
 }
 
 function createDefaultStages(jobTable, stageTemplates) {
@@ -245,6 +263,15 @@ function createDefaultStages(jobTable, stageTemplates) {
     //if (i == 3) break; // skip 2+
     addStage(jobTable, stageTemplate)
   }
+}
+
+function createStageButton(jobTable, stageName) {
+  let button = htmlHelpers.createElement("button", ["add-stage-button"], stageName);
+  button.title = stageName;
+  button.addEventListener("click", (e) => {
+    insertStage(jobTable, stageName);
+  });
+  return button;
 }
 
 // --------------------------------------
@@ -319,6 +346,14 @@ function createJob(jobId, loading = false) {
 	createDefaultStages(jobTable, stageTemplates);
   
   jobBody.appendChild(jobTable);
+  
+  // Create stage buttons
+  const jobFooter = htmlHelpers.createElement("div", "job-footer");
+  jobFooter.appendChild(htmlHelpers.createElement("label", "", "Add stage: "));
+  for (const stageTemplate of Object.values(stageTemplates))
+    jobFooter.appendChild(createStageButton(jobTable, stageTemplate.stageName));
+  jobBody.appendChild(jobFooter);
+  
   jobDiv.appendChild(jobBody);
   
   // Needs to be done after the content is instantiated
@@ -331,7 +366,6 @@ function createJob(jobId, loading = false) {
 // -------------------------------- SETUP
 
 function setup() {
-    setCloneStageFunction(cloneStage);
     setEnergyChangeFunction(onStageEnergyChanged);
 }
 setup();
