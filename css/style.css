@@ -103,6 +103,13 @@ tr.project-list-row {
   /*font-weight: bold;*/
 }
 
+#project-name-label {
+  margin-bottom: 8px;
+}
+
+#total-mh-label {
+}
+
 /* ------------------------------ ICONS ----------- */
 
 button.icon-button {

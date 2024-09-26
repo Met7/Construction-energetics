@@ -50,12 +50,16 @@ function saveProject(index = -1, name = "") {
   if (index == -1) { // new save
     index = projects.length;
     projects.push({ "name" : name, "data" : "" });
+  } else {
+    name = projects[index].name;
   }
   
   projects[index].data = projectSave;
   
   saveToStorage();
   printProjects();
+  
+  displayProjectName(name);
 }
 
 function openProject(index) {
@@ -72,7 +76,14 @@ function openProject(index) {
     loadJob(jobElement, jobData);
   }
 
+  displayProjectName(projects[index].name);
+
   console.log("Loaded project from local storage.");
+}
+
+function displayProjectName(name) {
+  const label = document.querySelector("#project-name-label");
+  label.innerText = name;
 }
 
 // --------------------------------------
