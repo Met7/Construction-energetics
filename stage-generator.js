@@ -170,9 +170,9 @@ function getApplicableTechnologies(stageName, materialCategory, material, approa
   //console.log(technologiesForStage);
   // Filter by material category and material
   let technologies = technologiesForStage.filter(
-    (tech) => (materialCategory == htmlHelpers.noFilterText || (tech.material_category == worksForAllText || helpers.strEq(tech.material_category, materialCategory)))
+    (tech) => (materialCategory == worksForAllText || (tech.material_category == worksForAllText || helpers.strEq(tech.material_category, materialCategory)))
               && 
-              (materialCategory == htmlHelpers.noFilterText || (tech.material == worksForAllText || helpers.strEq(tech.material, material)))
+              (material == worksForAllText || (tech.material == worksForAllText || helpers.strEq(tech.material, material)))
   ) // TODO support lists
   
   //console.log("Tech before approach: ");
@@ -309,8 +309,11 @@ function createStage(stageData) {
     //console.log("Conversion input changed");
     updateMh(stageTable, conversionFactorInput.value);
   });
+  const holder = htmlHelpers.createElement("div");
+  holder.appendChild(conversionFactorInput);
+  holder.appendChild(htmlHelpers.createElement("label", "conversion-unit-label", ""));
   stageTable.appendChild(htmlHelpers.createTableRow("Unit conversion factor:", [
-    conversionFactorInput, 
+    holder,
     htmlHelpers.createElement("label", "", "Converted rate:"), 
     htmlHelpers.createElement("p", "total-speed", htmlHelpers.emptySelectText)
   ], columnCount));
@@ -499,6 +502,7 @@ function extractConversions(selectElement) {
 // The first case already has all the params. In the other the local values need to be fetched.
 function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit = '', techConversions = [], speed = -1) {
   const unitConversionInput = stageElement.querySelector(".unit-conversion");
+  const conversionUnitLabel = stageElement.querySelector(".conversion-unit-label");
   let studySelect;
   if (!techUnit || !techConversions)
     studySelect = stageElement.querySelector(".study-select");
@@ -515,8 +519,12 @@ function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmou
     conversionFactor = 0;
     unitConversionInput.value = '';
   }
-  else
+  else {
     unitConversionInput.value = Number(conversionFactor.toFixed(2));
+  }
+  
+  conversionUnitLabel.innerHTML = helpers.formatUnit(techUnit) + "/" + helpers.formatUnit(jobUnit);
+  
   updateMh(stageElement, conversionFactor, jobUnit, jobAmount);
 }
 

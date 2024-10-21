@@ -46,6 +46,10 @@ button {
   display:inline;
 }
 
+.spacer-div {
+  width: 100%;
+}
+
 /* ------------------------------- COLLAPSIBLE ---- */
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS),
