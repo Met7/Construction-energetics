@@ -1,0 +1,24 @@
+{
+    "technologies": {
+        "Refinement": [
+            {
+                "id": "Hurst 1902 100",
+                "material_category": "Earth",
+                "material": "Dirt",
+                "approach": "Ramming",
+                "tool": "Unspecified",
+                "description": "",
+                "unit": "m3",
+                "rate": "0.367",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Hurst",
+                "year": "1902",
+                "pages": "377",
+                "conversions": {
+                    "t": 0.37
+                }
+            }
+        ]
+    }
+}

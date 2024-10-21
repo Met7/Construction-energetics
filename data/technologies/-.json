@@ -1,0 +1,28 @@
+{
+    "technologies": {
+        "Any": [
+            {
+                "id": "manual",
+                "material_category": "Any",
+                "material": "Any",
+                "approach": "Any",
+                "tool": "Any",
+                "description": "Set manually",
+                "unit": "m3",
+                "rate": "1",
+                "locality": "",
+                "tech_note": "",
+                "author": "-",
+                "year": "",
+                "pages": "",
+                "formula": "Multiply",
+                "input1_name": "Performance (mh/m3)",
+                "conversions": {
+                    "unit": 1.0,
+                    "t": 1.0,
+                    "m2": 1.0
+                }
+            }
+        ]
+    }
+}

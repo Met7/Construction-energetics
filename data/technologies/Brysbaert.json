@@ -1,0 +1,140 @@
+{
+    "technologies": {
+        "Extraction": [
+            {
+                "id": "Brysbaert 2015 100",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Quarrying",
+                "tool": "Unspecified",
+                "description": "Masonry blocks",
+                "unit": "m3",
+                "rate": "10",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Brysbaert",
+                "year": "2015",
+                "pages": "94",
+                "conversions": {
+                    "t": 0.37
+                }
+            }
+        ],
+        "Transportation": [
+            {
+                "id": "Brysbaert 2015 200",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Pulling",
+                "tool": "Oxen",
+                "description": "Oxen handlers",
+                "unit": "t*m",
+                "rate": "0.007",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Brysbaert",
+                "year": "2015",
+                "pages": "94",
+                "formula": "Multiply",
+                "input1_name": "distance",
+                "conversions": {
+                    "m3": 2.7
+                }
+            },
+            {
+                "id": "Brysbaert 2015 300",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Pulling",
+                "tool": "Oxen",
+                "description": "Guiding pair/yoke of oxen, 1km return trip",
+                "unit": "unit",
+                "rate": "1",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Brysbaert",
+                "year": "2015",
+                "pages": "96"
+            },
+            {
+                "id": "Brysbaert 2015 400",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Pulling",
+                "tool": "Oxen",
+                "description": "1 yoke cart - 1t, 1km return trip",
+                "unit": "unit",
+                "rate": "1",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Brysbaert",
+                "year": "2015",
+                "pages": "96",
+                "conversions": {
+                    "t": 1.0,
+                    "m3": 2.7
+                }
+            },
+            {
+                "id": "Brysbaert 2015 500",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Pulling",
+                "tool": "Oxen",
+                "description": "4 yoke cart - 3.5t, 1km return trip",
+                "unit": "unit",
+                "rate": "4",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Brysbaert",
+                "year": "2015",
+                "pages": "96",
+                "conversions": {
+                    "t": 0.29,
+                    "m3": 0.77
+                }
+            },
+            {
+                "id": "Brysbaert 2015 700",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Pulling",
+                "tool": "Unspecified",
+                "description": "2.5t block, pulling up a ramp cca 5m tall",
+                "unit": "unit",
+                "rate": "8",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Brysbaert",
+                "year": "2015",
+                "pages": "99",
+                "conversions": {
+                    "t": 0.4,
+                    "m3": 1.08
+                }
+            }
+        ],
+        "Placement": [
+            {
+                "id": "Brysbaert 2015 600",
+                "material_category": "Stone",
+                "material": "Limestone",
+                "approach": "Construction",
+                "tool": "Levers",
+                "description": "Moving 2.5t blocks to position",
+                "unit": "m*t",
+                "rate": "0.089",
+                "locality": "Greece",
+                "tech_note": "",
+                "author": "Brysbaert",
+                "year": "2015",
+                "pages": "99",
+                "formula": "Multiply",
+                "input1_name": "Distance",
+                "conversions": {
+                    "m3": 2.7
+                }
+            }
+        ]
+    }
+}
