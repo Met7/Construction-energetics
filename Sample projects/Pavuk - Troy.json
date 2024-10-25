@@ -1,0 +1,185 @@
+{
+  "name": "Pavuk - Troy",
+  "data": {
+    "jobs": [
+      {
+        "name": "Mudbrick crown, 2m tall, 3m wide",
+        "material-category": "Intermediary",
+        "material": "Mudbrick",
+        "unit": "m3",
+        "amount": "3720",
+        "stages": [
+          {
+            "stage": "Extraction",
+            "custom-inputs": [],
+            "approach": "Manufacture",
+            "tool": "Unspecified",
+            "study": "Buccellati 2016 100",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [],
+            "approach": "Loading",
+            "tool": "Basket",
+            "study": "DeLaine 1997 1900",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [
+              "143077"
+            ],
+            "approach": "Carrying",
+            "tool": "Basket",
+            "study": "DeLaine 1997 4300",
+            "conversion factor": "7.5",
+            "collapsed": 0
+          },
+          {
+            "stage": "Placement",
+            "custom-inputs": [],
+            "approach": "Unspecified",
+            "tool": "Unspecified",
+            "study": "Devolver 2005 100",
+            "conversion factor": "1",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 0,
+        "sortIndex": 3
+      },
+      {
+        "name": "Ramp - supervision 10%",
+        "material-category": "None",
+        "material": "None",
+        "unit": "m3",
+        "amount": "1",
+        "stages": [
+          {
+            "stage": "Placement",
+            "custom-inputs": [
+              "3247"
+            ],
+            "approach": "Any",
+            "tool": "Any",
+            "study": "manual",
+            "conversion factor": "1",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 1,
+        "sortIndex": 2
+      },
+      {
+        "name": "Dirt ramp construction",
+        "material-category": "Earth",
+        "material": "Dirt",
+        "unit": "m3",
+        "amount": "6562",
+        "stages": [
+          {
+            "stage": "Extraction",
+            "custom-inputs": [],
+            "approach": "Digging",
+            "tool": "Iron tools",
+            "study": "DeLaine 1997 3000",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [],
+            "approach": "Loading",
+            "tool": "Basket",
+            "study": "DeLaine 1997 1900",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [
+              "252384"
+            ],
+            "approach": "Carrying",
+            "tool": "Basket",
+            "study": "DeLaine 1997 4300",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Refinement",
+            "custom-inputs": [],
+            "approach": "Ramming",
+            "tool": "Unspecified",
+            "study": "Hurst 1902 100",
+            "conversion factor": "1",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 1,
+        "sortIndex": 1
+      },
+      {
+        "name": "Stone walls, 5m average height",
+        "material-category": "Stone",
+        "material": "Limestone",
+        "unit": "m3",
+        "amount": "10290",
+        "stages": [
+          {
+            "stage": "Extraction",
+            "custom-inputs": [],
+            "approach": "Quarrying",
+            "tool": "Iron tools",
+            "study": "Brysbaert 2015 100",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [],
+            "approach": "Un/loading",
+            "tool": "Manual",
+            "study": "De Haan 2009 300",
+            "conversion factor": "2.7",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [],
+            "approach": "Pulling",
+            "tool": "Oxen",
+            "study": "Brysbaert 2015 400",
+            "conversion factor": "1.35",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [],
+            "approach": "Pulling",
+            "tool": "Unspecified",
+            "study": "Brysbaert 2015 700",
+            "conversion factor": "1.08",
+            "collapsed": 0
+          },
+          {
+            "stage": "Placement",
+            "custom-inputs": [
+              "1.5"
+            ],
+            "approach": "Construction",
+            "tool": "Levers",
+            "study": "Brysbaert 2015 600",
+            "conversion factor": "2.7",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 1,
+        "sortIndex": 0
+      }
+    ]
+  }
+}

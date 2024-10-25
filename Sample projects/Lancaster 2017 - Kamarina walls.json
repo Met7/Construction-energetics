@@ -1,0 +1,143 @@
+{
+  "name": "Lancaster 2017 - Kamarina walls",
+  "data": {
+    "jobs": [
+      {
+        "name": "Mudbrick wall",
+        "material-category": "Intermediary",
+        "material": "Mudbrick",
+        "unit": "m3",
+        "amount": "36400",
+        "stages": [
+          {
+            "stage": "Extraction",
+            "custom-inputs": [],
+            "approach": "Manufacture",
+            "tool": "Unspecified",
+            "study": "Buccellati 2016 100",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Placement",
+            "custom-inputs": [],
+            "approach": "Unspecified",
+            "tool": "Unspecified",
+            "study": "Devolver 2005 100",
+            "conversion factor": "1",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 1,
+        "sortIndex": 4
+      },
+      {
+        "name": "Moving excess dirt",
+        "material-category": "Earth",
+        "material": "Dirt",
+        "unit": "m3",
+        "amount": "6188",
+        "stages": [
+          {
+            "stage": "Transportation",
+            "custom-inputs": [],
+            "approach": "Carrying",
+            "tool": "Basket",
+            "study": "Lancaster 2017 1700",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [],
+            "approach": "Loading",
+            "tool": "Basket",
+            "study": "DeLaine 1997 1900",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Transportation",
+            "custom-inputs": [],
+            "approach": "Carrying",
+            "tool": "Basket",
+            "study": "Lancaster 2017 1700",
+            "conversion factor": "1",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 1,
+        "sortIndex": 3
+      },
+      {
+        "name": "Socle fill",
+        "material-category": "Earth",
+        "material": "Fill",
+        "unit": "m3",
+        "amount": "12012",
+        "stages": [
+          {
+            "stage": "Placement",
+            "custom-inputs": [],
+            "approach": "Unspecified",
+            "tool": "Unspecified",
+            "study": "Pakkanen 2013 300",
+            "conversion factor": "1",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 1,
+        "sortIndex": 2
+      },
+      {
+        "name": "Stone socle",
+        "material-category": "Stone",
+        "material": "Limestone",
+        "unit": "m3",
+        "amount": "24388",
+        "stages": [
+          {
+            "stage": "Extraction",
+            "custom-inputs": [],
+            "approach": "Collecting",
+            "tool": "Unspecified",
+            "study": "Lancaster 2017 2200",
+            "conversion factor": "1",
+            "collapsed": 0
+          },
+          {
+            "stage": "Placement",
+            "custom-inputs": [],
+            "approach": "Construction",
+            "tool": "Unspecified",
+            "study": "Lancaster 2017 2300",
+            "conversion factor": "1",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 1,
+        "sortIndex": 1
+      },
+      {
+        "name": "Digg foundations",
+        "material-category": "Earth",
+        "material": "Dirt",
+        "unit": "m3",
+        "amount": "18200",
+        "stages": [
+          {
+            "stage": "Extraction",
+            "custom-inputs": [],
+            "approach": "Digging",
+            "tool": "Iron tools",
+            "study": "DeLaine 1997 2900",
+            "conversion factor": "1",
+            "collapsed": 0
+          }
+        ],
+        "collapsed": 1,
+        "sortIndex": 0
+      }
+    ]
+  }
+}
