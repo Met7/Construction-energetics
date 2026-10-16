@@ -78,7 +78,7 @@ function setExtraParameters(stageElement, values) {
     console.log("setExtraParameters: number of values " + values.length + " != number of inputs " + inputElements.length);
   let i = 0;
   for (const inputElement of inputElements) {
-    if (i == inputElements.length)
+    if (i == values.length)
       break;
     if (inputElement.nodeName  == "INPUT")
       inputElement.value = values[i];
@@ -284,7 +284,7 @@ function createStage(stageData) {
       htmlHelpers.getSelectData(studySelect, "author"),
       htmlHelpers.getSelectData(studySelect, "year"),
       htmlHelpers.getSelectData(studySelect, "pages"),
-      "XXX" //htmlHelpers.getSelectData(studySelect, "note")
+      htmlHelpers.getSelectData(studySelect, "note")
     );
   });
   
@@ -416,8 +416,8 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
     let optionText = tech.author + " " + tech.year;
     if (tech.description)
       optionText += ": " + tech.description;
-    if (tech["tech-note"] && tech["tech-note"] != "")
-      optionText += " (note: " + tech["tech-note"] + ")";
+    if (tech.tech_note)
+      optionText += " (note: " + tech.tech_note + ")";
     optionText += "  [" + tech.approach + " - " + tech.tool + "]";
     let optionsData = {
       "text": optionText,
@@ -426,7 +426,7 @@ function chooseStageTool(stageName, studySelect, approach, tool) {
       "author": tech.author,
       "year": tech.year,
       "pages": tech.pages,
-      "note": tech.note,
+      "note": tech.tech_note,
       "unit": tech.unit
     };
     if (tech.formula) {
@@ -500,7 +500,7 @@ function extractConversions(selectElement) {
 // stageElement is a parent
 // This may be called from the chooseStageStudy event, or from the outside when job unit changes.
 // The first case already has all the params. In the other the local values need to be fetched.
-function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit = '', techConversions = [], speed = -1) {
+function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmount, techUnit = '', techConversions = null, speed = -1) {
   const unitConversionInput = stageElement.querySelector(".unit-conversion");
   const conversionUnitLabel = stageElement.querySelector(".conversion-unit-label");
   let studySelect;
@@ -512,7 +512,7 @@ function setStageUnit(stageElement, materialCategory, material, jobUnit, jobAmou
     return;
   techUnit = techUnit.split("*")[0]; // in case of units such as t*m - we only care about the first.
   if (!techConversions)
-    techConversions = htmlHelpers.getSelectData(extractConversions(studySelect), "unit");
+    techConversions = extractConversions(studySelect);
   
   let conversionFactor = materialsHelpers.getConversionFactor(materialCategory, material, techUnit, jobUnit, techUnit, techConversions);
   if (conversionFactor == -1) {
@@ -570,22 +570,22 @@ function updateMh(stageElement, conversionFactor = -1, jobUnit = '', jobAmount =
     }
     else if (formula == "H-1") {
       console.log("Evaluating H-1");
-      if (params.length != 1) new Error("Wrong number of parameters for H-1");
-      if (params[0].name != "Height") new Error("Wrong parameter for H-1");
+      if (params.length != 1) throw new Error("Wrong number of parameters for H-1");
+      if (params[0].name != "Height") throw new Error("Wrong parameter for H-1");
       
       extraModifier = params[0].value > 1 ? params[0].value - 1 : 0; // the formula uses height-1
     }
     else if (formula == "Trips and weight") {
       console.log("Evaluating Trips and weight");
 	  //console.log(params);
-      if (params.length != 1) new Error("Wrong number of parameters for Trips and weight");
-      if (params.name != "# of trips") new Error("Wrong parameter for Trips and weight");
+      if (params.length != 1) throw new Error("Wrong number of parameters for Trips and weight");
+      if (params[0].name != "# of trips") throw new Error("Wrong parameter for Trips and weight");
 	  const extraParams = getAdditionalFormulaParameters(studySelect);
       console.log("extraParam: "+ extraParams[0]);
       extraValue = params[0].value * extraParams[0];
     }
     else
-      new Error("Unknown formula");
+      throw new Error("Unknown formula: " + formula);
     // for (const extraParam of getExtraParameters(stageElement)) {
       // if (!extraParam) {
         // //console.log("updateMh: empty extra param");
@@ -606,7 +606,8 @@ function updateMh(stageElement, conversionFactor = -1, jobUnit = '', jobAmount =
 function clearStage(stageElement, after = null) {
   //console.log("clearing stage, in " + stageElement.classList[0] + " after " + (after ? after.classList[0] : "start"));
   //remove custom elements from formulas
-  const rows = stageElement.getElementsByClassName("custom-input-row");
+  // copy, the live collection would skip rows while removing
+  const rows = Array.from(stageElement.getElementsByClassName("custom-input-row"));
   for (const row of rows)
     row.remove();
   

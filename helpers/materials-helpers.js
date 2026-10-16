@@ -91,7 +91,7 @@ function getConversionFactor(materialCategory, material, sourceUnit, targetUnit,
 // customSourceUnit, customConversions - the unit of the chosen tech and conversions it offers
 // returns -1 if the conversion was not resolved
 function convertQuantity(materialCategory, material, sourceUnit, targetUnit, quantity, customSourceUnit, customConversions) {
-  let conversionFactor = getConversionFactor(materialCategory, material, sourceUnit, targetUnit, quantity, customSourceUnit, customConversions);
+  let conversionFactor = getConversionFactor(materialCategory, material, sourceUnit, targetUnit, customSourceUnit, customConversions);
   
   if (conversionFactor == 0)
     throw("Materials-helper::convertQuantity: conversion factor is zero");

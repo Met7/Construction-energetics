@@ -77,6 +77,7 @@ function openProject(index) {
   }
 
   displayProjectName(projects[index].name);
+  recalculateTotalEnergy();
 
   console.log("Loaded project from local storage.");
 }
@@ -91,8 +92,7 @@ function displayProjectName(name) {
 
 function deleteProject(index) {
   checkProjectIndex(index, "deleteProject");
-  projects[index] = projects[projects.length - 1];
-  projects.pop();
+  projects.splice(index, 1);
   console.log("Deleted project from local storage.");
   saveToStorage();
   printProjects();
@@ -304,6 +304,7 @@ function main() {
   document.getElementById('clear-all-button').addEventListener('click', () => {
     clearAllJobs(jobsContainer);
     addJob(jobsContainer);
+    recalculateTotalEnergy();
   });
 }
 

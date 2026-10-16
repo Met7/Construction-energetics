@@ -58,14 +58,14 @@ function emptyInput(input, defaultValue = "") {
   
   input.innerHTML = defaultValue;
   input.value = defaultValue;
-  if (initSelect = true)
+  if (initSelect)
     createSelectDefaultOption(input);
 }
 
 function resetInput(input, defaultValue = "") {
   if (input.nodeName == "INPUT")
     input.value = defaultValue;
-  else if (input.nodeName = "SELECT")
+  else if (input.nodeName == "SELECT")
     input.selectedIndex = 0;
 }
 
@@ -270,6 +270,7 @@ function createTableRow(label, columns, totalColumns, colspans = [], isHeader = 
 function createLink(text, ref, cssClass = '') {
   const link = document.createElement("a");
   link.href = ref;
+  link.textContent = text;
   if (typeof(cssClass) != 'undefined' && cssClass != '')
     link.classList.add(cssClass);
   return link;

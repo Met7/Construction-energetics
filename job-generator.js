@@ -17,8 +17,11 @@ const columnCount = 3;
 // ---------------------------- MATERIALS
 
 function fillMaterialSelect(jobElement, materialSelect, materialCategory) {
- if (materialCategory == htmlHelpers.defaultSelectText)
+ if (htmlHelpers.isEmptyOption(materialCategory)) { // category unset - clear the material and the stages
+   htmlHelpers.createOptions(materialSelect, []);
+   updateStagesMaterial(jobElement, "", "");
    return;
+ }
 
   //console.log("filling material select for " + materialCategory);
   htmlHelpers.createOptions(materialSelect, Object.keys(materialsData[materialCategory]["data"]));
@@ -230,7 +233,7 @@ function insertStage(jobTable, stageName) {
   td.colSpan = columnCount;
   const stageTr = htmlHelpers.createTr(td);
   if (jobTable.childNodes.length === 0) {
-    jobTable.appendChild(stagetTr);
+    jobTable.appendChild(stageTr);
     return;
   }
   // sort the stage in from the back
